@@ -6723,7 +6723,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3258300048847859770}
-  - component: {fileID: 8923850179103894080}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -6767,26 +6766,6 @@ Transform:
   m_Father: {fileID: 4673185021982604604}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &8923850179103894080
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2773124511963720320}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 1646b5e81c94e6242b15fecca9c320e6, type: 3}
-  m_Controller: {fileID: 9100000, guid: 07637e4d1c3ef3041b7b12ed75087d57, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2798328151613357238
 GameObject:
   m_ObjectHideFlags: 0
@@ -20589,6 +20568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4673185021982604604}
   - component: {fileID: 616992439676264450}
+  - component: {fileID: 4570720078839338132}
   - component: {fileID: 5701580062507666206}
   - component: {fileID: 4303832576321928937}
   - component: {fileID: 2532546308901304050}
@@ -20633,6 +20613,26 @@ CharacterController:
   m_SkinWidth: 0.048
   m_MinMoveDistance: 0.001
   m_Center: {x: 0.01, y: 0.75, z: -0.1}
+--- !u!95 &4570720078839338132
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479496936149924893}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 1646b5e81c94e6242b15fecca9c320e6, type: 3}
+  m_Controller: {fileID: 9100000, guid: 07637e4d1c3ef3041b7b12ed75087d57, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &5701580062507666206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20676,7 +20676,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
   _mouvementSpeed: 5
-  _rotationSpeed: 0.04
+  _rotationSpeed: 10
+  _isDead: 0
 --- !u!114 &2532546308901304050
 MonoBehaviour:
   m_ObjectHideFlags: 0

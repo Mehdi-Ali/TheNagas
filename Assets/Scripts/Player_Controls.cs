@@ -37,9 +37,45 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""AutoAttack"",
                     ""type"": ""Button"",
                     ""id"": ""4b83e7b7-025f-4c45-a705-5aee07689e5f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirstAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1c1c1b8-a831-423f-9fde-3f5235432ca3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e748d03-1d31-466a-8f28-f4246387c924"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThirdAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""720d8989-acea-4dbe-a766-f1fdd9260353"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ultimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""a00fd490-0d12-4261-bcde-0a00cc4abf0d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -65,7 +101,18 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""AutoAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6145d8d6-921e-44c2-b293-7167a3ecd8b7"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AutoAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -233,6 +280,94 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b23635a-5e53-4051-a13d-ba19907592e6"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirstAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""825dcc7e-abac-4b63-b33e-62f0bdb6e64f"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirstAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ccd8e83-bcaf-47ce-acd2-8ff015af7bce"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef3f1b31-787c-4f3c-bfb7-06e2e2cb8f40"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3c1f5db-5092-42dd-95e3-4ae83ad1e81b"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThirdAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fddb2c64-7446-4186-a9d0-408c3d147b18"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThirdAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad91db5d-589b-448a-b788-58768de72e7c"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""297795b2-f16d-4e00-8ec6-9e0f9c503df9"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -242,7 +377,11 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
         // DefaultMap
         m_DefaultMap = asset.FindActionMap("DefaultMap", throwIfNotFound: true);
         m_DefaultMap_Move = m_DefaultMap.FindAction("Move", throwIfNotFound: true);
-        m_DefaultMap_Attack = m_DefaultMap.FindAction("Attack", throwIfNotFound: true);
+        m_DefaultMap_AutoAttack = m_DefaultMap.FindAction("AutoAttack", throwIfNotFound: true);
+        m_DefaultMap_FirstAbility = m_DefaultMap.FindAction("FirstAbility", throwIfNotFound: true);
+        m_DefaultMap_SecondAbility = m_DefaultMap.FindAction("SecondAbility", throwIfNotFound: true);
+        m_DefaultMap_ThirdAbility = m_DefaultMap.FindAction("ThirdAbility", throwIfNotFound: true);
+        m_DefaultMap_Ultimate = m_DefaultMap.FindAction("Ultimate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -303,13 +442,21 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_DefaultMap;
     private IDefaultMapActions m_DefaultMapActionsCallbackInterface;
     private readonly InputAction m_DefaultMap_Move;
-    private readonly InputAction m_DefaultMap_Attack;
+    private readonly InputAction m_DefaultMap_AutoAttack;
+    private readonly InputAction m_DefaultMap_FirstAbility;
+    private readonly InputAction m_DefaultMap_SecondAbility;
+    private readonly InputAction m_DefaultMap_ThirdAbility;
+    private readonly InputAction m_DefaultMap_Ultimate;
     public struct DefaultMapActions
     {
         private @Player_Controls m_Wrapper;
         public DefaultMapActions(@Player_Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_DefaultMap_Move;
-        public InputAction @Attack => m_Wrapper.m_DefaultMap_Attack;
+        public InputAction @AutoAttack => m_Wrapper.m_DefaultMap_AutoAttack;
+        public InputAction @FirstAbility => m_Wrapper.m_DefaultMap_FirstAbility;
+        public InputAction @SecondAbility => m_Wrapper.m_DefaultMap_SecondAbility;
+        public InputAction @ThirdAbility => m_Wrapper.m_DefaultMap_ThirdAbility;
+        public InputAction @Ultimate => m_Wrapper.m_DefaultMap_Ultimate;
         public InputActionMap Get() { return m_Wrapper.m_DefaultMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -322,9 +469,21 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnMove;
-                @Attack.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAttack;
-                @Attack.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAttack;
-                @Attack.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAttack;
+                @AutoAttack.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAutoAttack;
+                @AutoAttack.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAutoAttack;
+                @AutoAttack.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAutoAttack;
+                @FirstAbility.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnFirstAbility;
+                @FirstAbility.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnFirstAbility;
+                @FirstAbility.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnFirstAbility;
+                @SecondAbility.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnSecondAbility;
+                @SecondAbility.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnSecondAbility;
+                @SecondAbility.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnSecondAbility;
+                @ThirdAbility.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnThirdAbility;
+                @ThirdAbility.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnThirdAbility;
+                @ThirdAbility.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnThirdAbility;
+                @Ultimate.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
+                @Ultimate.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
+                @Ultimate.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
             }
             m_Wrapper.m_DefaultMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -332,9 +491,21 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Attack.started += instance.OnAttack;
-                @Attack.performed += instance.OnAttack;
-                @Attack.canceled += instance.OnAttack;
+                @AutoAttack.started += instance.OnAutoAttack;
+                @AutoAttack.performed += instance.OnAutoAttack;
+                @AutoAttack.canceled += instance.OnAutoAttack;
+                @FirstAbility.started += instance.OnFirstAbility;
+                @FirstAbility.performed += instance.OnFirstAbility;
+                @FirstAbility.canceled += instance.OnFirstAbility;
+                @SecondAbility.started += instance.OnSecondAbility;
+                @SecondAbility.performed += instance.OnSecondAbility;
+                @SecondAbility.canceled += instance.OnSecondAbility;
+                @ThirdAbility.started += instance.OnThirdAbility;
+                @ThirdAbility.performed += instance.OnThirdAbility;
+                @ThirdAbility.canceled += instance.OnThirdAbility;
+                @Ultimate.started += instance.OnUltimate;
+                @Ultimate.performed += instance.OnUltimate;
+                @Ultimate.canceled += instance.OnUltimate;
             }
         }
     }
@@ -342,6 +513,10 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
     public interface IDefaultMapActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
+        void OnAutoAttack(InputAction.CallbackContext context);
+        void OnFirstAbility(InputAction.CallbackContext context);
+        void OnSecondAbility(InputAction.CallbackContext context);
+        void OnThirdAbility(InputAction.CallbackContext context);
+        void OnUltimate(InputAction.CallbackContext context);
     }
 }

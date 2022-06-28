@@ -9,7 +9,7 @@ public class Moving : NetworkBehaviour
 {
     //Game Designe Vars
     [SerializeField] private float _mouvementSpeed = 5.0f;
-    [SerializeField] [Range(0,1)] private float _rotationSpeed = 1.0f;
+    [SerializeField] private float _rotationSpeed = 10.0f;
     
 
     //Variables to cache Instances 
@@ -31,6 +31,15 @@ public class Moving : NetworkBehaviour
     bool _isRunning = false;
     public bool _isDead = false;
     bool alreadyDead = false ;
+
+    //Variables to store omptimized Setter / getter parameter IDs
+    int _isRunningHash;
+    int _AutoAttackHash;
+    int _FirstAbilityHash;
+    int _SecondAbilityHash;
+    int _ThirdAbilityHash;
+    int _UltimateHash;
+    int _DeadHash;
 
     //Camera Stuff
     CameraFollowController _camera;
@@ -55,17 +64,34 @@ public class Moving : NetworkBehaviour
     {
         //caching Instances 
         _charactherController = GetComponent<CharacterController>();
-        _animmator = GetComponentInChildren<Animator>();
+        _animmator = GetComponent<Animator>();
+
+        //caching Hashes
+        _isRunningHash = Animator.StringToHash("isRunning");
+        _AutoAttackHash = Animator.StringToHash("AutoAttack");
+        _FirstAbilityHash = Animator.StringToHash("FirstAbility");
+        _SecondAbilityHash = Animator.StringToHash("SecondAbility");
+        _ThirdAbilityHash = Animator.StringToHash("ThirdAbility");
+        _UltimateHash = Animator.StringToHash("Ultimate");
+        _DeadHash = Animator.StringToHash("Dead");
         
         //player Input callbacks.
         _playerControls = new Player_Controls();
+
         _playerControls.DefaultMap.Move.started += OnMovementInput;
         _playerControls.DefaultMap.Move.canceled += OnMovementInput;
         _playerControls.DefaultMap.Move.performed += OnMovementInput;
 
+        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityUnput; // x 5
+
 
     }
 
+    private void OnSecondAbilityUnput(InputAction.CallbackContext context)
+    {
+        //logic
+        _animmator.SetTrigger(_SecondAbilityHash);
+    }
 
     private void OnMovementInput(InputAction.CallbackContext context)
     {
@@ -106,12 +132,12 @@ public class Moving : NetworkBehaviour
     {
         if (!base.IsOwner) return;
 
-        if (_isRunning) _animmator.SetBool("isRunning", true);
-        if (!_isRunning) _animmator.SetBool("isRunning", false);
+        if (_isRunning) _animmator.SetBool(_isRunningHash, true);
+        if (!_isRunning) _animmator.SetBool(_isRunningHash, false);
 
         if (_isDead && !alreadyDead)
         {
-            _animmator.SetTrigger("Dead");
+            _animmator.SetTrigger(_DeadHash);
             alreadyDead = true;
 
         } 
@@ -120,7 +146,6 @@ public class Moving : NetworkBehaviour
     private void HandleRotation()
     {
         if (!base.IsOwner || !_isRunning) return;
-        Debug.Log("updating");
 
         //the change in position our character should point to
         _positionTolookAt.x = _currentMovenemnt.x ;
@@ -129,7 +154,7 @@ public class Moving : NetworkBehaviour
 
         //creates a new rotation bases on where the player is currently moving
         _targetRotation = Quaternion.LookRotation(_positionTolookAt);
-        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationSpeed * Time.deltaTime);
 
     }
 }
