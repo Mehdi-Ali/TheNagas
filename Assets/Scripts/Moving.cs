@@ -49,10 +49,13 @@ public class Moving : NetworkBehaviour
         _playerControls.DefaultMap.Disable();
     }
 
+    // the equivalante of "if (!base.IsOwner) return;"
+    //is : 
+    //[Client(RequireOwnership = true)]
     private void Update()
     {
-        if (!_isMovementPressed) return;
-        _charactherController.SimpleMove(_currentMovenemnt * _mouvementSpeed );
+        if (!base.IsOwner) return;
+        if (_isMovementPressed) _charactherController.SimpleMove(_currentMovenemnt * _mouvementSpeed );
     }
 }
 
