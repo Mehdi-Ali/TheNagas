@@ -3,6 +3,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerRuningState : PlayerBaseState
 {
+    //Game Designe Vars, Mak a stat Script maybe
+    [SerializeField] private float _movementSpeed = 5.0f;
+    [SerializeField] private float _rotationSpeed = 10.0f;
+    
+    //A refrence for the Player State Manger
+    PlayerStateManger player;
+   
     //Variables to store player input values
     Vector2 _currentMovementInput;
     Vector3 _currentMovenemnt;
@@ -20,12 +27,15 @@ public class PlayerRuningState : PlayerBaseState
     // not sure if the mono behavior part will work (Awake and IsOwner)
     private void Awake() 
     {
+        //Caching The Player State Manger
+        player = GetComponent<PlayerStateManger>();
+        
         //caching Hashes
         _isRunningHash = Animator.StringToHash("isRunning");
 
     }
 
-    public override void EnterState(PlayerStateManger player)
+    public override void EnterState()
     {
         if (!base.IsOwner) return;
         _isMovementPressed = true;
@@ -33,15 +43,15 @@ public class PlayerRuningState : PlayerBaseState
 
     }
 
-    public override void UpdateState(PlayerStateManger player)
+    public override void UpdateState()
     {
         if (!base.IsOwner) return;
         HandleMovemenet(player);
         HandleRotation(player);
-        if (!_isMovementPressed || player.IsStationary) player.SwitchState(player.IdleState);
+        if (!_isMovementPressed || player.IsCastingAnAbility) player.SwitchState(player.IdleState);
     }
 
-    public override void ExitState(PlayerStateManger player)
+    public override void ExitState()
     {
         if (!base.IsOwner) return;
         player.Animator.SetBool(_isRunningHash, false);
@@ -59,7 +69,7 @@ public class PlayerRuningState : PlayerBaseState
     
     private void HandleMovemenet(PlayerStateManger player)
     {
-        player.CharactherController.SimpleMove(_currentMovenemnt * player.MovementSpeed);
+        player.CharactherController.SimpleMove(_currentMovenemnt * _movementSpeed);
     }
 
     private void HandleRotation(PlayerStateManger player)
@@ -72,7 +82,7 @@ public class PlayerRuningState : PlayerBaseState
 
         //creates a new rotation bases on where the player is currently moving
         _targetRotation = Quaternion.LookRotation(_positionTolookAt);
-        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, player.RotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _rotationSpeed * Time.deltaTime);
 
     }
 }

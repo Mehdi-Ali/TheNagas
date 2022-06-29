@@ -14,7 +14,7 @@ public class SM : MonoBehaviour
         STATE_SecondAbility,
         STATE_ThirdAbility,
         STATE_Ultimate,
-        STATE_Death
+        STATE_Dead
     };
 
 }

@@ -2,18 +2,26 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState
 {
+    //A refrence for the Player State Manger
+    PlayerStateManger player;
 
-    public override void EnterState(PlayerStateManger player)
+    private void Awake()
     {
-        Debug.Log("Enter Default Idel State");
+        //Caching The Player State Manger
+        player = GetComponent<PlayerStateManger>();
     }
 
-    public override void UpdateState(PlayerStateManger player)
+    public override void EnterState()
+    {
+
+    }
+
+    public override void UpdateState()
     {
         //Here wen can set the other idle eache x number of seconds.
     }
 
-    public override void ExitState(PlayerStateManger player)
+    public override void ExitState()
     {
 
     }
