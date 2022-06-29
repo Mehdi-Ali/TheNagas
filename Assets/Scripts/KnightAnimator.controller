@@ -145,7 +145,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_04_Base_Attack
+  m_Name: FirstAbility
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -159,7 +159,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 3977583342430870941, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: -4992397436203751085, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -173,7 +173,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_06_Dash
+  m_Name: ThirdAbility
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -187,7 +187,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -8454928391728628125, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 6479946625678360055, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -201,7 +201,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_05_CC_Attack
+  m_Name: SecondAbility
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -215,7 +215,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1420680604755467878, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 7579021641293499310, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -229,7 +229,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_08_Death
+  m_Name: Dead
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -242,7 +242,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -7193355873060594485, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 2501238330511443570, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -263,43 +263,43 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: AutoAttack
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: FirstAbility
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SecondAbility
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: ThirdAbility
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Ultimate
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Dead
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -377,7 +377,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.1
   m_TransitionOffset: 0
   m_ExitTime: 0.9050633
   m_HasExitTime: 0
@@ -417,7 +417,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_02_Running
+  m_Name: Running
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -431,7 +431,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -8380496491794824452, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 5092360084112545644, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -445,7 +445,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_01_Idle
+  m_Name: Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -464,7 +464,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -7166062167411647429, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 3703617226193914796, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -525,7 +525,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_07_Ult
+  m_Name: Ultimate
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -539,8 +539,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4064498010841393613, guid: 1646b5e81c94e6242b15fecca9c320e6,
-    type: 3}
+  m_Motion: {fileID: 281581015103947014, guid: 1646b5e81c94e6242b15fecca9c320e6, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -553,7 +552,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ControlRig|Knight_03_Basic_Attack_Combo
+  m_Name: AutoAttack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -567,7 +566,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 6110112649843249812, guid: 1646b5e81c94e6242b15fecca9c320e6,
+  m_Motion: {fileID: 3945281756854830254, guid: 1646b5e81c94e6242b15fecca9c320e6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 

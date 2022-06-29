@@ -454,7 +454,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025075214}
   m_LocalRotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 5.43, z: -3.7}
+  m_LocalPosition: {x: 0, y: 4, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -477,8 +477,8 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 524913438}
   _networkObjectCache: {fileID: 524913438}
   _cameraTarget: {fileID: 0}
-  zOffset: -2.6
-  yOffset: 4
+  zOffset: -5
+  yOffset: 8
   ClinetConnected: 0
 --- !u!114 &1025075219
 MonoBehaviour:

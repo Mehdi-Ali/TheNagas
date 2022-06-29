@@ -10,9 +10,9 @@ public class CameraFollowController : NetworkBehaviour
     Vector3 controllerPostion;
 
     [SerializeField]
-    float zOffset = -2.6f ;
+    float zOffset = -5.0f ;
     [SerializeField]
-    float yOffset =  4f ;
+    float yOffset =  8.0f ;
 
     // Camera rotation : x = 55 ;  y = z = 0
     // Camera projection : Field of View = 60 ; Axis = Vertical
