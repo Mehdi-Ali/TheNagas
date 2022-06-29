@@ -27,10 +27,9 @@ public class PlayerRuningState : PlayerBaseState
 
     public override void EnterState(PlayerStateManger player)
     {
-        Debug.Log("Enter Running State");
         if (!base.IsOwner) return;
         _isMovementPressed = true;
-        player.Animmator.SetBool(_isRunningHash, true);
+        player.Animator.SetBool(_isRunningHash, true);
 
     }
 
@@ -39,14 +38,13 @@ public class PlayerRuningState : PlayerBaseState
         if (!base.IsOwner) return;
         HandleMovemenet(player);
         HandleRotation(player);
-        if (!_isMovementPressed) ExitState(player);
+        if (!_isMovementPressed || player.IsStationary) ExitState(player);
     }
 
     public override void ExitState(PlayerStateManger player)
     {
         if (!base.IsOwner) return;
-        player.Animmator.SetBool(_isRunningHash, false);
-        Debug.Log("Exit Running State");
+        player.Animator.SetBool(_isRunningHash, false);
         player.SwitchState(player.IdleState);
 
     }

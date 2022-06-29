@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerDeadState : PlayerBaseState
 {
-
     //Variables to store omptimized Setter / getter parameter IDs
     int _DeadHash;
 
@@ -14,8 +13,8 @@ public class PlayerDeadState : PlayerBaseState
 
     public override void EnterState(PlayerStateManger player)
     {
-        Debug.Log("Enter Dead State");
-        player.Animmator.SetTrigger(_DeadHash);
+        if (!base.IsOwner) return;
+        player.Animator.SetTrigger(_DeadHash);
         player.ReadyToSwitchState = false;
 
     }
@@ -27,7 +26,7 @@ public class PlayerDeadState : PlayerBaseState
 
     public override void ExitState(PlayerStateManger player)
     {
-        Debug.Log("Exit Dead State");
+
     }
 
 }

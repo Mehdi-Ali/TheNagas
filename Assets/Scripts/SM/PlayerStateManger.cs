@@ -27,7 +27,7 @@ public class PlayerStateManger : NetworkBehaviour
     //Variables to cache Instances 
     public CharacterController CharactherController;
     private Player_Controls _playerControls;
-    public Animator Animmator;
+    public Animator Animator;
 
 
 
@@ -35,11 +35,12 @@ public class PlayerStateManger : NetworkBehaviour
 
 
     //StateMachine Variables (logic and animation)
+    public bool ReadyToSwitchState;
+    public bool IsStationary ;
     bool _isMovementPressed;
     bool _isRunning = false;
-    public bool _isDead = false;
+    public bool _TempDeadStateSim = false;
     bool alreadyDead = false;
-    public bool ReadyToSwitchState;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _AutoAttackHash;
@@ -63,15 +64,15 @@ public class PlayerStateManger : NetworkBehaviour
         _currentState = IdleState;
         _currentState.EnterState(this);
         ReadyToSwitchState = true;
+        IsStationary = false ;
 
         //caching Instances 
         CharactherController = GetComponent<CharacterController>();
-        Animmator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
 
         //caching Hashes
         _AutoAttackHash = Animator.StringToHash("AutoAttack");
         _FirstAbilityHash = Animator.StringToHash("FirstAbility");
-        _SecondAbilityHash = Animator.StringToHash("SecondAbility");
         _ThirdAbilityHash = Animator.StringToHash("ThirdAbility");
         _UltimateHash = Animator.StringToHash("Ultimate");
 
@@ -96,35 +97,21 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (_currentState != RuningState) SwitchState(RuningState);
         RuningState.OnMovementInput(context);
-
     }
 
     private void OnSecondAbilityUnput(InputAction.CallbackContext context)
     {
-        //logic
-        Animmator.SetTrigger(_SecondAbilityHash);
+        IsStationary = true ;
+        if (_currentState != SecondAbilityState) SwitchState(SecondAbilityState);
     }
 
     void Update()
     {
         _currentState.UpdateState(this);
 
-        HandleAnimation();       
+        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);       
     }
-
-    private void HandleAnimation()
-    {
-        if (!base.IsOwner) return;
-
-        if (_isDead && !alreadyDead)
-        {
-           SwitchState(DeadState);
-            alreadyDead = true;
-
-        }
-    }
-
-    
+ 
 
     private void OnEnable()
     {

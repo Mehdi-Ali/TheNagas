@@ -20628,7 +20628,7 @@ Animator:
   m_GameObject: {fileID: 8479496936149924893}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 1646b5e81c94e6242b15fecca9c320e6, type: 3}
-  m_Controller: {fileID: 9100000, guid: 07637e4d1c3ef3041b7b12ed75087d57, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3824ad73726a501449aebf02560b2334, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -20749,9 +20749,10 @@ MonoBehaviour:
   MovementSpeed: 5
   RotationSpeed: 10
   CharactherController: {fileID: 0}
-  Animmator: {fileID: 0}
-  _isDead: 0
+  Animator: {fileID: 0}
   ReadyToSwitchState: 0
+  IsStationary: 0
+  _TempDeadStateSim: 0
 --- !u!114 &6858166303471902967
 MonoBehaviour:
   m_ObjectHideFlags: 0
