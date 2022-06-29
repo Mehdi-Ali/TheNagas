@@ -330,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327144084732578, guid: db58b1eda8133c84983d20108c13888e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4327144084732578, guid: db58b1eda8133c84983d20108c13888e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -476,7 +476,7 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 524913438}
   _networkObjectCache: {fileID: 524913438}
-  _moving: {fileID: 0}
+  _cameraTarget: {fileID: 0}
   zOffset: -2.6
   yOffset: 4
   ClinetConnected: 0
@@ -616,7 +616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 322afac8caa1edd40b802f584390dc2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.01
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 322afac8caa1edd40b802f584390dc2d, type: 3}
       propertyPath: m_LocalPosition.z

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraFollowController : NetworkBehaviour
 {
-    public Moving _moving;
+    public CameraTarget _cameraTarget;
 
     Vector3 controllerPostion;
 
@@ -29,8 +29,8 @@ public class CameraFollowController : NetworkBehaviour
     void Update()
     {
         if (!ClinetConnected) return ;
-        controllerPostion.x = _moving.transform.position.x;
-        controllerPostion.z = _moving.transform.position.z + zOffset;
+        controllerPostion.x = _cameraTarget.transform.position.x;
+        controllerPostion.z = _cameraTarget.transform.position.z + zOffset;
         controllerPostion.y = yOffset;
 
         this.transform.position = controllerPostion;
