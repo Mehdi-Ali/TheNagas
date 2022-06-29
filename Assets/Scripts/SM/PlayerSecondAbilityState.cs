@@ -19,7 +19,7 @@ public class PlayerSecondAbilityState : PlayerBaseState
         if (!base.IsOwner) return;
         Invoke(nameof(AttackComplete), 1f);
         this.player = player;
-        player.Animator.SetTrigger(_SecondAbilityHash);
+        player.NetworkAnimator.SetTrigger(_SecondAbilityHash);
         player.ReadyToSwitchState = false;
     }
 

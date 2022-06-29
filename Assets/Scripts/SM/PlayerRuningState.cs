@@ -38,14 +38,13 @@ public class PlayerRuningState : PlayerBaseState
         if (!base.IsOwner) return;
         HandleMovemenet(player);
         HandleRotation(player);
-        if (!_isMovementPressed || player.IsStationary) ExitState(player);
+        if (!_isMovementPressed || player.IsStationary) player.SwitchState(player.IdleState);
     }
 
     public override void ExitState(PlayerStateManger player)
     {
         if (!base.IsOwner) return;
         player.Animator.SetBool(_isRunningHash, false);
-        player.SwitchState(player.IdleState);
 
     }
 

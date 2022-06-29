@@ -20577,6 +20577,7 @@ GameObject:
   - component: {fileID: 6746618029839681540}
   - component: {fileID: 4027057840975592395}
   - component: {fileID: 2676623566172398361}
+  - component: {fileID: 1473949094486602799}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -20813,6 +20814,27 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+--- !u!114 &1473949094486602799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479496936149924893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 5701580062507666206}
+  _networkObjectCache: {fileID: 0}
+  IgnoredParameters: []
+  _animator: {fileID: 4570720078839338132}
+  _smoothFloats: 1
+  _synchronizeInterval: 0.1
+  _clientAuthoritative: 1
+  _sendToOwner: 0
 --- !u!1 &8480887106053832769
 GameObject:
   m_ObjectHideFlags: 0

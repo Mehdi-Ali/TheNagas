@@ -14,7 +14,7 @@ public class PlayerDeadState : PlayerBaseState
     public override void EnterState(PlayerStateManger player)
     {
         if (!base.IsOwner) return;
-        player.Animator.SetTrigger(_DeadHash);
+        player.NetworkAnimator.SetTrigger(_DeadHash);
         player.ReadyToSwitchState = false;
 
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,7 @@ public class PlayerStateManger : NetworkBehaviour
     public CharacterController CharactherController;
     private Player_Controls _playerControls;
     public Animator Animator;
+    public NetworkAnimator NetworkAnimator;
 
 
 
@@ -69,6 +71,7 @@ public class PlayerStateManger : NetworkBehaviour
         //caching Instances 
         CharactherController = GetComponent<CharacterController>();
         Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
 
         //caching Hashes
         _AutoAttackHash = Animator.StringToHash("AutoAttack");
@@ -132,6 +135,7 @@ public class PlayerStateManger : NetworkBehaviour
     public void SwitchState(PlayerBaseState state)
     {   
         if (!ReadyToSwitchState) return;
+        _currentState.ExitState(this);
         _currentState = state;
         _currentState.EnterState(this);
 
