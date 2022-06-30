@@ -17,4 +17,16 @@ public class SM : MonoBehaviour
         STATE_Dead
     };
 
+    enum StateNames
+    {
+        Idle,
+        Runing,
+        AutoAttack,
+        FirstAbility,
+        SecondAbility,
+        ThirdAbility,
+        Ultimate,
+        Dead
+    };
+
 }
