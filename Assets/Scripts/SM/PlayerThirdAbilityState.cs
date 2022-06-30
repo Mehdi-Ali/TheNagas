@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class PlayerThirdAbilityState : PlayerBaseState
 {
+    //Ability Name
+    public string AbilityName = "Dash" ;
+
+    //Game Designe Vars, Mak a stat Script maybe
+    [SerializeField] float _dashSpeed = 5.0f;
+
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger player;
 
@@ -23,6 +29,7 @@ public class PlayerThirdAbilityState : PlayerBaseState
         //check cooldown
         Invoke(nameof(AttackComplete), 1f);
         player.NetworkAnimator.SetTrigger(_thirdAbility);
+       // transform.Translate(Vector3.forward * _dashSpeed * Time.deltaTime );
         player.ReadyToSwitchState = false;
     }
 

@@ -117,6 +117,17 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""056dfe51-ada5-4e7a-8b1d-944334b85075"",
+                    ""path"": ""<iOSGameController>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""ZQSD"",
                     ""id"": ""f6c508a5-1fb9-4516-bcf6-898f4dd597b2"",
                     ""path"": ""2DVector"",
@@ -316,8 +327,8 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ef3f1b31-787c-4f3c-bfb7-06e2e2cb8f40"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""id"": ""fddb2c64-7446-4186-a9d0-408c3d147b18"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -329,17 +340,6 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""e3c1f5db-5092-42dd-95e3-4ae83ad1e81b"",
                     ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThirdAbility"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fddb2c64-7446-4186-a9d0-408c3d147b18"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -366,6 +366,17 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Ultimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef3f1b31-787c-4f3c-bfb7-06e2e2cb8f40"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThirdAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
