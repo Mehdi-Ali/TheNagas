@@ -22,7 +22,7 @@ public class PlayerAutoAttackState : PlayerBaseState
         if (!base.IsOwner) return;
         //check cooldown
         Invoke(nameof(AttackComplete), 1f);
-        player.NetworkAnimator.SetTrigger(_autoAttack);
+        player.Animator.CrossFade(_autoAttack, 0.1f);
         player.ReadyToSwitchState = false;
     }
 

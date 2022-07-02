@@ -11,7 +11,7 @@ public class PlayerStateManger : NetworkBehaviour
     #region Fields and Proporties
 
     //Initiating the states.
-    PlayerBaseState _currentState;
+    public PlayerBaseState CurrentState;
 
     public PlayerIdleState IdleState ;
     public PlayerRuningState RuningState ;
@@ -35,6 +35,7 @@ public class PlayerStateManger : NetworkBehaviour
     private Player_Controls _playerControls;
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
+    public AnimationsLength AnimationsLength;
 
     #endregion
 
@@ -42,7 +43,25 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void Awake()
     {
-        //Setup states
+        CashingStates();
+
+        CurrentState = IdleState;
+        CurrentState.EnterState();
+        ReadyToSwitchState = true;
+        IsCastingAnAbility = false;
+
+        //caching Instances 
+        CharactherController = GetComponent<CharacterController>();
+        Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
+        AnimationsLength = GetComponent<AnimationsLength>();
+
+        SubscriptionToPlayerControls();
+
+    }
+
+    private void CashingStates()
+    {
         IdleState = GetComponent<PlayerIdleState>();
         RuningState = GetComponent<PlayerRuningState>();
         AutoAttackState = GetComponent<PlayerAutoAttackState>();
@@ -51,19 +70,6 @@ public class PlayerStateManger : NetworkBehaviour
         ThirdAbilityState = GetComponent<PlayerThirdAbilityState>();
         UltimateState = GetComponent<PlayerUltimateState>();
         DeadState = GetComponent<PlayerDeadState>();
-        
-        _currentState = IdleState;
-        _currentState.EnterState();
-        ReadyToSwitchState = true;
-        IsCastingAnAbility = false ;
-
-        //caching Instances 
-        CharactherController = GetComponent<CharacterController>();
-        Animator = GetComponent<Animator>();
-        NetworkAnimator = GetComponent<NetworkAnimator>();
-
-        SubscriptionToPlayerControls();
-
     }
 
     private void SubscriptionToPlayerControls()
@@ -80,47 +86,50 @@ public class PlayerStateManger : NetworkBehaviour
         _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInput; 
         _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInput; 
         _playerControls.DefaultMap.Ultimate.performed += OnUltimateInput; 
+
+        
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
     {
-        if (_currentState != RuningState) SwitchState(RuningState);
+        if (CurrentState != RuningState) SwitchState(RuningState);
         RuningState.OnMovementInput(context);
+        //_playerControls.DefaultMap.Move.ReadValue<Vector2>()
     }
 
     private void OnAutoAttackInput(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true ;
-        if (_currentState != AutoAttackState) SwitchState(AutoAttackState);
+        if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
 
     private void OnFirstAbilityInput(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
-        if (_currentState != FirstAbilityState) SwitchState(FirstAbilityState);
+        //IsCastingAnAbility = true;
+        if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
     }
 
     private void OnSecondAbilityInput(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
-        if (_currentState != SecondAbilityState) SwitchState(SecondAbilityState);
+        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
     }
 
     private void OnThirdAbilityInput(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
-        if (_currentState != ThirdAbilityState) SwitchState(ThirdAbilityState);
+        if (CurrentState != ThirdAbilityState) SwitchState(ThirdAbilityState);
     }
 
     private void OnUltimateInput(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
-        if (_currentState != UltimateState) SwitchState(UltimateState);
+        if (CurrentState != UltimateState) SwitchState(UltimateState);
     }
 
     void Update()
     {
-        _currentState.UpdateState();
+        CurrentState.UpdateState();
 
         if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);       
     }
@@ -145,9 +154,9 @@ public class PlayerStateManger : NetworkBehaviour
     public void SwitchState(PlayerBaseState state)
     {   
         if (!ReadyToSwitchState) return;
-        _currentState.ExitState();
-        _currentState = state;
-        _currentState.EnterState();
+        CurrentState.ExitState();
+        CurrentState = state;
+        CurrentState.EnterState();
 
     }
 

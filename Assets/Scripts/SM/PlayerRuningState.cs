@@ -8,7 +8,7 @@ public class PlayerRuningState : PlayerBaseState
     [SerializeField] private float _rotationSpeed = 10.0f;
     
     //A refrence for the Player State Manger
-    PlayerStateManger player;
+    PlayerStateManger _player;
    
     //Variables to store player input values
     Vector2 _currentMovementInput;
@@ -22,16 +22,16 @@ public class PlayerRuningState : PlayerBaseState
     bool _isMovementPressed;
 
     //Variables to store omptimized Setter / getter parameter IDs
-    int _isRunningHash;
+    int _RunningHash;
 
     // not sure if the mono behavior part will work (Awake and IsOwner)
     private void Awake() 
     {
         //Caching The Player State Manger
-        player = GetComponent<PlayerStateManger>();
+        _player = GetComponent<PlayerStateManger>();
         
         //caching Hashes
-        _isRunningHash = Animator.StringToHash("isRunning");
+        _RunningHash = Animator.StringToHash("Running");
 
     }
 
@@ -39,22 +39,22 @@ public class PlayerRuningState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         _isMovementPressed = true;
-        player.Animator.SetBool(_isRunningHash, true);
+        _player.Animator.CrossFade(_RunningHash, 0.1f);
 
     }
 
     public override void UpdateState()
     {
         if (!base.IsOwner) return;
-        HandleMovemenet(player);
-        HandleRotation(player);
-        if (!_isMovementPressed || player.IsCastingAnAbility) player.SwitchState(player.IdleState);
+        HandleMovemenet(_player);
+        HandleRotation(_player);
+        //if (!_isMovementPressed || _player.IsCastingAnAbility) _player.SwitchState(_player.CurrentState);
     }
 
     public override void ExitState()
     {
-        if (!base.IsOwner) return;
-        player.Animator.SetBool(_isRunningHash, false);
+
+
 
     }
 
@@ -63,6 +63,7 @@ public class PlayerRuningState : PlayerBaseState
         _currentMovementInput = context.ReadValue<Vector2>();
         _currentMovenemnt.x = _currentMovementInput.x;
         _currentMovenemnt.z = _currentMovementInput.y;
+
         _isMovementPressed = _currentMovenemnt.x != 0 || _currentMovenemnt.z != 0;
 
     }

@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 8109761303020472251}
   - component: {fileID: 6993583831906917193}
   - component: {fileID: 2676623566172398361}
+  - component: {fileID: 1079290804763206085}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -104,7 +105,11 @@ MonoBehaviour:
   - {fileID: 3761214916139061550}
   - {fileID: 6858166303471902967}
   - {fileID: 6746618029839681540}
+  - {fileID: 5947815961018107451}
+  - {fileID: 5803099296968801611}
   - {fileID: 4027057840975592395}
+  - {fileID: 8109761303020472251}
+  - {fileID: 6993583831906917193}
   - {fileID: 2676623566172398361}
   SceneTransformProperties:
     Position: {x: 0, y: 0, z: 0}
@@ -269,9 +274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c764abdc5768e7b4986dd7995eca4d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5701580062507666206}
 --- !u!114 &5803099296968801611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,9 +289,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c940383ff6af5f049ad6fb41c1951968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 5701580062507666206}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5701580062507666206}
+  AbbilityName: Spin
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,7 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f2601c58df881a488ba34e21f4b2753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 6
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
 --- !u!114 &8109761303020472251
@@ -314,9 +320,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 598e3439ea7f013439a6c876ce77fe75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 5701580062507666206}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5701580062507666206}
+  AbilityName: Dash
+  _dashSpeed: 5
 --- !u!114 &6993583831906917193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,9 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4526d01fcf46249849b1fbc3d9d7e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 10
   _addedNetworkObject: {fileID: 5701580062507666206}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5701580062507666206}
 --- !u!114 &2676623566172398361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,9 +352,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193f10343d4e2894eb7db33363a46cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 7
+  _componentIndexCache: 11
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+--- !u!114 &1079290804763206085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479496936149924893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b03d9c042b097c4aba67b702ee6fcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5477355537277993490
 PrefabInstance:
   m_ObjectHideFlags: 0

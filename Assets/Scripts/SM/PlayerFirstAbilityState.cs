@@ -2,8 +2,15 @@ using UnityEngine;
 
 public class PlayerFirstAbilityState : PlayerBaseState
 {
+    //Game Designe Vars, Mak a stat Script maybe
+    float _animationDuration = 0.0f;
+
     //Cashing the Player State Manager : Should do to all state scripts 
-    PlayerStateManger player;
+    PlayerStateManger _player;
+    
+
+    //Name of The Abbility
+    public string AbbilityName = "Spin" ;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _firstAbility;
@@ -11,7 +18,7 @@ public class PlayerFirstAbilityState : PlayerBaseState
     private void Awake()
     {
         //Caching The Player State Manger
-        player = GetComponent<PlayerStateManger>();
+        _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
         _firstAbility = Animator.StringToHash("FirstAbility");
@@ -21,14 +28,14 @@ public class PlayerFirstAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
-        Invoke(nameof(AttackComplete), 0f);
-        player.NetworkAnimator.SetTrigger(_firstAbility);
-        player.ReadyToSwitchState = false;
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
+        _player.Animator.CrossFade(_firstAbility, 0.1f);
+        _player.ReadyToSwitchState = false;
     }
 
     public override void UpdateState()
     {
-
+        //move with x Speed
     }
 
     public override void ExitState()
@@ -38,8 +45,8 @@ public class PlayerFirstAbilityState : PlayerBaseState
 
     void AttackComplete()
     {
-        player.ReadyToSwitchState = true;
-        player.IsCastingAnAbility = false;
-        player.SwitchState(player.IdleState);
+        _player.ReadyToSwitchState = true;
+        //_player.IsCastingAnAbility = false;
+        _player.SwitchState(_player.IdleState);
     }
 }
