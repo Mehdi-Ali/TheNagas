@@ -21,7 +21,7 @@ public class PlayerFirstAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
-        Invoke(nameof(AttackComplete), 1f);
+        Invoke(nameof(AttackComplete), 0f);
         player.NetworkAnimator.SetTrigger(_firstAbility);
         player.ReadyToSwitchState = false;
     }
