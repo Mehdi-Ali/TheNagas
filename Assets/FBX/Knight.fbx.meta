@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 1646b5e81c94e6242b15fecca9c320e6
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: 3703617226193914796
@@ -433,7 +433,7 @@ ModelImporter:
       takeName: FirstAbility_State
       internalID: 0
       firstFrame: 0
-      lastFrame: 90
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1531,6 +1531,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

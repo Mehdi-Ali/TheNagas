@@ -22,8 +22,16 @@ public class PlayerStateManger : NetworkBehaviour
     public PlayerUltimateState UltimateState ;
     public PlayerDeadState DeadState ;
 
+    //Variables to store player input values
+    Vector2 _currentMovementInput;
+    Vector3 _currentMovenemnt;
+
+    //Variables to handle Rotation
+    Vector3 _positionTolookAt;
+    Quaternion _targetRotation;
 
     //StateMachine Variables (logic and animation)
+    public bool IsMovementPressed;
     public bool ReadyToSwitchState;
     public bool IsCastingAnAbility ;
 
@@ -93,9 +101,42 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnMovementInput(InputAction.CallbackContext context)
     {
         if (CurrentState != RuningState) SwitchState(RuningState);
-        RuningState.OnMovementInput(context);
-        //_playerControls.DefaultMap.Move.ReadValue<Vector2>()
     }
+
+
+    public void ReadMovementInput()
+    {
+        _currentMovementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
+        _currentMovenemnt.x = _currentMovementInput.x;
+        _currentMovenemnt.z = _currentMovementInput.y;
+
+        IsMovementPressed = _currentMovenemnt.x != 0 || _currentMovenemnt.z != 0;
+    }
+
+    public void Move(float movementSpeed)
+    {
+        ReadMovementInput();
+        CharactherController.SimpleMove(_currentMovenemnt * movementSpeed);
+    }
+
+    public void Rotate(float rotationSpeed)
+    {
+
+        //the change in position our character should point to
+        _positionTolookAt.x = _currentMovenemnt.x;
+        _positionTolookAt.y = 0.0f;
+        _positionTolookAt.z = _currentMovenemnt.z;
+
+        //creates a new rotation bases on where the player is currently moving
+        _targetRotation = Quaternion.LookRotation(_positionTolookAt);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, rotationSpeed * Time.deltaTime);
+
+    }
+
+
+
+
+
 
     private void OnAutoAttackInput(InputAction.CallbackContext context)
     {
@@ -105,7 +146,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnFirstAbilityInput(InputAction.CallbackContext context)
     {
-        //IsCastingAnAbility = true;
+        IsCastingAnAbility = true;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
     }
 
@@ -130,6 +171,7 @@ public class PlayerStateManger : NetworkBehaviour
     void Update()
     {
         CurrentState.UpdateState();
+        if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
 
         if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);       
     }

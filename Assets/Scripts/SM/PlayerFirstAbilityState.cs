@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerFirstAbilityState : PlayerBaseState
 {
     //Game Designe Vars, Mak a stat Script maybe
-    float _animationDuration = 0.0f;
+    [SerializeField] private float _movementSpeed = 7.5f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -35,18 +35,19 @@ public class PlayerFirstAbilityState : PlayerBaseState
 
     public override void UpdateState()
     {
-        //move with x Speed
+        if (!base.IsOwner) return;
+        _player.Move(_movementSpeed);
     }
 
     public override void ExitState()
     {
-        //enable SwitchState
+
     }
 
     void AttackComplete()
     {
         _player.ReadyToSwitchState = true;
-        //_player.IsCastingAnAbility = false;
+        _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
     }
 }
