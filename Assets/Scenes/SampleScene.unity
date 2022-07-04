@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 135691973}
   - component: {fileID: 135691972}
   - component: {fileID: 135691971}
+  - component: {fileID: 135691974}
   m_Layer: 5
   m_Name: Ultimate
   m_TagString: Untagged
@@ -213,6 +214,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135691969}
   m_CullTransparentMesh: 1
+--- !u!114 &135691974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135691969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MovementRange: 50
+  m_ControlPath: <Gamepad>/rightStick
 --- !u!1 &378981681
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +461,7 @@ GameObject:
   - component: {fileID: 453077958}
   - component: {fileID: 453077957}
   - component: {fileID: 453077956}
+  - component: {fileID: 453077959}
   m_Layer: 5
   m_Name: SecondAbility
   m_TagString: Untagged
@@ -524,6 +540,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453077954}
   m_CullTransparentMesh: 1
+--- !u!114 &453077959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453077954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MovementRange: 50
+  m_ControlPath: <Gamepad>/rightStick
 --- !u!1 &524913436
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,8 +612,8 @@ MonoBehaviour:
   _scenePathHash: 584410112
   _sceneId: 2510022320391303363
   _sceneNetworkObjects:
-  - {fileID: 524913438}
   - {fileID: 1520825874}
+  - {fileID: 524913438}
 --- !u!1001 &561528001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -936,6 +966,7 @@ GameObject:
   - component: {fileID: 1289577754}
   - component: {fileID: 1289577753}
   - component: {fileID: 1289577752}
+  - component: {fileID: 1289577755}
   m_Layer: 5
   m_Name: FirstAbility
   m_TagString: Untagged
@@ -1014,6 +1045,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289577750}
   m_CullTransparentMesh: 1
+--- !u!114 &1289577755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289577750}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MovementRange: 50
+  m_ControlPath: <Gamepad>/rightStick
 --- !u!224 &1481590118 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7209665109931025011, guid: f3d70141e82032b4f998941ceb228750,
@@ -1197,7 +1242,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520825867}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
@@ -1208,15 +1253,15 @@ MonoBehaviour:
     Position: {x: 0, y: 4, z: 2.6}
     Rotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
     LocalScale: {x: 1, y: 1, z: 1}
-  _isNetworked: 1
+  _isNetworked: 0
   _hasParentNetworkObjectAtEdit: 0
   NetworkObserver: {fileID: 0}
   _prefabId: -1
   _scenePathHash: 584410112
-  _sceneId: 2510022321209346263
+  _sceneId: 2510022318977801168
   _sceneNetworkObjects:
-  - {fileID: 524913438}
   - {fileID: 1520825874}
+  - {fileID: 524913438}
 --- !u!1001 &1677442417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1329,6 +1374,7 @@ GameObject:
   - component: {fileID: 1802264940}
   - component: {fileID: 1802264939}
   - component: {fileID: 1802264938}
+  - component: {fileID: 1802264941}
   m_Layer: 5
   m_Name: ThirdAbility
   m_TagString: Untagged
@@ -1407,6 +1453,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1802264936}
   m_CullTransparentMesh: 1
+--- !u!114 &1802264941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802264936}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MovementRange: 50
+  m_ControlPath: <Gamepad>/rightStick
 --- !u!1 &2005334586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1646,6 +1706,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209665110974238482, guid: f3d70141e82032b4f998941ceb228750,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -39.399902
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3d70141e82032b4f998941ceb228750, type: 3}

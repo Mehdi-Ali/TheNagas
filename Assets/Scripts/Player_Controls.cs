@@ -51,7 +51,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""a1c1c1b8-a831-423f-9fde-3f5235432ca3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -60,7 +60,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""6e748d03-1d31-466a-8f28-f4246387c924"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -69,7 +69,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""720d8989-acea-4dbe-a766-f1fdd9260353"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -78,8 +78,17 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""a00fd490-0d12-4261-bcde-0a00cc4abf0d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Value"",
+                    ""id"": ""c132a603-1f33-445b-a6fe-c9d10c573242"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -313,6 +322,17 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""action"": ""ThirdAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a443ca7-977c-4094-bd47-153d7df7f750"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -327,6 +347,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
         m_DefaultMap_SecondAbility = m_DefaultMap.FindAction("SecondAbility", throwIfNotFound: true);
         m_DefaultMap_ThirdAbility = m_DefaultMap.FindAction("ThirdAbility", throwIfNotFound: true);
         m_DefaultMap_Ultimate = m_DefaultMap.FindAction("Ultimate", throwIfNotFound: true);
+        m_DefaultMap_Aim = m_DefaultMap.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -392,6 +413,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_DefaultMap_SecondAbility;
     private readonly InputAction m_DefaultMap_ThirdAbility;
     private readonly InputAction m_DefaultMap_Ultimate;
+    private readonly InputAction m_DefaultMap_Aim;
     public struct DefaultMapActions
     {
         private @Player_Controls m_Wrapper;
@@ -402,6 +424,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
         public InputAction @SecondAbility => m_Wrapper.m_DefaultMap_SecondAbility;
         public InputAction @ThirdAbility => m_Wrapper.m_DefaultMap_ThirdAbility;
         public InputAction @Ultimate => m_Wrapper.m_DefaultMap_Ultimate;
+        public InputAction @Aim => m_Wrapper.m_DefaultMap_Aim;
         public InputActionMap Get() { return m_Wrapper.m_DefaultMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -429,6 +452,9 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                 @Ultimate.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
                 @Ultimate.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
                 @Ultimate.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnUltimate;
+                @Aim.started -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_DefaultMapActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_DefaultMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -451,6 +477,9 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                 @Ultimate.started += instance.OnUltimate;
                 @Ultimate.performed += instance.OnUltimate;
                 @Ultimate.canceled += instance.OnUltimate;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -463,5 +492,6 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
         void OnSecondAbility(InputAction.CallbackContext context);
         void OnThirdAbility(InputAction.CallbackContext context);
         void OnUltimate(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

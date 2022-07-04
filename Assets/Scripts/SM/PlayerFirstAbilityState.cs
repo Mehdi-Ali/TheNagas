@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class PlayerFirstAbilityState : PlayerBaseState
 {
+    //Name of The Abbility
+    public string AbbilityName = "Spin" ;
+
     //Game Designe Vars, Mak a stat Script maybe
     [SerializeField] private float _movementSpeed = 7.5f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
-    
-
-    //Name of The Abbility
-    public string AbbilityName = "Spin" ;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _firstAbility;
@@ -30,7 +29,9 @@ public class PlayerFirstAbilityState : PlayerBaseState
         //check cooldown
         Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
         _player.Animator.CrossFade(_firstAbility, 0.1f);
+        //_player.NetworkAnimator.CrossFade(_firstAbility, 0.1f, -1, 0,0);
         _player.ReadyToSwitchState = false;
+        _player.IsCastingAnAbility = true;
     }
 
     public override void UpdateState()

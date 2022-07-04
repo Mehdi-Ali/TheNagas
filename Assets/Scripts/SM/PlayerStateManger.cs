@@ -30,6 +30,12 @@ public class PlayerStateManger : NetworkBehaviour
     Vector3 _positionTolookAt;
     Quaternion _targetRotation;
 
+    //Variables to handle Aiming
+    Vector2 _currentAimingInput ;
+    Vector3 _currentAimingAt ;
+    Quaternion _currentAimingRotation;
+
+
     //StateMachine Variables (logic and animation)
     public bool IsMovementPressed;
     public bool ReadyToSwitchState;
@@ -44,6 +50,8 @@ public class PlayerStateManger : NetworkBehaviour
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
     public AnimationsLength AnimationsLength;
+    [SerializeField] HitBox _1stHitBox;
+
 
     #endregion
 
@@ -63,8 +71,9 @@ public class PlayerStateManger : NetworkBehaviour
         Animator = GetComponent<Animator>();
         NetworkAnimator = GetComponent<NetworkAnimator>();
         AnimationsLength = GetComponent<AnimationsLength>();
-
         SubscriptionToPlayerControls();
+
+        _1stHitBox.gameObject.SetActive(false);
 
     }
 
@@ -89,13 +98,44 @@ public class PlayerStateManger : NetworkBehaviour
         _playerControls.DefaultMap.Move.canceled += OnMovementInput;
         _playerControls.DefaultMap.Move.performed += OnMovementInput;
 
+        _playerControls.DefaultMap.Aim.started += OnAimingInput;
+        _playerControls.DefaultMap.Aim.canceled += OnAimingInput;
+        _playerControls.DefaultMap.Aim.performed += OnAimingInput;
+
         _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInput;
-        _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInput; 
-        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInput; 
+        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInput; 
+
+        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInput_performed; 
+        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInput_canceled; 
+        
         _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInput; 
         _playerControls.DefaultMap.Ultimate.performed += OnUltimateInput; 
 
         
+    }
+
+    private void OnAimingInput(InputAction.CallbackContext context)
+    {
+        ReadAimingtInput();
+        HandleAmingRotation();        
+    }
+
+    private void ReadAimingtInput()
+    {
+        _currentAimingInput = _playerControls.DefaultMap.Aim.ReadValue<Vector2>();
+        _currentAimingAt.x = _currentAimingInput.x;
+        _currentAimingAt.y = 0.0f;
+        _currentAimingAt.z = _currentAimingInput.y;
+
+    }
+
+    private void HandleAmingRotation()
+    {
+        _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
+        Debug.Log(_currentAimingAt);
+        Debug.Log(_currentAimingRotation);
+        _1stHitBox.transform.rotation = Quaternion.Slerp(_1stHitBox.transform.rotation,
+                                                            _currentAimingRotation, 0.75f);
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
@@ -134,10 +174,6 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
 
-
-
-
-
     private void OnAutoAttackInput(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true ;
@@ -150,11 +186,31 @@ public class PlayerStateManger : NetworkBehaviour
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
     }
 
-    private void OnSecondAbilityInput(InputAction.CallbackContext context)
+    
+    
+    
+
+    private void OnSecondAbilityInput_performed(InputAction.CallbackContext context)
+    {
+        //change the place of the mmmethode or add conditions before applying.
+        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        _1stHitBox._2.gameObject.SetActive(true);
+
+
+    }
+
+
+    private void OnSecondAbilityInput_canceled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+        _1stHitBox._2.gameObject.SetActive(false);
     }
+
+
+
+
+
 
     private void OnThirdAbilityInput(InputAction.CallbackContext context)
     {

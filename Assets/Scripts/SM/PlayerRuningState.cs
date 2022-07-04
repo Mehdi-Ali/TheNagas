@@ -10,12 +10,6 @@ public class PlayerRuningState : PlayerBaseState
     //A refrence for the Player State Manger
     PlayerStateManger _player;
    
-
-
-
-
-
-
     //Variables to store omptimized Setter / getter parameter IDs
     int _RunningHash;
 
