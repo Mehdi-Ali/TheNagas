@@ -48,8 +48,8 @@ public class AnimationsLength : MonoBehaviour
                 case "ThirdAbility_State":
                     ThirdAbilityDuration = clip.length;
                     break;
-                case "Ultimate_State":
-                    UltimateDuration = clip.length;
+                case "Ultimate_State": 
+                    UltimateDuration = clip.length ; // 
                     break;
                 case "Dead_State":
                     DeadDuration = clip.length;

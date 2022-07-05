@@ -62,14 +62,13 @@ GameObject:
   m_Component:
   - component: {fileID: 560060419982342154}
   - component: {fileID: 7911659424621958943}
-  - component: {fileID: 2367989718393439920}
   m_Layer: 0
-  m_Name: AbilityHitBox_3
+  m_Name: AbilityHitBox_3_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &560060419982342154
 Transform:
   m_ObjectHideFlags: 0
@@ -77,13 +76,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647548884738781888}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.025, y: 0, z: 1.83}
-  m_LocalScale: {x: 0.04, y: 0.1, z: 0.07}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.025, y: 0, z: -2.166}
+  m_LocalScale: {x: 0.04, y: 0.10000003, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 2
+  m_Father: {fileID: 1111092448088423424}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &7911659424621958943
 SpriteRenderer:
@@ -137,13 +136,46 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2367989718393439920
+--- !u!1 &1724860473213849719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1111092448088423424}
+  - component: {fileID: 2979363044844787090}
+  m_Layer: 0
+  m_Name: AbilityHitBox_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1111092448088423424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724860473213849719}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3.996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 560060419982342154}
+  m_Father: {fileID: 6656375592314909681}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2979363044844787090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647548884738781888}
+  m_GameObject: {fileID: 1724860473213849719}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
@@ -479,7 +511,7 @@ Transform:
   m_Children:
   - {fileID: 6401397835162887978}
   - {fileID: 6060401361930298120}
-  - {fileID: 560060419982342154}
+  - {fileID: 1111092448088423424}
   - {fileID: 365946972399886044}
   m_Father: {fileID: 6714603885293539493}
   m_RootOrder: 0
@@ -498,7 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitBox1: {fileID: 7357285480015409602}
   HitBox2: {fileID: 3692613208259820304}
-  HitBox3: {fileID: 2367989718393439920}
+  HitBox3: {fileID: 2979363044844787090}
   HitBoxU: {fileID: 8720286562408087850}
   RotationConstraint: {fileID: 0}
 --- !u!1 &8479496936149924893
@@ -730,6 +762,7 @@ MonoBehaviour:
   UltimateState: {fileID: 0}
   DeadState: {fileID: 0}
   HitBoxes: {fileID: 0}
+  ActiveHitBox: {fileID: 0}
   IsMovementPressed: 0
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
@@ -836,7 +869,6 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
   AbilityName: Dash
-  _dashStpeed: 20
   _animationSpeed: 2
 --- !u!114 &6993583831906917193
 MonoBehaviour:
@@ -854,7 +886,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
   AbbilityName: Dank
-  _animationSpeed: 2
+  _animationSpeed: 1.5
   Range: 5
 --- !u!114 &2676623566172398361
 MonoBehaviour:

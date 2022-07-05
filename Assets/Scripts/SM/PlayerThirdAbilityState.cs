@@ -6,11 +6,15 @@ public class PlayerThirdAbilityState : PlayerBaseState
     public string AbilityName = "Dash" ;
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] float _dashStpeed = 20.0f;
     [SerializeField] float _animationSpeed = 2f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
+
+    //Variables...
+    float _tLerp;
+    Vector3 _end;
+    Vector3 _start;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _thirdAbilityHash;
@@ -33,8 +37,13 @@ public class PlayerThirdAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _tLerp = 0.0f;
+        _start = transform.position;
+        _end = _player.ActiveHitBox.transform.position;
+
         Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_animationSpeed );
         _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
+
         //activating colider
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
@@ -42,7 +51,10 @@ public class PlayerThirdAbilityState : PlayerBaseState
 
     public override void UpdateState()
     {
-        transform.Translate(Vector3.forward * _dashStpeed * Time.deltaTime);
+        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _animationSpeed);
+
+        _tLerp += Time.deltaTime * _animationSpeed / _player.AnimationsLength.ThirdAbilityDuration;
+        transform.position = Vector3.Lerp(_start, _end, _tLerp);
 
     }
 

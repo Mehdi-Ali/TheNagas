@@ -36,9 +36,9 @@ public class PlayerStateManger : NetworkBehaviour
     Vector3 _currentAimingAt ;
     Quaternion _currentAimingRotation;
     public HitBoxes HitBoxes;
-    HitBox _activeHitBox;
+    public HitBox ActiveHitBox;
 
-    
+
 
 
     //StateMachine Variables (logic and animation)
@@ -134,9 +134,9 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnAimingInput(InputAction.CallbackContext context)
     {
         ReadAimingtInput();
-        if (_activeHitBox != null && !_activeHitBox.Movable) HandleAmingRotation();
+        if (ActiveHitBox != null && !ActiveHitBox.Movable) HandleAmingRotation();
 
-        if (_activeHitBox != null && _activeHitBox.Movable) HandleAmingLocation();
+        if (ActiveHitBox != null && ActiveHitBox.Movable) HandleAmingLocation();
 
     }
 
@@ -153,7 +153,7 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
     private void HandleAmingLocation()
-    {
+    {   
         HitBoxes.transform.localPosition = _currentAimingAt * UltimateState.Range ;
     } 
 
@@ -220,7 +220,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
         HitBoxes.HitBox1.gameObject.SetActive(true);
-        _activeHitBox = HitBoxes.HitBox1;
+        ActiveHitBox = HitBoxes.HitBox1;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -238,7 +238,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
         HitBoxes.HitBox2.gameObject.SetActive(true);
-        _activeHitBox = HitBoxes.HitBox2;
+        ActiveHitBox = HitBoxes.HitBox2;
     }
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -257,7 +257,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
         HitBoxes.HitBox3.gameObject.SetActive(true);
-        _activeHitBox = HitBoxes.HitBox3;
+        ActiveHitBox = HitBoxes.HitBox3;
     }
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -276,7 +276,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
         HitBoxes.HitBoxU.gameObject.SetActive(true);
-        _activeHitBox = HitBoxes.HitBoxU;
+        ActiveHitBox = HitBoxes.HitBoxU;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {

@@ -6,7 +6,7 @@ public class PlayerUltimateState : PlayerBaseState
     public string AbbilityName = "Dank";
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 2.0f;
+    [SerializeField] private float _animationSpeed = 1.5f;
     [SerializeField] public float Range = 5.0f;
 
 
@@ -15,6 +15,7 @@ public class PlayerUltimateState : PlayerBaseState
     float _tLerp ;
     Vector3 _end;
     Vector3 _start;
+
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -32,8 +33,6 @@ public class PlayerUltimateState : PlayerBaseState
         _ultimateHash = Animator.StringToHash("Ultimate");
         _ultimateMultiplierHash = Animator.StringToHash("Ultimate_Multiplier");
 
-        _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
-
     }
 
     public override void EnterState()
@@ -45,19 +44,25 @@ public class PlayerUltimateState : PlayerBaseState
         _start = transform.position ;
         _end = _player.HitBoxes.transform.position ;
 
-        Invoke(nameof(AttackComplete),_player.AnimationsLength.UltimateDuration / _animationSpeed);
+
+        Invoke( nameof(AttackComplete),
+                ((_player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ))) / _animationSpeed );
+        
+        _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
         _player.Animator.CrossFade(_ultimateHash, 0.1f);
 
+        //activating colider
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
     }
 
     public override void UpdateState()
     {
-        _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
-
+  
+        
+       
         if (_grounded) return;
-        _tLerp += Time.deltaTime * _animationSpeed / _player.AnimationsLength.UltimateDuration;
+        _tLerp += Time.deltaTime * _animationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
         transform.position = Vector3.Lerp( _start, _end, _tLerp );
 
     }
@@ -80,8 +85,8 @@ public class PlayerUltimateState : PlayerBaseState
         //Activat Collider + deal damage 
     }
 
-    void StopTranslateEvent()
+    void StopUltimateTransformEvent()
     {
-        //_grounded = true ;
+        _grounded = true ;
     }
 }

@@ -32,7 +32,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""eb42d74c-4f5c-439d-9ee5-2fffed2f6e81"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
@@ -86,7 +86,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""c132a603-1f33-445b-a6fe-c9d10c573242"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 }
