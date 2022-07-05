@@ -42,7 +42,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""4b83e7b7-025f-4c45-a705-5aee07689e5f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {

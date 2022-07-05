@@ -46,7 +46,7 @@ public class PlayerUltimateState : PlayerBaseState
 
 
         Invoke( nameof(AttackComplete),
-                ((_player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ))) / _animationSpeed );
+                (_player.AnimationsLength.UltimateDuration / _animationSpeed ));
         
         _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
         _player.Animator.CrossFade(_ultimateHash, 0.1f);

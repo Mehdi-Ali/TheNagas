@@ -110,7 +110,9 @@ public class PlayerStateManger : NetworkBehaviour
         _playerControls.DefaultMap.Aim.canceled += OnAimingInput;
         _playerControls.DefaultMap.Aim.performed += OnAimingInput;
 
-        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInput;
+        _playerControls.DefaultMap.AutoAttack.started += OnAutoAttackInputStarted;
+        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformmed;
+        _playerControls.DefaultMap.AutoAttack.canceled += OnAutoAttackInputcanceled;
 
         _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
         _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
@@ -210,10 +212,20 @@ public class PlayerStateManger : NetworkBehaviour
 
 
 
-    private void OnAutoAttackInput(InputAction.CallbackContext context)
+    private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
+        Debug.Log("Started");
         IsCastingAnAbility = true ;
+        AutoAttackState.Continue = false;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
+    }
+    private void OnAutoAttackInputPerformmed(InputAction.CallbackContext context)
+    {
+        AutoAttackState.Continue = true;
+    }
+    private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
+    {
+        AutoAttackState.Continue = false ;
     }
 
 
