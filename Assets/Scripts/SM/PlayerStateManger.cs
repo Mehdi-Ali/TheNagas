@@ -104,14 +104,22 @@ public class PlayerStateManger : NetworkBehaviour
         _playerControls.DefaultMap.Aim.performed += OnAimingInput;
 
         _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInput;
-        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInput; 
 
-        _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInput_started; 
-        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInput_performed; 
-        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInput_canceled; 
+        _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
+        _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
+        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCancled;
+
+        _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInputStarted; 
+        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInputPerformed; 
+        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInputCanceled; 
         
-        _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInput; 
-        _playerControls.DefaultMap.Ultimate.performed += OnUltimateInput; 
+        _playerControls.DefaultMap.ThirdAbility.started += OnThirdAbilityInputStarted;
+        _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInputPerformed;
+        _playerControls.DefaultMap.ThirdAbility.canceled += OnThirdAbilityInputCanceled;
+
+        _playerControls.DefaultMap.Ultimate.started += OnUltimateInputStarted;
+        _playerControls.DefaultMap.Ultimate.performed += OnUltimateInputPerformed;
+        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceld;
 
         
     }
@@ -139,7 +147,7 @@ public class PlayerStateManger : NetworkBehaviour
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
         _hitBox.transform.rotation = Quaternion.Slerp(  _hitBox.transform.rotation,
                                                         _currentAimingRotation,
-                                                        10f * Time.deltaTime);
+                                                        100f );
     }
 
     void RotateToHitBox()
@@ -193,27 +201,36 @@ public class PlayerStateManger : NetworkBehaviour
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
 
-    private void OnFirstAbilityInput(InputAction.CallbackContext context)
+
+    private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
+    {
+        _hitBox._1.gameObject.SetActive(true);
+    }
+    private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        _hitBox._1.gameObject.SetActive(true);
+    }
+    private void OnFirstAbilityInputCancled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
+        _hitBox._1.gameObject.SetActive(false);
     }
 
 
-    private void OnSecondAbilityInput_started(InputAction.CallbackContext context)
+    private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
         _hitBox._2.gameObject.SetActive(true);
     }
 
-
-    private void OnSecondAbilityInput_performed(InputAction.CallbackContext context)
+    private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (!ReadyToSwitchState || IsCastingAnAbility) return;
         _hitBox._2.gameObject.SetActive(true);
     }
 
-
-    private void OnSecondAbilityInput_canceled(InputAction.CallbackContext context)
+    private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
@@ -222,20 +239,41 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
 
-
-
-
-
-    private void OnThirdAbilityInput(InputAction.CallbackContext context)
+    private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
-        if (CurrentState != ThirdAbilityState) SwitchState(ThirdAbilityState);
+        _hitBox._3.gameObject.SetActive(true);
     }
 
-    private void OnUltimateInput(InputAction.CallbackContext context)
+    private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        _hitBox._3.gameObject.SetActive(true);
+    }
+
+    private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
-        if (CurrentState != UltimateState) SwitchState(UltimateState);
+        if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
+        RotateToHitBox();
+        _hitBox._3.gameObject.SetActive(false);
+    }
+
+
+    private void OnUltimateInputStarted(InputAction.CallbackContext context)
+    {
+        _hitBox._U.gameObject.SetActive(true);
+    }
+    private void OnUltimateInputPerformed(InputAction.CallbackContext context)
+    {
+        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        _hitBox._U.gameObject.SetActive(true);
+    }
+    private void OnUltimateInputCanceld(InputAction.CallbackContext context)
+    {
+        IsCastingAnAbility = true;
+        if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
+        RotateToHitBox();
+        _hitBox._U.gameObject.SetActive(false);
     }
 
     void Update()

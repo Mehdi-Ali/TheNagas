@@ -29,7 +29,7 @@ public class PlayerFirstAbilityState : PlayerBaseState
         //check cooldown
         Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
         _player.Animator.CrossFade(_firstAbility, 0.1f);
-        //_player.NetworkAnimator.CrossFade(_firstAbility, 0.1f, -1, 0,0);
+        //activating colider
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
     }

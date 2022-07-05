@@ -6,35 +6,43 @@ public class PlayerThirdAbilityState : PlayerBaseState
     public string AbilityName = "Dash" ;
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] float _dashSpeed = 5.0f;
+    [SerializeField] float _dashStpeed = 20.0f;
+    [SerializeField] float _animationSpeed = 2f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
-    PlayerStateManger player;
+    PlayerStateManger _player;
 
     //Variables to store omptimized Setter / getter parameter IDs
-    int _thirdAbility;
+    int _thirdAbilityHash;
+    int _thirdAbilityMultiplierHash ;
 
     private void Awake()
     {
         //Caching The Player State Manger
-        player = GetComponent<PlayerStateManger>();
+        _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
-        _thirdAbility = Animator.StringToHash("ThirdAbility");
+        _thirdAbilityHash = Animator.StringToHash("ThirdAbility");
+        _thirdAbilityMultiplierHash = Animator.StringToHash("ThirdAbility_Multiplier");
+
+        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _animationSpeed);
+
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
         //check cooldown
-        Invoke(nameof(AttackComplete), 1f);
-        player.NetworkAnimator.SetTrigger(_thirdAbility);
-       // transform.Translate(Vector3.forward * _dashSpeed * Time.deltaTime );
-        player.ReadyToSwitchState = false;
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_animationSpeed );
+        _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
+        //activating colider
+        _player.ReadyToSwitchState = false;
+        _player.IsCastingAnAbility = true;
     }
 
     public override void UpdateState()
     {
+        transform.Translate(Vector3.forward * _dashStpeed * Time.deltaTime);
 
     }
 
@@ -45,8 +53,8 @@ public class PlayerThirdAbilityState : PlayerBaseState
 
     void AttackComplete()
     {
-        player.ReadyToSwitchState = true;
-        player.IsCastingAnAbility = false;
-        player.SwitchState(player.IdleState);
+        _player.ReadyToSwitchState = true;
+        _player.IsCastingAnAbility = false;
+        _player.SwitchState(_player.IdleState);
     }
 }

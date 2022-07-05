@@ -13,7 +13,7 @@ public class PlayerSecondAbilityState : PlayerBaseState
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _secondAbilityHash;
-    int _secondAbility_Multiplier ;
+    int _secondAbilityMultiplierHash ;
 
     private void Awake()
     {       
@@ -22,9 +22,9 @@ public class PlayerSecondAbilityState : PlayerBaseState
 
         //caching Hashes
         _secondAbilityHash = Animator.StringToHash("SecondAbility");
-        _secondAbility_Multiplier = Animator.StringToHash("SecondAbility_Multiplier");
+        _secondAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
        
-       _player.Animator.SetFloat("SecondAbility_Multiplier", _animationSpeed);
+       _player.Animator.SetFloat(_secondAbilityMultiplierHash, _animationSpeed);
     }
 
     public override void EnterState()
@@ -32,10 +32,7 @@ public class PlayerSecondAbilityState : PlayerBaseState
         if (!base.IsOwner) return;
         //check cooldown
         Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _animationSpeed);
-        
-        // Set player rotation to the hitbox rotation.
-        // and rest the hit box rotation so that it seems that it didn't rotate.
-        
+                
         _player.Animator.CrossFade(_secondAbilityHash, 0.1f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
@@ -59,6 +56,12 @@ public class PlayerSecondAbilityState : PlayerBaseState
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false ;
         _player.SwitchState(_player.IdleState);
+    }
+
+    void SecondAbilityEvent()
+    {
+        Debug.Log("Pop");
+        //Activat Collider + deal damage 
     }
 
 }
