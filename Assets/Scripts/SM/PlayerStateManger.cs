@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Component.Animating;
@@ -34,6 +35,10 @@ public class PlayerStateManger : NetworkBehaviour
     Vector2 _currentAimingInput ;
     Vector3 _currentAimingAt ;
     Quaternion _currentAimingRotation;
+    public HitBoxes HitBoxes;
+    HitBox _activeHitBox;
+
+    
 
 
     //StateMachine Variables (logic and animation)
@@ -51,7 +56,8 @@ public class PlayerStateManger : NetworkBehaviour
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
     public AnimationsLength AnimationsLength;
-    HitBox _hitBox;
+
+
 
 
     #endregion
@@ -60,7 +66,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void Awake()
     {
-        CashingStates();
+        CashingInstances();
 
         CurrentState = IdleState;
         CurrentState.EnterState();
@@ -68,17 +74,11 @@ public class PlayerStateManger : NetworkBehaviour
         IsCastingAnAbility = false;
         IsAmingPressed = false;
 
-        //caching Instances 
-        CharactherController = GetComponent<CharacterController>();
-        Animator = GetComponent<Animator>();
-        NetworkAnimator = GetComponent<NetworkAnimator>();
-        AnimationsLength = GetComponent<AnimationsLength>();
-        _hitBox = FindObjectOfType<HitBox>();
         SubscriptionToPlayerControls();
 
     }
 
-    private void CashingStates()
+    private void CashingInstances()
     {
         IdleState = GetComponent<PlayerIdleState>();
         RuningState = GetComponent<PlayerRuningState>();
@@ -88,6 +88,13 @@ public class PlayerStateManger : NetworkBehaviour
         ThirdAbilityState = GetComponent<PlayerThirdAbilityState>();
         UltimateState = GetComponent<PlayerUltimateState>();
         DeadState = GetComponent<PlayerDeadState>();
+
+        CharactherController = GetComponent<CharacterController>();
+        Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
+        AnimationsLength = GetComponent<AnimationsLength>();
+        HitBoxes = FindObjectOfType<HitBoxes>();
+
     }
 
     private void SubscriptionToPlayerControls()
@@ -127,7 +134,10 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnAimingInput(InputAction.CallbackContext context)
     {
         ReadAimingtInput();
-        HandleAmingRotation();        
+        if (_activeHitBox != null && !_activeHitBox.Movable) HandleAmingRotation();
+
+        if (_activeHitBox != null && _activeHitBox.Movable) HandleAmingLocation();
+
     }
 
     private void ReadAimingtInput()
@@ -142,17 +152,22 @@ public class PlayerStateManger : NetworkBehaviour
 
     }
 
+    private void HandleAmingLocation()
+    {
+        HitBoxes.transform.localPosition = _currentAimingAt * UltimateState.Range ;
+    } 
+
     private void HandleAmingRotation()
     {
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
-        _hitBox.transform.rotation = Quaternion.Slerp(  _hitBox.transform.rotation,
+        HitBoxes.transform.rotation = Quaternion.Slerp(  HitBoxes.transform.rotation,
                                                         _currentAimingRotation,
                                                         100f );
     }
 
     void RotateToHitBox()
     {
-        transform.LookAt(_hitBox._2.transform);
+        transform.LookAt(HitBoxes.HitBox2.transform);
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
@@ -204,76 +219,76 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
-        _hitBox._1.gameObject.SetActive(true);
+        HitBoxes.HitBox1.gameObject.SetActive(true);
+        _activeHitBox = HitBoxes.HitBox1;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (!ReadyToSwitchState || IsCastingAnAbility) return;
-        _hitBox._1.gameObject.SetActive(true);
+        HitBoxes.HitBox1.gameObject.SetActive(true);
     }
     private void OnFirstAbilityInputCancled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        _hitBox._1.gameObject.SetActive(false);
+        HitBoxes.HitBox1.gameObject.SetActive(false);
     }
 
 
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
-        _hitBox._2.gameObject.SetActive(true);
+        HitBoxes.HitBox2.gameObject.SetActive(true);
+        _activeHitBox = HitBoxes.HitBox2;
     }
-
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (!ReadyToSwitchState || IsCastingAnAbility) return;
-        _hitBox._2.gameObject.SetActive(true);
+        HitBoxes.HitBox2.gameObject.SetActive(true);
     }
-
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
-        _hitBox._2.gameObject.SetActive(false);
+        HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
 
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
-        _hitBox._3.gameObject.SetActive(true);
+        HitBoxes.HitBox3.gameObject.SetActive(true);
+        _activeHitBox = HitBoxes.HitBox3;
     }
-
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (!ReadyToSwitchState || IsCastingAnAbility) return;
-        _hitBox._3.gameObject.SetActive(true);
+        HitBoxes.HitBox3.gameObject.SetActive(true);
     }
-
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
         RotateToHitBox();
-        _hitBox._3.gameObject.SetActive(false);
+        HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
 
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
-        _hitBox._U.gameObject.SetActive(true);
+        HitBoxes.HitBoxU.gameObject.SetActive(true);
+        _activeHitBox = HitBoxes.HitBoxU;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
         if (!ReadyToSwitchState || IsCastingAnAbility) return;
-        _hitBox._U.gameObject.SetActive(true);
+        HitBoxes.HitBoxU.gameObject.SetActive(true);
     }
     private void OnUltimateInputCanceld(InputAction.CallbackContext context)
     {
         IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
         RotateToHitBox();
-        _hitBox._U.gameObject.SetActive(false);
+        HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
     void Update()
@@ -281,7 +296,7 @@ public class PlayerStateManger : NetworkBehaviour
         CurrentState.UpdateState();
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         if ( IsAmingPressed) {ReadAimingtInput(); HandleAmingRotation();}
-        else _hitBox.transform.localEulerAngles = Vector3.zero;
+        else HitBoxes.transform.localEulerAngles = Vector3.zero;
 
         if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);       
     }

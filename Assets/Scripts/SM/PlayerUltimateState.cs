@@ -6,7 +6,15 @@ public class PlayerUltimateState : PlayerBaseState
     public string AbbilityName = "Dank";
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 1.0f;
+    [SerializeField] private float _animationSpeed = 2.0f;
+    [SerializeField] public float Range = 5.0f;
+
+
+    //Variables...
+    bool _grounded ;
+    float _tLerp ;
+    Vector3 _end;
+    Vector3 _start;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -32,20 +40,31 @@ public class PlayerUltimateState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _grounded = false;
+        _tLerp = 0.0f ;
+        _start = transform.position ;
+        _end = _player.HitBoxes.transform.position ;
+
         Invoke(nameof(AttackComplete),_player.AnimationsLength.UltimateDuration / _animationSpeed);
         _player.Animator.CrossFade(_ultimateHash, 0.1f);
+
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
     }
 
     public override void UpdateState()
     {
+        _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
+
+        if (_grounded) return;
+        _tLerp += Time.deltaTime * _animationSpeed / _player.AnimationsLength.UltimateDuration;
+        transform.position = Vector3.Lerp( _start, _end, _tLerp );
 
     }
 
     public override void ExitState()
     {
-        //enable SwitchState
+
     }
 
     void AttackComplete()
@@ -59,5 +78,10 @@ public class PlayerUltimateState : PlayerBaseState
     {
         Debug.Log("Biger Pop");
         //Activat Collider + deal damage 
+    }
+
+    void StopTranslateEvent()
+    {
+        //_grounded = true ;
     }
 }

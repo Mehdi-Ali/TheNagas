@@ -1,5 +1,57 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1609854746206480959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6714603885293539493}
+  - component: {fileID: 9161195576453264490}
+  m_Layer: 0
+  m_Name: HitBoxHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6714603885293539493
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609854746206480959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6656375592314909681}
+  m_Father: {fileID: 4673185021982604604}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1818360609 &9161195576453264490
+RotationConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609854746206480959}
+  m_Enabled: 1
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &1647548884738781888
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,6 +62,7 @@ GameObject:
   m_Component:
   - component: {fileID: 560060419982342154}
   - component: {fileID: 7911659424621958943}
+  - component: {fileID: 2367989718393439920}
   m_Layer: 0
   m_Name: AbilityHitBox_3
   m_TagString: Untagged
@@ -84,6 +137,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2367989718393439920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647548884738781888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
+  Movable: 0
 --- !u!1 &1725123932843481487
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 365946972399886044}
   - component: {fileID: 3539571576118183765}
+  - component: {fileID: 8720286562408087850}
   m_Layer: 0
   m_Name: AbilityHitBox_U
   m_TagString: Untagged
@@ -168,6 +236,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8720286562408087850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725123932843481487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
+  Movable: 1
 --- !u!1 &2034158316825229032
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6401397835162887978}
   - component: {fileID: 8387852871576861356}
+  - component: {fileID: 7357285480015409602}
   m_Layer: 0
   m_Name: AbilityHitBox_1
   m_TagString: Untagged
@@ -252,6 +335,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7357285480015409602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034158316825229032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
+  Movable: 0
 --- !u!1 &2256348051351351708
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,6 +359,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6060401361930298120}
   - component: {fileID: 8695548962750523629}
+  - component: {fileID: 3692613208259820304}
   m_Layer: 0
   m_Name: AbilityHitBox_2
   m_TagString: Untagged
@@ -336,6 +434,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3692613208259820304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256348051351351708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
+  Movable: 0
 --- !u!1 &3997462032446882025
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +472,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3997462032446882025}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -369,8 +481,8 @@ Transform:
   - {fileID: 6060401361930298120}
   - {fileID: 560060419982342154}
   - {fileID: 365946972399886044}
-  m_Father: {fileID: 4673185021982604604}
-  m_RootOrder: 1
+  m_Father: {fileID: 6714603885293539493}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6761588083424209742
 MonoBehaviour:
@@ -384,10 +496,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6313d081491953849aca5031579a16da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _1: {fileID: 2034158316825229032}
-  _2: {fileID: 2256348051351351708}
-  _3: {fileID: 1647548884738781888}
-  _U: {fileID: 1725123932843481487}
+  HitBox1: {fileID: 7357285480015409602}
+  HitBox2: {fileID: 3692613208259820304}
+  HitBox3: {fileID: 2367989718393439920}
+  HitBoxU: {fileID: 8720286562408087850}
+  RotationConstraint: {fileID: 0}
 --- !u!1 &8479496936149924893
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +546,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5443093462058804729}
-  - {fileID: 6656375592314909681}
+  - {fileID: 6714603885293539493}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -616,6 +729,7 @@ MonoBehaviour:
   ThirdAbilityState: {fileID: 0}
   UltimateState: {fileID: 0}
   DeadState: {fileID: 0}
+  HitBoxes: {fileID: 0}
   IsMovementPressed: 0
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
@@ -739,6 +853,9 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+  AbbilityName: Dank
+  _animationSpeed: 2
+  Range: 5
 --- !u!114 &2676623566172398361
 MonoBehaviour:
   m_ObjectHideFlags: 0

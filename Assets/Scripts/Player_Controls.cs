@@ -328,7 +328,7 @@ public partial class @Player_Controls : IInputActionCollection2, IDisposable
                     ""id"": ""0a443ca7-977c-4094-bd47-153d7df7f750"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
                     ""isComposite"": false,
