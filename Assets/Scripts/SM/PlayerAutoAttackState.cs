@@ -16,7 +16,9 @@ public class PlayerAutoAttackState : PlayerBaseState
     public bool Continue;
 
     //Variables to store omptimized Setter / getter parameter IDs
-    int _autoAttackHash;
+    int _autoAttack1Hash;
+    int _autoAttack2Hash;
+    int _autoAttack3Hash;
     int _AutoAttackMultiplierHash;
 
     private void Awake()
@@ -25,7 +27,9 @@ public class PlayerAutoAttackState : PlayerBaseState
         _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
-        _autoAttackHash = Animator.StringToHash("AutoAttack");
+        _autoAttack1Hash = Animator.StringToHash("AutoAttack1");
+        _autoAttack2Hash = Animator.StringToHash("AutoAttack2");
+        _autoAttack3Hash = Animator.StringToHash("AutoAttack3");
         _AutoAttackMultiplierHash = Animator.StringToHash("AutoAttack_Multiplier");
 
         _player.Animator.SetFloat(_AutoAttackMultiplierHash, _animationSpeed);
@@ -35,9 +39,9 @@ public class PlayerAutoAttackState : PlayerBaseState
     {
         if (!base.IsOwner) return;
 
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.AutoAttackDuration / _animationSpeed);
+        Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
 
-        _player.Animator.CrossFade(_autoAttackHash, 0.1f);
+        _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
     }
@@ -52,8 +56,51 @@ public class PlayerAutoAttackState : PlayerBaseState
         //enable SwitchState
     }
 
-    void AttackComplete()
+    public void Attack1Complete()
     {
+        if (Continue)
+        {
+            Invoke(nameof(Attack2Complete), _player.AnimationsLength.AutoAttack2Duration / _animationSpeed);
+
+            _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
+        }
+        else
+        {
+            AttackComplete();   
+        }
+    }
+
+    public void Attack2Complete()
+    {
+        if (Continue)
+        {
+            Invoke(nameof(Attack3Complete), _player.AnimationsLength.AutoAttack3Duration / _animationSpeed);
+
+            _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
+        }
+        else
+        {
+            AttackComplete();
+        }
+    }
+
+    public void Attack3Complete()
+    {
+        if (Continue)
+        {
+            Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
+
+            _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
+        }
+        else
+        {
+            AttackComplete();
+        }
+    }
+
+    public void AttackComplete()
+    {
+
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
@@ -75,16 +122,7 @@ public class PlayerAutoAttackState : PlayerBaseState
         //Activat Collider + deal damage 
     }
 
-        void AutoAttack1BreakEvent()
-    {
-        Debug.Log("B1");
-        Debug.Log(Continue);
-        if (!Continue) AttackComplete() ;
-    }
-        void AutoAttack2BreakEvent()
-    {
-        Debug.Log("B2");
-        if (!Continue) AttackComplete();
-    }
+
+
 }
 

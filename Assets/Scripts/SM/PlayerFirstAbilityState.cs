@@ -27,11 +27,13 @@ public class PlayerFirstAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        
+        _player.ReadyToSwitchState = false;
+        _player.IsCastingAnAbility = true;
+
         Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
         _player.Animator.CrossFade(_firstAbility, 0.1f);
         //activating colider
-        _player.ReadyToSwitchState = false;
-        _player.IsCastingAnAbility = true;
     }
 
     public override void UpdateState()

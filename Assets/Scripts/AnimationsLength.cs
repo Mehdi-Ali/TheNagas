@@ -11,7 +11,9 @@ public class AnimationsLength : MonoBehaviour
     //Animations
     public float IdleDuration ;
     public float RunningDuration ;
-    public float AutoAttackDuration ;
+    public float AutoAttack1Duration ;
+    public float AutoAttack2Duration ;
+    public float AutoAttack3Duration ;
     public float FirstAbilityDuration ;
     public float SecondAbilityDuration ;
     public float ThirdAbilityDuration ;
@@ -36,8 +38,14 @@ public class AnimationsLength : MonoBehaviour
                 case "Running_State":
                     RunningDuration = clip.length;
                     break;
-                case "AutoAttack_State":
-                    AutoAttackDuration = clip.length;
+                case "AutoAttack1_State":
+                    AutoAttack1Duration = clip.length;
+                    break;
+                case "AutoAttack2_State":
+                    AutoAttack2Duration = clip.length;
+                    break;
+                case "AutoAttack3_State":
+                    AutoAttack3Duration = clip.length;
                     break;
                 case "FirstAbility_State":
                     FirstAbilityDuration = clip.length;

@@ -50,6 +50,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool _TempDeadStateSim = false;
 
 
+
     //Variables to cache Instances 
     public CharacterController CharactherController;
     private Player_Controls _playerControls;
@@ -214,8 +215,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
-        Debug.Log("Started");
-        IsCastingAnAbility = true ;
         AutoAttackState.Continue = false;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
@@ -241,7 +240,6 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnFirstAbilityInputCancled(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
         HitBoxes.HitBox1.gameObject.SetActive(false);
     }
@@ -259,7 +257,6 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
         HitBoxes.HitBox2.gameObject.SetActive(false);
@@ -278,7 +275,6 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
         RotateToHitBox();
         HitBoxes.HitBox3.gameObject.SetActive(false);
@@ -297,7 +293,6 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnUltimateInputCanceld(InputAction.CallbackContext context)
     {
-        IsCastingAnAbility = true;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
         RotateToHitBox();
         HitBoxes.HitBoxU.gameObject.SetActive(false);
