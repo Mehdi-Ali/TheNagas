@@ -57,6 +57,7 @@ public class PlayerStateManger : NetworkBehaviour
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
     public AnimationsLength AnimationsLength;
+    public CooldownSystem CooldownSystem;
 
 
 
@@ -95,6 +96,7 @@ public class PlayerStateManger : NetworkBehaviour
         NetworkAnimator = GetComponent<NetworkAnimator>();
         AnimationsLength = GetComponent<AnimationsLength>();
         HitBoxes = FindObjectOfType<HitBoxes>();
+        CooldownSystem = FindObjectOfType<CooldownSystem>();
 
     }
 
@@ -221,7 +223,7 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnAutoAttackInputPerformmed(InputAction.CallbackContext context)
     {
-        AutoAttackState.Continue = true;
+        if (AutoAttackState.Continue == false) AutoAttackState.Continue = true ;
     }
     private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
     {
@@ -231,16 +233,20 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
         HitBoxes.HitBox1.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox1;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
-        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility ) return;
+
         HitBoxes.HitBox1.gameObject.SetActive(true);
     }
     private void OnFirstAbilityInputCancled(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
         HitBoxes.HitBox1.gameObject.SetActive(false);
     }
@@ -248,16 +254,20 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox2;
     }
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
-        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility) return;
+
         HitBoxes.HitBox2.gameObject.SetActive(true);
     }
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
         HitBoxes.HitBox2.gameObject.SetActive(false);
@@ -266,16 +276,19 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox3;
     }
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
-        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        if (    CooldownSystem.IsOnCooldown(ThirdAbilityState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility) return;
         HitBoxes.HitBox3.gameObject.SetActive(true);
     }
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
         RotateToHitBox();
         HitBoxes.HitBox3.gameObject.SetActive(false);
@@ -284,16 +297,19 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBoxU;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
-        if (!ReadyToSwitchState || IsCastingAnAbility) return;
+        if (    CooldownSystem.IsOnCooldown(UltimateState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
     }
     private void OnUltimateInputCanceld(InputAction.CallbackContext context)
     {
+        if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
         RotateToHitBox();
         HitBoxes.HitBoxU.gameObject.SetActive(false);
@@ -306,7 +322,9 @@ public class PlayerStateManger : NetworkBehaviour
         if ( IsAmingPressed) {ReadAimingtInput(); HandleAmingRotation();}
         else HitBoxes.transform.localEulerAngles = Vector3.zero;
 
-        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);       
+        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);
+
+      
     }
  
 

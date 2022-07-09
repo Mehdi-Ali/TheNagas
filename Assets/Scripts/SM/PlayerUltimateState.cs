@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class PlayerUltimateState : PlayerBaseState
+public class PlayerUltimateState : PlayerBaseState, IHasCooldown
 {
     //Name of The Abbility
-    public string AbbilityName = "Dank";
+    public string AbilityName = "Dank";
 
     //Game Designe Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 1.5f;
     [SerializeField] public float Range = 5.0f;
+    [SerializeField] float _cooldown = 5.0f;
 
 
     //Variables...
@@ -24,6 +25,10 @@ public class PlayerUltimateState : PlayerBaseState
     int _ultimateHash;
     int _ultimateMultiplierHash;
 
+    // cooldown things
+    public string Id => AbilityName;
+    public float CooldownDuration => _cooldown;
+
     private void Awake()
     {
         //Caching The Player State Manger
@@ -39,6 +44,8 @@ public class PlayerUltimateState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _player.CooldownSystem.PutOnCooldown(this);
+
         _grounded = false;
         _tLerp = 0.0f ;
         _start = transform.position ;

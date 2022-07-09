@@ -772,6 +772,7 @@ MonoBehaviour:
   Animator: {fileID: 0}
   NetworkAnimator: {fileID: 0}
   AnimationsLength: {fileID: 0}
+  CooldownSystem: {fileID: 0}
 --- !u!114 &6858166303471902967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,6 +843,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   AbbilityName: Spin
   _movementSpeed: 7.5
+  _cooldown: 5
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0

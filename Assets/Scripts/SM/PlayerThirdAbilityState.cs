@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class PlayerThirdAbilityState : PlayerBaseState
+public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
 {
     //Ability Name
     public string AbilityName = "Dash" ;
 
     //Game Designe Vars, Mak a stat Script maybe
     [SerializeField] float _animationSpeed = 2f;
+    [SerializeField] float _cooldown = 5.0f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -19,6 +20,10 @@ public class PlayerThirdAbilityState : PlayerBaseState
     //Variables to store omptimized Setter / getter parameter IDs
     int _thirdAbilityHash;
     int _thirdAbilityMultiplierHash ;
+
+    // cooldown things
+    public string Id => AbilityName;
+    public float CooldownDuration => _cooldown;
 
     private void Awake()
     {
@@ -37,6 +42,8 @@ public class PlayerThirdAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _player.CooldownSystem.PutOnCooldown(this);
+
         _tLerp = 0.0f;
         _start = transform.position;
         _end = _player.ActiveHitBox.transform.position;

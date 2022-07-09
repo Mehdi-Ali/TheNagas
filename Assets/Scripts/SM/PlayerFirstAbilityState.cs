@@ -1,18 +1,23 @@
 using UnityEngine;
 
-public class PlayerFirstAbilityState : PlayerBaseState
+public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
 {
     //Name of The Abbility
     public string AbbilityName = "Spin" ;
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] private float _movementSpeed = 7.5f;
+    [SerializeField] float _movementSpeed = 7.5f;
+    [SerializeField] float _cooldown = 5.0f ;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _firstAbility;
+
+    // cooldown things
+    public string Id => AbbilityName ;
+    public float CooldownDuration => _cooldown ;
 
     private void Awake()
     {
@@ -27,12 +32,13 @@ public class PlayerFirstAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _player.CooldownSystem.PutOnCooldown(this);
         
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
+        
+        _player.Animator.CrossFade(_firstAbility, 0.1f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
-
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
-        _player.Animator.CrossFade(_firstAbility, 0.1f);
         //activating colider
     }
 
@@ -40,6 +46,7 @@ public class PlayerFirstAbilityState : PlayerBaseState
     {
         if (!base.IsOwner) return;
         _player.Move(_movementSpeed);
+
     }
 
     public override void ExitState()
