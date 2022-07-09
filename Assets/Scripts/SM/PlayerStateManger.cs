@@ -136,10 +136,12 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnAimingInput(InputAction.CallbackContext context)
     {
-        ReadAimingtInput();
-        if (ActiveHitBox != null && !ActiveHitBox.Movable) HandleAmingRotation();
+        if (ActiveHitBox == null ) return;
 
-        if (ActiveHitBox != null && ActiveHitBox.Movable) HandleAmingLocation();
+        ReadAimingtInput();
+        HandleAmingRotation();
+
+        if (ActiveHitBox.Movable) HandleAmingLocation();
 
     }
 
@@ -197,7 +199,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     public void Rotate(float rotationSpeed)
     {
-
         //the change in position our character should point to
         _positionTolookAt.x = _currentMovenemnt.x;
         _positionTolookAt.y = 0.0f;

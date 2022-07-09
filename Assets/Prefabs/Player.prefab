@@ -819,6 +819,12 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+  AbbilityName: Auto Attack
+  _animationSpeed: 1.5
+  _dashingMovementSpeed: 10
+  _dashingTime: 0.1
+  _rotationSpeed: 20
+  Continue: 0
 --- !u!114 &5803099296968801611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,7 +923,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IdleDuration: 0
   RunningDuration: 0
-  AutoAttackDuration: 0
+  AutoAttack1Duration: 0
+  AutoAttack2Duration: 0
+  AutoAttack3Duration: 0
   FirstAbilityDuration: 0
   SecondAbilityDuration: 0
   ThirdAbilityDuration: 0

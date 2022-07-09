@@ -6,14 +6,17 @@ public class PlayerAutoAttackState : PlayerBaseState
     public string AbbilityName = "Auto Attack";
 
     //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 1.0f;
-    [SerializeField] private float _dashingMovementSpeed = 7.5f;
+    [SerializeField] private float _animationSpeed = 1.5f;
+    [SerializeField] private float _dashingMovementSpeed = 10f;
+    [SerializeField] private float _dashingTime = 0.25f;
+    [SerializeField] private float _rotationSpeed = 10.0f;
     
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
     //Variables 
     public bool Continue;
+    bool _dashed ;
 
     //Variables to store omptimized Setter / getter parameter IDs
     int _autoAttack1Hash;
@@ -40,6 +43,8 @@ public class PlayerAutoAttackState : PlayerBaseState
         if (!base.IsOwner) return;
 
         Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
+        _dashed = false;
+        Invoke(nameof(Dashed), _dashingTime);
 
         _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         _player.ReadyToSwitchState = false;
@@ -48,7 +53,9 @@ public class PlayerAutoAttackState : PlayerBaseState
 
     public override void UpdateState()
     {
-
+        if (_dashed || !_player.IsMovementPressed) return ;
+        _player.Move(_dashingMovementSpeed);
+        _player.Rotate(_rotationSpeed);
     }
 
     public override void ExitState()
@@ -56,11 +63,18 @@ public class PlayerAutoAttackState : PlayerBaseState
         //enable SwitchState
     }
 
+    void Dashed()
+    {
+        _dashed = true;
+    }
+
     public void Attack1Complete()
     {
         if (Continue)
         {
             Invoke(nameof(Attack2Complete), _player.AnimationsLength.AutoAttack2Duration / _animationSpeed);
+            _dashed = false;
+            Invoke(nameof(Dashed), _dashingTime);
 
             _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
         }
@@ -75,6 +89,8 @@ public class PlayerAutoAttackState : PlayerBaseState
         if (Continue)
         {
             Invoke(nameof(Attack3Complete), _player.AnimationsLength.AutoAttack3Duration / _animationSpeed);
+            _dashed = false;
+            Invoke(nameof(Dashed), _dashingTime);
 
             _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
         }
@@ -89,6 +105,8 @@ public class PlayerAutoAttackState : PlayerBaseState
         if (Continue)
         {
             Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
+            _dashed = false;
+            Invoke(nameof(Dashed), _dashingTime);
 
             _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         }
