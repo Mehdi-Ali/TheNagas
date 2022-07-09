@@ -28,6 +28,21 @@ public class CooldownSystem : MonoBehaviour
         cooldowns.Add(new CooldownData(cd)) ;
     }
 
+    
+    public void RestartCooldown(IHasCooldown cd)
+    {
+        foreach (CooldownData cooldown in cooldowns)
+        {
+            if (cooldown.Id == cd.Id) 
+            {
+                cooldown.ReminingTime = cd.CooldownDuration;
+                return;
+            }
+        }
+        
+        PutOnCooldown(cd);
+    }
+
     public bool IsOnCooldown(string id)
     {
         foreach (CooldownData cd in cooldowns)

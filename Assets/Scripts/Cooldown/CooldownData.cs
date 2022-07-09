@@ -10,7 +10,7 @@ public class CooldownData
     
 
     public string Id { get; }
-    public float ReminingTime { get; private set ;}
+    public float ReminingTime { get; set;}
 
 
     public bool DecrementalCooldown(float deltaTime)

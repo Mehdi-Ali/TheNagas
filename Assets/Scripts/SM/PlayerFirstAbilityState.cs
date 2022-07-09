@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
 {
     //Name of The Abbility
-    public string AbbilityName = "Spin" ;
+    public string AbilityName = "Spin" ;
 
     //Game Designe Vars, Mak a stat Script maybe
     [SerializeField] float _movementSpeed = 7.5f;
@@ -16,7 +16,7 @@ public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
     int _firstAbility;
 
     // cooldown things
-    public string Id => AbbilityName ;
+    public string Id => AbilityName ;
     public float CooldownDuration => _cooldown ;
 
     private void Awake()
