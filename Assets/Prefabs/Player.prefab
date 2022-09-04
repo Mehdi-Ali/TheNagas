@@ -754,7 +754,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   CurrentState: {fileID: 0}
   IdleState: {fileID: 0}
-  RuningState: {fileID: 0}
+  RunningState: {fileID: 0}
   AutoAttackState: {fileID: 0}
   FirstAbilityState: {fileID: 0}
   SecondAbilityState: {fileID: 0}
@@ -766,9 +766,9 @@ MonoBehaviour:
   IsMovementPressed: 0
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
-  IsAmingPressed: 0
+  IsAimingPressed: 0
   _TempDeadStateSim: 0
-  CharactherController: {fileID: 0}
+  CharacterController: {fileID: 0}
   Animator: {fileID: 0}
   NetworkAnimator: {fileID: 0}
   AnimationsLength: {fileID: 0}
@@ -841,7 +841,7 @@ MonoBehaviour:
   _componentIndexCache: 7
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbbilityName: Spin
+  AbilityName: Spin
   _movementSpeed: 7.5
   _cooldown: 5
 --- !u!114 &4027057840975592395
@@ -859,8 +859,11 @@ MonoBehaviour:
   _componentIndexCache: 8
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbbilityName: Slash
+  AbilityName: Slash
   _animationSpeed: 2
+  _cooldown: 0
+  _attackRang: 1.5
+  _damage: 20
 --- !u!114 &8109761303020472251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,6 +881,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   AbilityName: Dash
   _animationSpeed: 2
+  _cooldown: 5
 --- !u!114 &6993583831906917193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -893,9 +897,10 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbbilityName: Dank
+  AbilityName: Dank
   _animationSpeed: 1.5
   Range: 5
+  _cooldown: 5
 --- !u!114 &2676623566172398361
 MonoBehaviour:
   m_ObjectHideFlags: 0

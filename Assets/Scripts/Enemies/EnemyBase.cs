@@ -1,17 +1,26 @@
 using UnityEngine;
 
-public class EnemyBase : Damagable
+public class EnemyBase : Damageable
 {
-    [SerializeField] bool _takeDamage ;
-    [SerializeField] float _maxHealth = 100.0f ;
+    // [SerializeField] bool _takeDamage; // dell ; just a test
+    [SerializeField] float _maxHealth = 100.0f;
 
-    public override float Maxhealth { get => _maxHealth; }
-    public override float Health { get ; set ; }
+    public override float MaxHealth { get => _maxHealth; }
+    public override float Health { get; set; }
 
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        // Get Stat Class
+        // _maxHealth = stats.MaxHealth ;
+    }
 
     private void Update()
     {
-        if(_takeDamage) TakeDamage(1.0f);
-        Debug.Log(Health);
+        // // dell ; just a test
+        // if (_takeDamage) TakeDamage(1.0f);
+        // Debug.Log(Health);
     }
 }

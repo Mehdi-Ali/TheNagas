@@ -25,7 +25,7 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void UpdateState()
     {
-        if (_player.IsMovementPressed) _player.SwitchState(_player.RuningState);
+        if (_player.IsMovementPressed) _player.SwitchState(_player.RunningState);
         //Here wen can set the other idle eache x number of seconds.
     }
 

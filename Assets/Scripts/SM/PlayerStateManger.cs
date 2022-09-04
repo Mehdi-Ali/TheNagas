@@ -15,7 +15,7 @@ public class PlayerStateManger : NetworkBehaviour
     public PlayerBaseState CurrentState;
 
     public PlayerIdleState IdleState ;
-    public PlayerRuningState RuningState ;
+    public PlayerRunningState RunningState ;
     public PlayerAutoAttackState AutoAttackState ;
     public PlayerFirstAbilityState FirstAbilityState ;
     public PlayerSecondAbilityState SecondAbilityState ;
@@ -25,10 +25,10 @@ public class PlayerStateManger : NetworkBehaviour
 
     //Variables to store player input values
     Vector2 _currentMovementInput;
-    Vector3 _currentMovenemnt;
+    Vector3 _currentMovement;
 
     //Variables to handle Rotation
-    Vector3 _positionTolookAt;
+    Vector3 _positionToLookAt;
     Quaternion _targetRotation;
 
     //Variables to handle Aiming
@@ -45,14 +45,14 @@ public class PlayerStateManger : NetworkBehaviour
     public bool IsMovementPressed ;
     public bool ReadyToSwitchState;
     public bool IsCastingAnAbility ;
-    public bool IsAmingPressed ;
+    public bool IsAimingPressed ;
 
     public bool _TempDeadStateSim = false;
 
 
 
     //Variables to cache Instances 
-    public CharacterController CharactherController;
+    public CharacterController CharacterController;
     private Player_Controls _playerControls;
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
@@ -74,7 +74,7 @@ public class PlayerStateManger : NetworkBehaviour
         CurrentState.EnterState();
         ReadyToSwitchState = true;
         IsCastingAnAbility = false;
-        IsAmingPressed = false;
+        IsAimingPressed = false;
 
         SubscriptionToPlayerControls();
 
@@ -83,7 +83,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void CashingInstances()
     {
         IdleState = GetComponent<PlayerIdleState>();
-        RuningState = GetComponent<PlayerRuningState>();
+        RunningState = GetComponent<PlayerRunningState>();
         AutoAttackState = GetComponent<PlayerAutoAttackState>();
         FirstAbilityState = GetComponent<PlayerFirstAbilityState>();
         SecondAbilityState = GetComponent<PlayerSecondAbilityState>();
@@ -91,7 +91,7 @@ public class PlayerStateManger : NetworkBehaviour
         UltimateState = GetComponent<PlayerUltimateState>();
         DeadState = GetComponent<PlayerDeadState>();
 
-        CharactherController = GetComponent<CharacterController>();
+        CharacterController = GetComponent<CharacterController>();
         Animator = GetComponent<Animator>();
         NetworkAnimator = GetComponent<NetworkAnimator>();
         AnimationsLength = GetComponent<AnimationsLength>();
@@ -119,7 +119,7 @@ public class PlayerStateManger : NetworkBehaviour
 
         _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
         _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
-        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCancled;
+        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCanceled;
 
         _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInputStarted; 
         _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInputPerformed; 
@@ -131,7 +131,7 @@ public class PlayerStateManger : NetworkBehaviour
 
         _playerControls.DefaultMap.Ultimate.started += OnUltimateInputStarted;
         _playerControls.DefaultMap.Ultimate.performed += OnUltimateInputPerformed;
-        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceld;
+        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceled;
 
         
     }
@@ -140,31 +140,31 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (ActiveHitBox == null ) return;
 
-        ReadAimingtInput();
-        HandleAmingRotation();
+        ReadAimingInput();
+        HandleAimingRotation();
 
-        if (ActiveHitBox.Movable) HandleAmingLocation();
+        if (ActiveHitBox.Movable) HandleAimingLocation();
 
     }
 
-    private void ReadAimingtInput()
+    private void ReadAimingInput()
     {
         _currentAimingInput = _playerControls.DefaultMap.Aim.ReadValue<Vector2>();
         _currentAimingAt.x = _currentAimingInput.x;
         _currentAimingAt.y = 0.0f;
         _currentAimingAt.z = _currentAimingInput.y;
 
-        IsAmingPressed =    _currentAimingAt.x != 0 ||
+        IsAimingPressed =    _currentAimingAt.x != 0 ||
                             _currentAimingAt.z != 0 ;
 
     }
 
-    private void HandleAmingLocation()
+    private void HandleAimingLocation()
     {   
         HitBoxes.transform.localPosition = _currentAimingAt * UltimateState.Range ;
     } 
 
-    private void HandleAmingRotation()
+    private void HandleAimingRotation()
     {
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
         HitBoxes.transform.rotation = Quaternion.Slerp(  HitBoxes.transform.rotation,
@@ -179,35 +179,35 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnMovementInput(InputAction.CallbackContext context)
     {
-        if (CurrentState != RuningState) SwitchState(RuningState);
+        if (CurrentState != RunningState) SwitchState(RunningState);
     }
 
 
     public void ReadMovementInput()
     {
         _currentMovementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
-        _currentMovenemnt.x = _currentMovementInput.x;
-        _currentMovenemnt.z = _currentMovementInput.y;
+        _currentMovement.x = _currentMovementInput.x;
+        _currentMovement.z = _currentMovementInput.y;
 
-        IsMovementPressed = _currentMovenemnt.x != 0 ||
-                            _currentMovenemnt.z != 0 ;
+        IsMovementPressed = _currentMovement.x != 0 ||
+                            _currentMovement.z != 0 ;
     }
 
     public void Move(float movementSpeed)
     {
         ReadMovementInput();
-        CharactherController.SimpleMove(_currentMovenemnt * movementSpeed);
+        CharacterController.SimpleMove(_currentMovement * movementSpeed);
     }
 
     public void Rotate(float rotationSpeed)
     {
         //the change in position our character should point to
-        _positionTolookAt.x = _currentMovenemnt.x;
-        _positionTolookAt.y = 0.0f;
-        _positionTolookAt.z = _currentMovenemnt.z;
+        _positionToLookAt.x = _currentMovement.x;
+        _positionToLookAt.y = 0.0f;
+        _positionToLookAt.z = _currentMovement.z;
 
         //creates a new rotation bases on where the player is currently moving
-        _targetRotation = Quaternion.LookRotation(_positionTolookAt);
+        _targetRotation = Quaternion.LookRotation(_positionToLookAt);
         transform.rotation = Quaternion.Slerp(  transform.rotation,
                                                 _targetRotation,
                                                 rotationSpeed * Time.deltaTime);
@@ -244,11 +244,11 @@ public class PlayerStateManger : NetworkBehaviour
 
         HitBoxes.HitBox1.gameObject.SetActive(true);
     }
-    private void OnFirstAbilityInputCancled(InputAction.CallbackContext context)
+    private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        HitBoxes.HitBox1.gameObject.SetActive(false);
+        //HitBoxes.HitBox1.gameObject.SetActive(false);
     }
 
 
@@ -270,7 +270,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
-        HitBoxes.HitBox2.gameObject.SetActive(false);
+        //HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
 
@@ -291,7 +291,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
         RotateToHitBox();
-        HitBoxes.HitBox3.gameObject.SetActive(false);
+        //HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
 
@@ -307,19 +307,19 @@ public class PlayerStateManger : NetworkBehaviour
                 !ReadyToSwitchState || IsCastingAnAbility) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
     }
-    private void OnUltimateInputCanceld(InputAction.CallbackContext context)
+    private void OnUltimateInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
         RotateToHitBox();
-        HitBoxes.HitBoxU.gameObject.SetActive(false);
+        //HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
     void Update()
     {
         CurrentState.UpdateState();
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
-        if ( IsAmingPressed) {ReadAimingtInput(); HandleAmingRotation();}
+        if ( IsAimingPressed) {ReadAimingInput(); HandleAimingRotation();}
         else HitBoxes.transform.localEulerAngles = Vector3.zero;
 
         if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);

@@ -12,7 +12,7 @@ public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
     int _firstAbility;
 
     // cooldown things
@@ -39,7 +39,7 @@ public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
         _player.Animator.CrossFade(_firstAbility, 0.1f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
-        //activating colider
+        //activating collider
     }
 
     public override void UpdateState()

@@ -2,17 +2,19 @@ using UnityEngine;
 
 public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 {
-    //Name of The Abbility
+    //Name of The Ability
     public string AbilityName = "Slash";
 
-    //Game Designe Vars, Mak a stat Script maybe
+    //Game Design Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 2.0f;
     [SerializeField] float _cooldown = 5.0f;
+    [SerializeField] float _attackRang = 1.5f;
+    [SerializeField] float _damage = 20.0f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
     int _secondAbilityHash;
     int _secondAbilityMultiplierHash ;
 
@@ -55,7 +57,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
         //enable SwitchState
 
 
-        // should go to the methode that deals dmg
+        // should go to the method that deals dmg
     }
 
     void AttackComplete()
@@ -67,8 +69,25 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     void SecondAbilityEvent()
     {
-        Debug.Log("Pop");
-        //Activat Collider + deal damage 
+
+        // TODO make the radius directly related to the hit box, or make custom colliders.
+        Collider[] _hitEnemies =  Physics.OverlapSphere(_player.ActiveHitBox.transform.position, _attackRang);
+        
+        foreach (Collider enemy in _hitEnemies)
+        {
+
+            if (enemy.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+            {
+                damageableEnemy.TakeDamage(_damage);
+            }
+        }
+
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_player.ActiveHitBox == null) return;
+        Gizmos.DrawSphere(_player.ActiveHitBox.transform.position, _attackRang);
     }
 
 }

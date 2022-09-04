@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerRuningState : PlayerBaseState
+public class PlayerRunningState : PlayerBaseState
 {
     //Game Designe Vars, Mak a stat Script maybe
     [SerializeField] private float _movementSpeed = 5.0f;

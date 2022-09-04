@@ -813,6 +813,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: FISHNET
     Standalone: FISHNET
+    iPhone: FISHNET
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
