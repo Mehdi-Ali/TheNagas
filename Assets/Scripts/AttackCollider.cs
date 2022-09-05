@@ -5,5 +5,21 @@ using UnityEngine;
 public class AttackCollider : MonoBehaviour
 {
 
-[SerializeField] public Collider Collider ; 
+    [SerializeField] HitBoxes _hitBoxes;
+    [SerializeField] public Collider Collider ; 
+
+
+        private void Awake() 
+    {
+        _hitBoxes = GetComponentInParent<HitBoxes>() ;
+    }
+
+        private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+            {
+                _hitBoxes.Targets.Add(damageableEnemy);
+            }
+    }
+
 }

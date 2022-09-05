@@ -25,7 +25,8 @@ public class HitBoxes : MonoBehaviour
     [SerializeField] public AttackCollider AttackCollider3 ;
     [SerializeField] public AttackCollider AttackColliderU ;
 
-
+        //Storing Variables
+    public HashSet<EnemyBase> Targets = new HashSet<EnemyBase>();
 
     private void Awake()
     {

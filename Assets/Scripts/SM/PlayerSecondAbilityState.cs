@@ -23,9 +23,6 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     public string Id => AbilityName;
     public float CooldownDuration => _cooldown;
 
-    //Storing Variables
-    private HashSet<EnemyBase> _targets = new HashSet<EnemyBase>();
-
     private void Awake()
     {       
          //Caching The Player State Manger
@@ -69,7 +66,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     void SecondAbilityStartEvent()
     {
-        _targets.Clear();
+        _player.HitBoxes.Targets.Clear();
        _player.ActiveAttackCollider.Collider.enabled = true ;
 
     }
@@ -77,24 +74,18 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     void SecondAbilityEndEvent()
     {       
 
-        foreach(EnemyBase enemy in _targets)
+        foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
             enemy.TakeDamage(_damage);
         }
 
+        _player.HitBoxes.Targets.Clear();
         _player.ActiveAttackCollider.Collider.enabled = false ;
-        _targets.Clear();
 
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
-            {
-                _targets.Add(damageableEnemy);
-            }
-    }
+
 
 
 }
