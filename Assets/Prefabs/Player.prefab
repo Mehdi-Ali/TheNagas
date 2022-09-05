@@ -1160,7 +1160,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   AbilityName: Spin
   _movementSpeed: 7.5
-  _cooldown: 5
+  _cooldown: 0
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,7 +1198,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   AbilityName: Dash
   _animationSpeed: 2
-  _cooldown: 5
+  _cooldown: 0
 --- !u!114 &6993583831906917193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   AbilityName: Dank
   _animationSpeed: 1.5
   Range: 5
-  _cooldown: 5
+  _cooldown: 0
   _damage: 99
 --- !u!114 &2676623566172398361
 MonoBehaviour:
@@ -1268,7 +1268,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

@@ -31,8 +31,6 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
     public string Id => AbilityName;
     public float CooldownDuration => _cooldown;
 
-    //Storing Variables
-    private HashSet<EnemyBase> _targets = new HashSet<EnemyBase>();
 
     private void Awake()
     {
@@ -91,28 +89,24 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
         _player.SwitchState(_player.IdleState);
     }
 
-    void UltimateEvent()
+    void UltimateStartEvent()
     {
-        foreach(EnemyBase enemy in _targets)
+        _grounded = true ;
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
+    }
+
+    void UltimateEndEvent()
+    {
+        foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
             enemy.TakeDamage(_damage);
         }
 
-        _player.ActiveAttackCollider.gameObject.SetActive(false) ;
-        _targets.Clear() ;
-    }
-
-        private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
-            {
-                _targets.Add(damageableEnemy);
-            }
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 
 
-    void StopUltimateTransformEvent()
-    {
-        _grounded = true ;
-    }
+
 }
