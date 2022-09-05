@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerUltimateState : PlayerBaseState, IHasCooldown
@@ -9,6 +10,7 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
     [SerializeField] private float _animationSpeed = 1.5f;
     [SerializeField] public float Range = 5.0f;
     [SerializeField] float _cooldown = 5.0f;
+    [SerializeField] float _damage = 99.0f;
 
 
     //Variables...
@@ -28,6 +30,9 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
     // cooldown things
     public string Id => AbilityName;
     public float CooldownDuration => _cooldown;
+
+    //Storing Variables
+    private HashSet<EnemyBase> _targets = new HashSet<EnemyBase>();
 
     private void Awake()
     {
@@ -88,9 +93,23 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
 
     void UltimateEvent()
     {
-        Debug.Log("Biger Pop");
-        //Activat Collider + deal damage 
+        foreach(EnemyBase enemy in _targets)
+        {
+            enemy.TakeDamage(_damage);
+        }
+
+        _player.ActiveAttackCollider.gameObject.SetActive(false) ;
+        _targets.Clear() ;
     }
+
+        private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+            {
+                _targets.Add(damageableEnemy);
+            }
+    }
+
 
     void StopUltimateTransformEvent()
     {

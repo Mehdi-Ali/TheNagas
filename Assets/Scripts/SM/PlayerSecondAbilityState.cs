@@ -67,16 +67,24 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
         _player.SwitchState(_player.IdleState);
     }
 
-    void SecondAbilityEvent()
+    void SecondAbilityStartEvent()
     {
-       
+        _targets.Clear();
+       _player.ActiveAttackCollider.Collider.enabled = true ;
+
+    }
+
+    void SecondAbilityEndEvent()
+    {       
+
         foreach(EnemyBase enemy in _targets)
         {
             enemy.TakeDamage(_damage);
         }
 
-        _player.ActiveAttackCollider.gameObject.SetActive(false) ;
-        _targets.Clear() ;
+        _player.ActiveAttackCollider.Collider.enabled = false ;
+        _targets.Clear();
+
     }
 
 

@@ -220,7 +220,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false;
-        HitBoxes.AttackColliderAA.gameObject.SetActive(true);
+        HitBoxes.AttackColliderAA.gameObject.SetActive(true); //to check
         ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
@@ -239,7 +239,6 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
         HitBoxes.HitBox1.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox1;
-        HitBoxes.AttackCollider1.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider1 ;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
@@ -262,7 +261,6 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox2;
-        HitBoxes.AttackCollider2.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
     }
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
@@ -286,7 +284,6 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox3;
-        HitBoxes.AttackCollider3.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
     }
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
@@ -309,8 +306,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBoxU;
-        HitBoxes.AttackColliderU.gameObject.SetActive(true);
-        ActiveAttackCollider = HitBoxes.AttackColliderU ;
+          ActiveAttackCollider = HitBoxes.AttackColliderU ;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
