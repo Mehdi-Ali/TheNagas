@@ -42,7 +42,7 @@ public abstract class Damageable : MonoBehaviour
     public virtual void Die()
     {
         OnDied?.Invoke();
-
+        GetComponent<CapsuleCollider>().enabled = false ;
         Animator.CrossFade(_DeadHash, 0.1f);
         
         Debug.Log("Dead");

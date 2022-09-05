@@ -41,7 +41,6 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     public override void EnterState()
     {
         if (!base.IsOwner) return;
-        //check cooldown
         _player.CooldownSystem.PutOnCooldown(this);
 
         Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _animationSpeed);
@@ -58,11 +57,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     public override void ExitState()
     {
-        //enable SwitchState
 
-
-
-        // should go to the method that deals dmg
     }
 
     void AttackComplete()
@@ -74,22 +69,6 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     void SecondAbilityEvent()
     {
-
-        // // TODO make the radius directly related to the hit box, or make custom colliders.
-        // Collider[] _hitEnemies =  Physics.OverlapSphere(_player.ActiveHitBox.transform.position, _attackRang);
-        
-        // foreach (Collider enemy in _hitEnemies)
-        // {
-
-        //     if (enemy.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
-        //     {
-        //         damageableEnemy.TakeDamage(_damage);
-        //     }
-        // }
-
-
-        // // Turn On colider 
-        // _player.ActiveAttackCollider.gameObject.SetActive(true) ;
        
         foreach(EnemyBase enemy in _targets)
         {
@@ -106,14 +85,8 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
         if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
             {
                 _targets.Add(damageableEnemy);
-
             }
     }
 
-    // private void OnDrawGizmosSelected()
-    // {
-    //     if (_player.ActiveHitBox == null) return;
-    //     Gizmos.DrawSphere(_player.ActiveHitBox.transform.position, _attackRang);
-    // }
 
 }

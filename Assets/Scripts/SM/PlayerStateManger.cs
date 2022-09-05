@@ -253,8 +253,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        //HitBoxes.HitBox1.gameObject.SetActive(false);
-        // the collider also
+        HitBoxes.HitBox1.gameObject.SetActive(false);
     }
 
 
@@ -278,7 +277,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
-        //HitBoxes.HitBox2.gameObject.SetActive(false);
+        HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
 
@@ -301,7 +300,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
         RotateToHitBox();
-        //HitBoxes.HitBox3.gameObject.SetActive(false);
+        HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
 
@@ -324,7 +323,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
         RotateToHitBox();
-        //HitBoxes.HitBoxU.gameObject.SetActive(false);
+        HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
     void Update()
