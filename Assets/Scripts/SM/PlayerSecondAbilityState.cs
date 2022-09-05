@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
@@ -21,6 +22,9 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     // cooldown things
     public string Id => AbilityName;
     public float CooldownDuration => _cooldown;
+
+    //Storing Variables
+    private HashSet<EnemyBase> _targets = new HashSet<EnemyBase>();
 
     private void Awake()
     {       
@@ -57,6 +61,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
         //enable SwitchState
 
 
+
         // should go to the method that deals dmg
     }
 
@@ -70,24 +75,45 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     void SecondAbilityEvent()
     {
 
-        // TODO make the radius directly related to the hit box, or make custom colliders.
-        Collider[] _hitEnemies =  Physics.OverlapSphere(_player.ActiveHitBox.transform.position, _attackRang);
+        // // TODO make the radius directly related to the hit box, or make custom colliders.
+        // Collider[] _hitEnemies =  Physics.OverlapSphere(_player.ActiveHitBox.transform.position, _attackRang);
         
-        foreach (Collider enemy in _hitEnemies)
-        {
+        // foreach (Collider enemy in _hitEnemies)
+        // {
 
-            if (enemy.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
-            {
-                damageableEnemy.TakeDamage(_damage);
-            }
+        //     if (enemy.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+        //     {
+        //         damageableEnemy.TakeDamage(_damage);
+        //     }
+        // }
+
+
+        // // Turn On colider 
+        // _player.ActiveAttackCollider.gameObject.SetActive(true) ;
+       
+        foreach(EnemyBase enemy in _targets)
+        {
+            enemy.TakeDamage(_damage);
         }
 
+        _player.ActiveAttackCollider.gameObject.SetActive(false) ;
+        _targets.Clear() ;
     }
 
-    private void OnDrawGizmosSelected()
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (_player.ActiveHitBox == null) return;
-        Gizmos.DrawSphere(_player.ActiveHitBox.transform.position, _attackRang);
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+            {
+                _targets.Add(damageableEnemy);
+
+            }
     }
+
+    // private void OnDrawGizmosSelected()
+    // {
+    //     if (_player.ActiveHitBox == null) return;
+    //     Gizmos.DrawSphere(_player.ActiveHitBox.transform.position, _attackRang);
+    // }
 
 }

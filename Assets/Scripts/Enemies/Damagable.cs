@@ -44,6 +44,7 @@ public abstract class Damageable : MonoBehaviour
         OnDied?.Invoke();
 
         Animator.CrossFade(_DeadHash, 0.1f);
+        
         Debug.Log("Dead");
     }
 

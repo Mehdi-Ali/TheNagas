@@ -19,6 +19,12 @@ public class HitBoxes : MonoBehaviour
 
     ConstraintSource ConstraintSource;
 
+    [SerializeField] public AttackCollider AttackColliderAA ;
+    [SerializeField] public AttackCollider AttackCollider1 ;
+    [SerializeField] public AttackCollider AttackCollider2 ;
+    [SerializeField] public AttackCollider AttackCollider3 ;
+    [SerializeField] public AttackCollider AttackColliderU ;
+
 
 
     private void Awake()

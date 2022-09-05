@@ -37,6 +37,7 @@ public class PlayerStateManger : NetworkBehaviour
     Quaternion _currentAimingRotation;
     public HitBoxes HitBoxes;
     public HitBox ActiveHitBox;
+    public AttackCollider ActiveAttackCollider;
 
 
 
@@ -114,7 +115,7 @@ public class PlayerStateManger : NetworkBehaviour
         _playerControls.DefaultMap.Aim.performed += OnAimingInput;
 
         _playerControls.DefaultMap.AutoAttack.started += OnAutoAttackInputStarted;
-        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformmed;
+        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformed;
         _playerControls.DefaultMap.AutoAttack.canceled += OnAutoAttackInputcanceled;
 
         _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
@@ -219,9 +220,11 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false;
+        HitBoxes.AttackColliderAA.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
-    private void OnAutoAttackInputPerformmed(InputAction.CallbackContext context)
+    private void OnAutoAttackInputPerformed(InputAction.CallbackContext context)
     {
         if (AutoAttackState.Continue == false) AutoAttackState.Continue = true ;
     }
@@ -236,6 +239,8 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
         HitBoxes.HitBox1.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox1;
+        HitBoxes.AttackCollider1.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackCollider1 ;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -249,6 +254,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
         //HitBoxes.HitBox1.gameObject.SetActive(false);
+        // the collider also
     }
 
 
@@ -257,6 +263,8 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox2;
+        HitBoxes.AttackCollider2.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
     }
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -279,6 +287,8 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox3;
+        HitBoxes.AttackCollider3.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackCollider3 ;
     }
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
@@ -300,6 +310,8 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBoxU;
+        HitBoxes.AttackColliderU.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackColliderU ;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
