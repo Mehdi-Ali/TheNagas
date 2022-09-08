@@ -24,7 +24,10 @@ public class AttackCollider : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+        // if any problem occurs  
+        // && _hitBoxes.Targets.Contains(other.GetComponent<EnemyBase>())
+        
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy) ) 
             {
                 _hitBoxes.Targets.Remove(damageableEnemy);
             }        

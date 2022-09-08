@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
@@ -5,9 +6,10 @@ public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
     //Ability Name
     public string AbilityName = "Dash" ;
 
-    //Game Designe Vars, Mak a stat Script maybe
+    //Game Design Vars, Mak a stat Script maybe
     [SerializeField] float _animationSpeed = 2f;
     [SerializeField] float _cooldown = 5.0f;
+    [SerializeField] float _damage = 20.0f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -16,8 +18,9 @@ public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
     float _tLerp;
     Vector3 _end;
     Vector3 _start;
+    public HashSet<EnemyBase> _targetsToRemove = new HashSet<EnemyBase>();
 
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
     int _thirdAbilityHash;
     int _thirdAbilityMultiplierHash ;
 
@@ -51,7 +54,9 @@ public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
         Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_animationSpeed );
         _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
 
-        //activating colider
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
+
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
     }
@@ -62,6 +67,18 @@ public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
 
         _tLerp += Time.deltaTime * _animationSpeed / _player.AnimationsLength.ThirdAbilityDuration;
         transform.position = Vector3.Lerp(_start, _end, _tLerp);
+
+        foreach(EnemyBase enemy in _player.HitBoxes.Targets)
+        {
+            enemy.TakeDamage(_damage);
+
+            _targetsToRemove.Add(enemy);
+        }
+
+        _player.HitBoxes.Targets.ExceptWith(_targetsToRemove);
+            
+
+
 
     }
 
@@ -75,5 +92,7 @@ public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
+
+        _player.ActiveAttackCollider.Collider.enabled = false ; 
     }
 }

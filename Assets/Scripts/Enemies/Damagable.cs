@@ -34,6 +34,8 @@ public abstract class Damageable : MonoBehaviour
         Health = Mathf.Max(0.0f, Health - damage);
 
         if (Health == 0) Die();
+
+        //popup dmg number
         
         //delete
         Debug.Log(Health);
