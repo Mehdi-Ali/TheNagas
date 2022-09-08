@@ -9,7 +9,6 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     //Game Design Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 2.0f;
     [SerializeField] float _cooldown = 5.0f;
-    [SerializeField] float _attackRang = 1.5f;
     [SerializeField] float _damage = 20.0f;
 
     //Cashing the Player State Manager : Should do to all state scripts 
@@ -25,7 +24,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     private void Awake()
     {       
-         //Caching The Player State Manger
+        //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
@@ -67,7 +66,7 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
     void SecondAbilityStartEvent()
     {
         _player.HitBoxes.Targets.Clear();
-       _player.ActiveAttackCollider.Collider.enabled = true ;
+        _player.ActiveAttackCollider.Collider.enabled = true ;
 
     }
 
@@ -79,7 +78,6 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
             enemy.TakeDamage(_damage);
         }
 
-        _player.HitBoxes.Targets.Clear();
         _player.ActiveAttackCollider.Collider.enabled = false ;
 
     }

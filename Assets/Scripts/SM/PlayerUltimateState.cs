@@ -103,7 +103,6 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
             enemy.TakeDamage(_damage);
         }
 
-        _player.HitBoxes.Targets.Clear();
         _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 

@@ -1160,7 +1160,8 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5701580062507666206}
   AbilityName: Spin
   _movementSpeed: 7.5
-  _cooldown: 0
+  _cooldown: -0.1
+  _damage: 20.21
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1179,7 +1180,6 @@ MonoBehaviour:
   AbilityName: Slash
   _animationSpeed: 2
   _cooldown: 0
-  _attackRang: 1.5
   _damage: 20
 --- !u!114 &8109761303020472251
 MonoBehaviour:
