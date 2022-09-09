@@ -1,29 +1,52 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSecondAbilityState : PlayerBaseState
+public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 {
-    //Cashing the Player State Manager : Should do to all state scripts 
-    PlayerStateManger player;
+    //Name of The Ability
+    public string AbilityName = "Slash";
 
-    //Variables to store omptimized Setter / getter parameter IDs
-    int _SecondAbilityHash;
+    //Game Design Vars, Mak a stat Script maybe
+    [SerializeField] private float _animationSpeed = 2.0f;
+    [SerializeField] float _cooldown = 5.0f;
+    [SerializeField] float _damage = 20.0f;
+
+    //Cashing the Player State Manager : Should do to all state scripts 
+    PlayerStateManger _player;
+
+    //Variables to store optimized Setter / getter parameter IDs
+    int _secondAbilityHash;
+    int _secondAbilityMultiplierHash ;
+
+    // cooldown things
+    public string Id => AbilityName;
+    public float CooldownDuration => _cooldown;
 
     private void Awake()
     {       
-         //Caching The Player State Manger
-        player = GetComponent<PlayerStateManger>();
+        //Caching The Player State Manger
+        _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
-        _SecondAbilityHash = Animator.StringToHash("SecondAbility");
+        _secondAbilityHash = Animator.StringToHash("SecondAbility");
+        _secondAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
+       
+       _player.Animator.SetFloat(_secondAbilityMultiplierHash, _animationSpeed);
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
-        //check cooldown
-        Invoke(nameof(AttackComplete), 1f);
-        player.NetworkAnimator.SetTrigger(_SecondAbilityHash);
-        player.ReadyToSwitchState = false;
+        _player.CooldownSystem.PutOnCooldown(this);
+
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _animationSpeed);
+                
+        _player.Animator.CrossFade(_secondAbilityHash, 0.1f);
+        _player.ReadyToSwitchState = false;
+        _player.IsCastingAnAbility = true;
+
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
     }
 
     public override void UpdateState()
@@ -33,13 +56,29 @@ public class PlayerSecondAbilityState : PlayerBaseState
 
     public override void ExitState()
     {
-        //enable SwitchState
+
     }
 
     void AttackComplete()
     {
-        player.ReadyToSwitchState = true;
-        player.IsCastingAnAbility = false ;
-        player.SwitchState(player.IdleState);
+        _player.ReadyToSwitchState = true;
+        _player.IsCastingAnAbility = false ;
+        _player.SwitchState(_player.IdleState);
     }
+
+    void SecondAbilityStartEvent()
+    {
+        foreach(EnemyBase enemy in _player.HitBoxes.Targets)
+        {
+            enemy.TakeDamage(_damage);
+        }
+
+        _player.ActiveAttackCollider.Collider.enabled = false ;
+    }
+
+
+
+
+
+
 }
