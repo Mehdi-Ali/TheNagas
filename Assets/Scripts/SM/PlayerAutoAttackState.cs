@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class PlayerAutoAttackState : PlayerBaseState
 {
-    //Name of The Abbility
-    public string AbbilityName = "Auto Attack";
+    //Name of The Ability
+    public string AbilityName = "Auto Attack";
 
-    //Game Designe Vars, Mak a stat Script maybe
+    //Game Design Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 1.5f;
     [SerializeField] private float _dashingMovementSpeed = 10f;
     [SerializeField] private float _dashingTime = 0.25f;
     [SerializeField] private float _rotationSpeed = 10.0f;
+    [SerializeField] float _damage1 = 10.0f;
+    [SerializeField] float _damage2 = 5.0f;
+    [SerializeField] float _damage3 = 20.0f;
     
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
@@ -18,7 +21,7 @@ public class PlayerAutoAttackState : PlayerBaseState
     public bool Continue;
     bool _dashed ;
 
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
     int _autoAttack1Hash;
     int _autoAttack2Hash;
     int _autoAttack3Hash;
@@ -49,6 +52,9 @@ public class PlayerAutoAttackState : PlayerBaseState
         _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
+
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
     }
 
     public override void UpdateState()
@@ -93,12 +99,14 @@ public class PlayerAutoAttackState : PlayerBaseState
             Invoke(nameof(Dashed), _dashingTime);
 
             _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
+
         }
         else
         {
             AttackComplete();
         }
     }
+
 
     public void Attack3Complete()
     {
@@ -122,24 +130,30 @@ public class PlayerAutoAttackState : PlayerBaseState
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
+
+        _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 
     void AutoAttack1Event()
     {
-        Debug.Log("1");
-        //Activat Collider + deal damage 
+        DoDamage(_damage1);
     }
     void AutoAttack2Event()
     {
-        Debug.Log("2");
-        //Activat Collider + deal damage 
+        DoDamage(_damage2); 
     }
     void AutoAttack3Event()
     {
-        Debug.Log("3");
-        //Activat Collider + deal damage 
+        DoDamage(_damage3);
     }
 
+    private void DoDamage(float damage)
+    {
+        foreach (EnemyBase enemy in _player.HitBoxes.Targets)
+        {
+            enemy.TakeDamage(damage);
+        }
+    }
 
 
 }
