@@ -64,6 +64,9 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
         //activating colider
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
+
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
     }
 
     public override void UpdateState()
@@ -92,8 +95,6 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
     void UltimateStartEvent()
     {
         _grounded = true ;
-        _player.HitBoxes.Targets.Clear();
-        _player.ActiveAttackCollider.Collider.enabled = true ;
     }
 
     void UltimateEndEvent()

@@ -44,6 +44,9 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
         _player.Animator.CrossFade(_secondAbilityHash, 0.1f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
+
+        _player.HitBoxes.Targets.Clear();
+        _player.ActiveAttackCollider.Collider.enabled = true ;
     }
 
     public override void UpdateState()
@@ -65,22 +68,14 @@ public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
 
     void SecondAbilityStartEvent()
     {
-        _player.HitBoxes.Targets.Clear();
-        _player.ActiveAttackCollider.Collider.enabled = true ;
-
-    }
-
-    void SecondAbilityEndEvent()
-    {       
-
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
             enemy.TakeDamage(_damage);
         }
 
         _player.ActiveAttackCollider.Collider.enabled = false ;
-
     }
+
 
 
 
