@@ -1,17 +1,21 @@
 using System;
 using UnityEngine;
 
-public abstract class Damageable : MonoBehaviour
+public class Damageable : MonoBehaviour // make a damageable Enemy and player 
 {
-    //Abstract Parameters
-    abstract public float MaxHealth { get; set; }
-    abstract public float Health { get ; set ;}
-    public Animator Animator { get; set; }
+    //Variables to cache Instances
+    private EnemyStatics _enemyStatics ;
+    public Animator Animator;
+    private HealthBar _healthBar ;
+
+
 
     //Variables to store optimized Setter / getter parameter IDs
     int _DeadHash ;
 
-    // del
+    // utilities
+    private float _maxHealth ;
+    private float _health ;
     private float _shield ;
     
     
@@ -25,20 +29,31 @@ public abstract class Damageable : MonoBehaviour
     {
         Animator = GetComponent<Animator>();
         _DeadHash = Animator.StringToHash("Dead");
+        _enemyStatics = GetComponent<EnemyStatics>() ;
 
-        Health = MaxHealth;
+        _healthBar = GetComponentInChildren<HealthBar>();
+
+        _maxHealth = _enemyStatics.MaxHealth ;
+
+        _health = _maxHealth;
+        _healthBar.SetMaxHealth(_maxHealth) ;
+
+        
+
+
     }
 
     public void TakeDamage(float damage)
     {
-        Health = Mathf.Max(0.0f, Health - damage);
+        _health = Mathf.Max(0.0f, _health - damage);
 
-        if (Health == 0) Die();
+        if (_health == 0) Die();
 
+        _healthBar.SetHealth(_health);
         //popup dmg number
         
         //delete
-        Debug.Log(Health);
+        Debug.Log(_health);
      }
 
     public virtual void Die()
@@ -48,20 +63,22 @@ public abstract class Damageable : MonoBehaviour
         Animator.CrossFade(_DeadHash, 0.1f);
         
         Debug.Log("Dead");
+        _healthBar.gameObject.SetActive(false) ;
+
     }
 
     public virtual void GetHeal(float heal)
     {
-        if ( Health + heal >= MaxHealth) 
+        if ( _health + heal >= _maxHealth) 
         {
-            _shield = MaxHealth - Health + heal ;
-            Health = MaxHealth ;
+            _shield = _maxHealth - _health + heal ;
+            _health = _maxHealth ;
             GetShield(_shield) ;
         }
 
         else
         {
-            Health = Health + heal ;
+            _health = _health + heal ;
         }
     }
 
