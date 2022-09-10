@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAutoAttackState : PlayerBaseState
+public class PlayerAutoAttackState : BaseState
 {
     //Name of The Ability
     public string AbilityName = "Auto Attack";

@@ -6,22 +6,18 @@ using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerStateManger : NetworkBehaviour
+public class PlayerStateManger : StateManger
 {
 
-    #region Fields and Proporties
+    #region Fields and Properties
 
     //Initiating the states.
-    public PlayerBaseState CurrentState;
-
-    public PlayerIdleState IdleState ;
-    public PlayerRunningState RunningState ;
     public PlayerAutoAttackState AutoAttackState ;
     public PlayerFirstAbilityState FirstAbilityState ;
     public PlayerSecondAbilityState SecondAbilityState ;
     public PlayerThirdAbilityState ThirdAbilityState ;
     public PlayerUltimateState UltimateState ;
-    public PlayerDeadState DeadState ;
+
 
     //Variables to store player input values
     Vector2 _currentMovementInput;
@@ -35,7 +31,7 @@ public class PlayerStateManger : NetworkBehaviour
     Vector2 _currentAimingInput ;
     Vector3 _currentAimingAt ;
     Quaternion _currentAimingRotation;
-    public HitBoxes HitBoxes;
+    public PlayerHitBoxes HitBoxes;
     public HitBox ActiveHitBox;
     public AttackCollider ActiveAttackCollider;
 
@@ -44,10 +40,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     //StateMachine Variables (logic and animation)
     public bool IsMovementPressed ;
-    public bool ReadyToSwitchState;
-    public bool IsCastingAnAbility ;
     public bool IsAimingPressed ;
-
     public bool _TempDeadStateSim = false;
 
 
@@ -55,9 +48,6 @@ public class PlayerStateManger : NetworkBehaviour
     //Variables to cache Instances 
     public CharacterController CharacterController;
     private Player_Controls _playerControls;
-    public Animator Animator;
-    public NetworkAnimator NetworkAnimator;
-    public AnimationsLength AnimationsLength;
     public CooldownSystem CooldownSystem;
 
 
@@ -67,38 +57,32 @@ public class PlayerStateManger : NetworkBehaviour
 
     #region Execution
 
-    private void Awake()
+    public override void Awake()
     {
-        CashingInstances();
+        base.Awake();
+        CashingPlayerInstances() ;
 
-        CurrentState = IdleState;
-        CurrentState.EnterState();
-        ReadyToSwitchState = true;
-        IsCastingAnAbility = false;
+
+
         IsAimingPressed = false;
-
         SubscriptionToPlayerControls();
 
     }
 
-    private void CashingInstances()
+    private void CashingPlayerInstances()
     {
-        IdleState = GetComponent<PlayerIdleState>();
-        RunningState = GetComponent<PlayerRunningState>();
+
         AutoAttackState = GetComponent<PlayerAutoAttackState>();
         FirstAbilityState = GetComponent<PlayerFirstAbilityState>();
         SecondAbilityState = GetComponent<PlayerSecondAbilityState>();
         ThirdAbilityState = GetComponent<PlayerThirdAbilityState>();
         UltimateState = GetComponent<PlayerUltimateState>();
-        DeadState = GetComponent<PlayerDeadState>();
 
         CharacterController = GetComponent<CharacterController>();
-        Animator = GetComponent<Animator>();
-        NetworkAnimator = GetComponent<NetworkAnimator>();
-        AnimationsLength = GetComponent<AnimationsLength>();
-        HitBoxes = FindObjectOfType<HitBoxes>();
+        HitBoxes = FindObjectOfType<PlayerHitBoxes>();
         CooldownSystem = FindObjectOfType<CooldownSystem>();
 
+        
     }
 
     private void SubscriptionToPlayerControls()
@@ -322,9 +306,11 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
-    void Update()
+    public override void Update()
     {
-        CurrentState.UpdateState();
+
+        base.Update();
+
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         if ( IsAimingPressed) {ReadAimingInput(); HandleAimingRotation();}
         else HitBoxes.transform.localEulerAngles = Vector3.zero;
@@ -334,12 +320,11 @@ public class PlayerStateManger : NetworkBehaviour
       
     }
  
-
+    // PlayerControls Enable / Disable 
     private void OnEnable()
     {
         _playerControls.DefaultMap.Enable();
     }
-
     private void OnDisable()
     {
         _playerControls.DefaultMap.Disable();
@@ -347,18 +332,4 @@ public class PlayerStateManger : NetworkBehaviour
 
     #endregion
 
-    #region State Specific Behavior
-
-    
-    //for extreme state switches like stunn, we use SuperSwitchState.
-    public void SwitchState(PlayerBaseState state)
-    {   
-        if (!ReadyToSwitchState) return;
-        CurrentState.ExitState();
-        CurrentState = state;
-        CurrentState.EnterState();
-
-    }
-
-    #endregion
 }

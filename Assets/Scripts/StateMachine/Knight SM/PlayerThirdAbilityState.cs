@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerThirdAbilityState : PlayerBaseState, IHasCooldown
+public class PlayerThirdAbilityState : BaseState, IHasCooldown
 {
     //Ability Name
     public string AbilityName = "Dash" ;

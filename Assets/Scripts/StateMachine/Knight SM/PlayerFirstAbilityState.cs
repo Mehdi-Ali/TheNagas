@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerFirstAbilityState : PlayerBaseState, IHasCooldown
+public class PlayerFirstAbilityState : BaseState, IHasCooldown
 {
     //Name of The Abbility
     public string AbilityName = "Spin" ;

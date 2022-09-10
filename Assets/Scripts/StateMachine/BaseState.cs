@@ -1,7 +1,7 @@
 using UnityEngine;
 using FishNet.Object;
 
-public abstract class PlayerBaseState : NetworkBehaviour 
+public abstract class BaseState : NetworkBehaviour 
 {
 
     public abstract void EnterState();

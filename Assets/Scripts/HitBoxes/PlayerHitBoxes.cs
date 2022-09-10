@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class HitBoxes : MonoBehaviour
+public class PlayerHitBoxes : MonoBehaviour
 {
     [SerializeField] public HitBox HitBox1;
 

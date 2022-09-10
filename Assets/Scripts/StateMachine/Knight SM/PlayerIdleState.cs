@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerIdleState : PlayerBaseState
+public class PlayerIdleState : IdleState
 {
     //A refrence for the Player State Manger
     PlayerStateManger _player;

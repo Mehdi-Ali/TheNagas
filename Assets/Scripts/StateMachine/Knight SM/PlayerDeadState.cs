@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerDeadState : PlayerBaseState
+public class PlayerDeadState : DeadState
 {
     //A refrence for the Player State Manger
     PlayerStateManger player;
@@ -19,7 +19,7 @@ public class PlayerDeadState : PlayerBaseState
     public override void EnterState()
     {
         if (!base.IsOwner) return;
-        player.NetworkAnimator.SetTrigger(_DeadHash);
+        player.Animator.CrossFade(_DeadHash, 0.15f);
         player.ReadyToSwitchState = false;
 
     }

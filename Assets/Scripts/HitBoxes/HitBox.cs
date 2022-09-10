@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class HitBox : MonoBehaviour
 {
-    [SerializeField] HitBoxes _hitBoxes;
+    [SerializeField] PlayerHitBoxes _hitBoxes;
     [SerializeField] public bool Movable;
 
     private void Awake() 
     {
-        _hitBoxes = GetComponentInParent<HitBoxes>() ;
+        _hitBoxes = GetComponentInParent<PlayerHitBoxes>() ;
     }
 
     private void OnEnable() 

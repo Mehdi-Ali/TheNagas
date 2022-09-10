@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSecondAbilityState : PlayerBaseState, IHasCooldown
+public class PlayerSecondAbilityState : BaseState, IHasCooldown
 {
     //Name of The Ability
     public string AbilityName = "Slash";

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerUltimateState : PlayerBaseState, IHasCooldown
+public class PlayerUltimateState : BaseState, IHasCooldown
 {
-    //Name of The Abbility
+    //Name of The Ability
     public string AbilityName = "Dank";
 
-    //Game Designe Vars, Mak a stat Script maybe
+    //Game Design Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 1.5f;
     [SerializeField] public float Range = 5.0f;
     [SerializeField] float _cooldown = 5.0f;
@@ -23,7 +23,7 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
     int _ultimateHash;
     int _ultimateMultiplierHash;
 
@@ -61,7 +61,7 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
         _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
         _player.Animator.CrossFade(_ultimateHash, 0.1f);
 
-        //activating colider
+
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
 
@@ -82,7 +82,7 @@ public class PlayerUltimateState : PlayerBaseState, IHasCooldown
 
     public override void ExitState()
     {
-
+        
     }
 
     void AttackComplete()
