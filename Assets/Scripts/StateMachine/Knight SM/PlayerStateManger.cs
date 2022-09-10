@@ -49,6 +49,7 @@ public class PlayerStateManger : StateManger
     public CharacterController CharacterController;
     private Player_Controls _playerControls;
     public CooldownSystem CooldownSystem;
+    public PlayerAnimationsLength AnimationsLength;
 
 
 
@@ -61,9 +62,6 @@ public class PlayerStateManger : StateManger
     {
         base.Awake();
         CashingPlayerInstances() ;
-
-
-
         IsAimingPressed = false;
         SubscriptionToPlayerControls();
 
@@ -82,6 +80,7 @@ public class PlayerStateManger : StateManger
         HitBoxes = FindObjectOfType<PlayerHitBoxes>();
         CooldownSystem = FindObjectOfType<CooldownSystem>();
 
+        AnimationsLength = GetComponent<PlayerAnimationsLength>();
         
     }
 

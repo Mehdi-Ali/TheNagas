@@ -14,7 +14,7 @@ public class StateManger : NetworkBehaviour
 
     //Variables to cache Instances 
     public Animator Animator;
-    public AnimationsLength AnimationsLength;
+
 
     //StateMachine Variables (logic and animation) 
     public bool ReadyToSwitchState;
@@ -32,7 +32,8 @@ public class StateManger : NetworkBehaviour
         CurrentState.EnterState();
 
         ReadyToSwitchState = true;
-        IsCastingAnAbility = false;
+        IsCastingAnAbility = false; 
+        // we`ll see if we don't use it in Enemy we move it to Player
     }
 
         private void CashingStandardInstances()
@@ -42,7 +43,7 @@ public class StateManger : NetworkBehaviour
         DeadState = GetComponent<DeadState>();
 
         Animator = GetComponent<Animator>();
-        AnimationsLength = GetComponent<AnimationsLength>();
+        
     }
 
     public virtual void Update()

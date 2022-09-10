@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Damageable : MonoBehaviour
 {
     //Abstract Parameters
-    abstract public float MaxHealth { get; }
+    abstract public float MaxHealth { get; set; }
     abstract public float Health { get ; set ;}
     public Animator Animator { get; set; }
 
