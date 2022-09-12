@@ -2,37 +2,44 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI ;
 
 public class EnemyStateManger : StateManger
 {
 
     //Initiating the states.
+    public EnemyRoamingState RoamingState ;
     public EnemyBasicAttackState BasicAttackState ;
-    public EnemySuperAttack_State SuperAttackState ;
+    public EnemySuperAttackState SuperAttackState ;
 
 
     //Variables to cache Instances 
     public EnemyAnimationsLength AnimationsLength;
+    public EnemyStatics Statics ;
+    public NavMeshAgent NavAgent;
 
 
     //StateMachine Variables (logic and animation)
-    //public bool IsCastingAnAbility ; 
 
 
 
     public override void Awake()
     {
-        base.Awake();
         CashingEnemyInstances() ;
+
+        base.Awake();
 
     }
 
     private void CashingEnemyInstances()
     {
+        RoamingState = GetComponent<EnemyRoamingState>();
         BasicAttackState = GetComponent<EnemyBasicAttackState>();
-        SuperAttackState = GetComponent<EnemySuperAttack_State>();
+        SuperAttackState = GetComponent<EnemySuperAttackState>();
 
+        Statics = GetComponent<EnemyStatics>();
         AnimationsLength = GetComponent<EnemyAnimationsLength>();
+        NavAgent = GetComponent<NavMeshAgent>();
     }
 
     public override void Update()

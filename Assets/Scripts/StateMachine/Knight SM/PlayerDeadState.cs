@@ -2,25 +2,24 @@ using UnityEngine;
 
 public class PlayerDeadState : DeadState
 {
-    //A refrence for the Player State Manger
-    PlayerStateManger player;
+    //A reference for the Player State Manger
+    PlayerStateManger _player;
 
-    //Variables to store omptimized Setter / getter parameter IDs
-    int _DeadHash;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         //Caching The Player State Manger
-        player = GetComponent<PlayerStateManger>();
-        //caching Hashes
-        _DeadHash = Animator.StringToHash("Dead");
+        _player = GetComponent<PlayerStateManger>();
+
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
-        player.Animator.CrossFade(_DeadHash, 0.15f);
-        player.ReadyToSwitchState = false;
+        _player.Animator.CrossFade(_DeadHash, 0.15f);
+        _player.ReadyToSwitchState = false;
 
     }
 

@@ -5,7 +5,8 @@ public class Damageable : MonoBehaviour // make a damageable Enemy and player
 {
     //Variables to cache Instances
     private EnemyStatics _enemyStatics ;
-    public Animator Animator;
+    private EnemyStateManger _enemy ;
+    private Animator _animator;
     private HealthBar _healthBar ;
 
 
@@ -27,9 +28,10 @@ public class Damageable : MonoBehaviour // make a damageable Enemy and player
 
     public virtual void Awake()
     {
-        Animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         _DeadHash = Animator.StringToHash("Dead");
         _enemyStatics = GetComponent<EnemyStatics>() ;
+        _enemy = GetComponent<EnemyStateManger>();
 
         _healthBar = GetComponentInChildren<HealthBar>();
 
@@ -59,11 +61,9 @@ public class Damageable : MonoBehaviour // make a damageable Enemy and player
     public virtual void Die()
     {
         OnDied?.Invoke();
-        GetComponent<CapsuleCollider>().enabled = false ;
-        Animator.CrossFade(_DeadHash, 0.1f);
+        _enemy.SwitchState(_enemy.DeadState);
         
-        Debug.Log("Dead");
-        _healthBar.gameObject.SetActive(false) ;
+        _healthBar.gameObject.SetActive(false);
 
     }
 

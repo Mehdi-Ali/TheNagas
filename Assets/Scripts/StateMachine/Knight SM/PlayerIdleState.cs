@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class PlayerIdleState : IdleState
 {
-    //A refrence for the Player State Manger
+    //A reference for the Player State Manger
     PlayerStateManger _player;
 
-    //Variables to store omptimized Setter / getter parameter IDs
-    int _Idle;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
 
-        //caching Hashes
-        _Idle = Animator.StringToHash("Idle");
+
     }
 
     public override void EnterState()
@@ -26,7 +25,7 @@ public class PlayerIdleState : IdleState
     public override void UpdateState()
     {
         if (_player.IsMovementPressed) _player.SwitchState(_player.RunningState);
-        //Here wen can set the other idle eache x number of seconds.
+        //Here wen can set the other idle each x number of seconds.
     }
 
     public override void ExitState()

@@ -7,10 +7,11 @@ public class PlayerRunningState : RunningState
     [SerializeField] private float _movementSpeed = 5.0f;
     [SerializeField] private float _rotationSpeed = 10.0f;
     
-    //A refrence for the Player State Manger
+    //A reference for the Player State Manger
     PlayerStateManger _player;
    
-    //Variables to store omptimized Setter / getter parameter IDs
+    //Variables to store optimized Setter / getter parameter IDs
+    
     int _RunningHash;
 
     // not sure if the mono behavior part will work (Awake and IsOwner)

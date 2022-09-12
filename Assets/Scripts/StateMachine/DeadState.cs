@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class DeadState : BaseState
 {
+    //Variables to store omptimized Setter / getter parameter IDs
+    protected int _DeadHash;
+
+    public virtual void Awake()
+    {
+        //caching Hashes
+        _DeadHash = Animator.StringToHash("Dead");
+    }
+
     public override void EnterState()
     {
         

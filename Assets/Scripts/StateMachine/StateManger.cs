@@ -16,7 +16,8 @@ public class StateManger : NetworkBehaviour
     public Animator Animator;
 
 
-    //StateMachine Variables (logic and animation) 
+    //StateMachine Variables (logic and animation)
+    // we`ll see if we don't use it in Enemy we move it to Player 
     public bool ReadyToSwitchState;
     public bool IsCastingAnAbility ;
 
@@ -31,12 +32,12 @@ public class StateManger : NetworkBehaviour
         CurrentState = IdleState;
         CurrentState.EnterState();
 
+        // we`ll see if we don't use it in Enemy we move it to Player
         ReadyToSwitchState = true;
         IsCastingAnAbility = false; 
-        // we`ll see if we don't use it in Enemy we move it to Player
     }
 
-        private void CashingStandardInstances()
+    private void CashingStandardInstances()
     {
         IdleState = GetComponent<IdleState>();
         RunningState = GetComponent<RunningState>();
