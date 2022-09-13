@@ -43,8 +43,6 @@ public class EnemyRoamingState : BaseState
     {
         _enemy.NavAgent.destination = _roamingPos ;
 
-        Debug.Log(Vector3.Distance(transform.position, _roamingPos));
-
         if (Vector3.Distance(transform.position, _roamingPos) < 1.0f)
         {
             StopRoaming();

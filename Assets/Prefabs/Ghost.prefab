@@ -18,11 +18,13 @@ GameObject:
   - component: {fileID: 2173564305596942674}
   - component: {fileID: 2546039537808458831}
   - component: {fileID: 3242587505469904738}
+  - component: {fileID: 6771701834436361113}
   - component: {fileID: 7234850922456280030}
   - component: {fileID: 5745639388223354640}
   - component: {fileID: 5789112543792799957}
   - component: {fileID: 8966469563047282533}
   - component: {fileID: 7893324485583620652}
+  - component: {fileID: 5645306132690149296}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -61,8 +63,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   VisionRange: 10
-  AttackRange: 2
-  MaxRoamingPause: 3
+  AttackRange: 4
+  DropAggroRange: 14
+  MinRoamingPause: 3
+  MaxRoamingPause: 6
+  RoamingSpeed: 1.5
+  ChasingSpeed: 3.5
 --- !u!95 &7324678761862502599
 Animator:
   serializedVersion: 4
@@ -138,8 +144,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
   CurrentState: {fileID: 0}
   IdleState: {fileID: 0}
   RunningState: {fileID: 0}
@@ -148,11 +154,16 @@ MonoBehaviour:
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
   RoamingState: {fileID: 0}
+  ChasingState: {fileID: 0}
   BasicAttackState: {fileID: 0}
   SuperAttackState: {fileID: 0}
   AnimationsLength: {fileID: 0}
   Statics: {fileID: 0}
   NavAgent: {fileID: 0}
+  Player: {fileID: 0}
+  x: {x: 0, y: 0, z: 0}
+  y: {x: 0, y: 0, z: 0}
+  z: 0
 --- !u!114 &2173564305596942674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,8 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 1
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &2546039537808458831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,8 +192,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &3242587505469904738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,9 +207,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 3
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
-  _roamingPos: {x: 0, y: 0, z: 0}
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
+--- !u!114 &6771701834436361113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267754348304856137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8f5981c91c2104eabcb6ce7e33d1b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 4
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &7234850922456280030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,9 +236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d076ea97bffa049b12865f477be1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 4
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &5745639388223354640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,9 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8a591e99705444b93b6f43ac1398a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 5
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 6
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &5789112543792799957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,9 +266,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6dd48ded5235c4d98b46b900e670ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 6
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _componentIndexCache: 7
+  _addedNetworkObject: {fileID: 5645306132690149296}
+  _networkObjectCache: {fileID: 5645306132690149296}
 --- !u!114 &8966469563047282533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,7 +299,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 250
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -283,6 +308,40 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5645306132690149296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267754348304856137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _networkBehaviours:
+  - {fileID: 1522711315874546608}
+  - {fileID: 2173564305596942674}
+  - {fileID: 2546039537808458831}
+  - {fileID: 3242587505469904738}
+  - {fileID: 6771701834436361113}
+  - {fileID: 7234850922456280030}
+  - {fileID: 5745639388223354640}
+  - {fileID: 5789112543792799957}
+  SceneTransformProperties:
+    Position: {x: -20.8, y: 0, z: 15}
+    Rotation: {x: -0, y: 0.9995328, z: -0, w: 0.030564656}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _hasParentNetworkObjectAtEdit: 0
+  NetworkObserver: {fileID: 0}
+  _prefabId: 5
+  _scenePathHash: 0
+  _sceneId: 0
+  _sceneNetworkObjects:
+  - {fileID: 5645306132690149296}
+  - {fileID: 0}
 --- !u!1001 &2867727464205076337
 PrefabInstance:
   m_ObjectHideFlags: 0
