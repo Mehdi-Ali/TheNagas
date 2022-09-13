@@ -915,7 +915,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.048
   m_MinMoveDistance: 0.00001
-  m_Center: {x: 0.01, y: 0.75, z: -0.1}
+  m_Center: {x: 0.01, y: 0.75, z: 0}
 --- !u!95 &4570720078839338132
 Animator:
   serializedVersion: 4
@@ -1071,25 +1071,25 @@ MonoBehaviour:
   CurrentState: {fileID: 0}
   IdleState: {fileID: 0}
   RunningState: {fileID: 0}
+  DeadState: {fileID: 0}
+  Animator: {fileID: 0}
+  ReadyToSwitchState: 0
+  IsCastingAnAbility: 0
   AutoAttackState: {fileID: 0}
   FirstAbilityState: {fileID: 0}
   SecondAbilityState: {fileID: 0}
   ThirdAbilityState: {fileID: 0}
   UltimateState: {fileID: 0}
-  DeadState: {fileID: 0}
   HitBoxes: {fileID: 0}
   ActiveHitBox: {fileID: 0}
   ActiveAttackCollider: {fileID: 0}
+  _gravity: {x: 0, y: -9.8, z: 0}
   IsMovementPressed: 0
-  ReadyToSwitchState: 0
-  IsCastingAnAbility: 0
   IsAimingPressed: 0
   _TempDeadStateSim: 0
   CharacterController: {fileID: 0}
-  Animator: {fileID: 0}
-  NetworkAnimator: {fileID: 0}
-  AnimationsLength: {fileID: 0}
   CooldownSystem: {fileID: 0}
+  AnimationsLength: {fileID: 0}
 --- !u!114 &6858166303471902967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,11 +1137,14 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbbilityName: Auto Attack
+  AbilityName: Auto Attack
   _animationSpeed: 1.5
   _dashingMovementSpeed: 10
   _dashingTime: 0.1
   _rotationSpeed: 20
+  _damage1: 10
+  _damage2: 5
+  _damage3: 20
   Continue: 0
 --- !u!114 &5803099296968801611
 MonoBehaviour:
@@ -1162,6 +1165,7 @@ MonoBehaviour:
   _movementSpeed: 7.5
   _cooldown: -0.1
   _damage: 20.21
+  _tick: 7
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1199,6 +1203,7 @@ MonoBehaviour:
   AbilityName: Dash
   _animationSpeed: 2
   _cooldown: 0
+  _damage: 20
 --- !u!114 &6993583831906917193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1267,7 +1272,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0

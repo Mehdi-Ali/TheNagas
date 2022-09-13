@@ -54,8 +54,7 @@ public class Damageable : MonoBehaviour // make a damageable Enemy and player
         _healthBar.SetHealth(_health);
         //popup dmg number
         
-        //delete
-        Debug.Log(_health);
+        
      }
 
     public virtual void Die()

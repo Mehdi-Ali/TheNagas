@@ -35,6 +35,9 @@ public class PlayerStateManger : StateManger
     public HitBox ActiveHitBox;
     public AttackCollider ActiveAttackCollider;
 
+    //Variables to handle Gravity
+    [SerializeField] Vector3 _gravity = new Vector3(0.0f , -9.8f , 0.0f);
+
 
 
 
@@ -64,6 +67,8 @@ public class PlayerStateManger : StateManger
         CashingPlayerInstances() ;
         IsAimingPressed = false;
         SubscriptionToPlayerControls();
+
+        CharacterController.enableOverlapRecovery = true ;
 
     }
 
@@ -307,15 +312,18 @@ public class PlayerStateManger : StateManger
 
     public override void Update()
     {
-
         base.Update();
+
+        if (!CharacterController.isGrounded)
+        {
+            CharacterController.Move(_gravity * Time.deltaTime);
+        }
 
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         if ( IsAimingPressed) {ReadAimingInput(); HandleAimingRotation();}
         else HitBoxes.transform.localEulerAngles = Vector3.zero;
 
-        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);
-
+        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);   
       
     }
  
