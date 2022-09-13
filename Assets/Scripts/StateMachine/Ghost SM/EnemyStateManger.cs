@@ -55,18 +55,12 @@ public class EnemyStateManger : StateManger
     {
         base.Update();
 
+        //TODO turn the target into an array Targets and make this a for each loop
         if (Player == null) {GettingTarget();}
-        else if (ReadyToSwitchState)
+        else if (ReadyToSwitchState &
+                 Vector3.Distance(transform.position, Player.transform.position) < Statics.VisionRange)
         {
-            x = transform.position ;
-            y = Player.gameObject.transform.position ;
-            z = Vector3.Distance(transform.position, Player.transform.position);
-
-            //TODO turn the target into an array Targets and make this a for each loop
-            if (Vector3.Distance(transform.position, Player.transform.position) < Statics.VisionRange)
-            {
-                SwitchState(ChasingState);
-            }
+            SwitchState(ChasingState);
         }
 
     }

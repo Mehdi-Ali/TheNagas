@@ -54,10 +54,13 @@ public class StateManger : NetworkBehaviour
     
     public void SwitchState(BaseState state)
     {   
-        if (!ReadyToSwitchState) return;
-        CurrentState.ExitState();
-        CurrentState = state;
-        CurrentState.EnterState();
+        if (CurrentState == DeadState) return ;
+        if (ReadyToSwitchState || state == DeadState)
+        {
+            CurrentState.ExitState();
+            CurrentState = state;
+            CurrentState.EnterState();
+        }
 
     }
 }

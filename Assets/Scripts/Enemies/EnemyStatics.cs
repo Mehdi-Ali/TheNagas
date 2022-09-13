@@ -14,8 +14,10 @@ public class EnemyStatics : MonoBehaviour
     public float ChasingSpeed =  3.5f ;
     public float BasicAttackDamage =  15.0f ;
     public float BasicAttackSpeed =  1.0f ;
+    public float BasicAttackRotationSpeed =  10f ;
     public float SuperAttackDamage =  15.0f ;
     public float SuperAttackSpeed =  1.0f ;
+    public float SuperAttackRotationSpeed =  10f ;
 
 
         private void OnDrawGizmosSelected()

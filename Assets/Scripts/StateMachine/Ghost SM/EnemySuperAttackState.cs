@@ -8,40 +8,49 @@ public class EnemySuperAttackState : BaseState
     EnemyStateManger _enemy;
 
     //Variables to store optimized Setter / getter parameter IDs
-    int _SuperAttackHash;
+    int _superAttackHash;
+    int _superAttackMultiplierHash;
+    private Vector3 _direction ;
+    private Quaternion _lookRotation ;
 
 
     // utilities 
-    private int _attackCounter ;
 
-    public void Awake()
+    public void Start()
     {
-
         //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
 
         //caching Hashes
-        _SuperAttackHash = Animator.StringToHash("SuperAttack");
+        _superAttackHash = Animator.StringToHash("SuperAttack");
+        _superAttackMultiplierHash = Animator.StringToHash("SuperAttack__Multiplier");
 
-
-        _attackCounter = 0 ;
-  
+        _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackSpeed);
     }
+
     public override void EnterState()
     {
-        Debug.Log("Supper Attack !!") ;
-        _enemy.Animator.CrossFade(_SuperAttackHash, 0.15f);
+        Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackSpeed );
+
+        _enemy.Animator.CrossFade(_superAttackHash, 0.15f);
         _enemy.ReadyToSwitchState = false ;
     }
 
     public override void UpdateState()
     {
-
+        _direction = (_enemy.Player.transform.position - this.transform.position).normalized;
+        _lookRotation = Quaternion.LookRotation(_direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.SuperAttackRotationSpeed);
     }
 
     public override void ExitState()
     {
-        _enemy.ReadyToSwitchState = true ;
+
     }
 
+    void AttackComplete()
+    {
+        _enemy.ReadyToSwitchState = true ;
+        _enemy.SwitchState(_enemy.IdleState);
+    }
 }

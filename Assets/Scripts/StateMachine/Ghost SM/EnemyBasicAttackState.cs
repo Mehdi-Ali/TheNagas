@@ -8,53 +8,67 @@ public class EnemyBasicAttackState : BaseState
     EnemyStateManger _enemy;
 
     //Variables to store optimized Setter / getter parameter IDs
-    int _BasicAttackHash;
-    int _BasicAttackMultiplierHash;
+    int _basicAttackHash;
+    int _basicAttackMultiplierHash;
 
 
     // utilities 
     private int _attackCounter ;
+    private Vector3 _direction ;
+    private Quaternion _lookRotation ;
 
-    public void Awake()
+    public void Start()
     {
 
         //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
 
         //caching Hashes
-        _BasicAttackHash = Animator.StringToHash("BasicAttack");
-        _BasicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
+        _basicAttackHash = Animator.StringToHash("BasicAttack");
+        _basicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
 
-
+        _enemy.Animator.SetFloat(_basicAttackMultiplierHash, _enemy.Statics.BasicAttackSpeed);
         _attackCounter = 0 ;
-  
+
     }
     public override void EnterState()
     {
-        if (_attackCounter == 2)
+
+        if (_attackCounter < 2)
+        {
+            _attackCounter++ ;
+
+            Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackSpeed );
+
+
+            _enemy.Animator.CrossFade(_basicAttackHash, 0.15f);
+            _enemy.ReadyToSwitchState = false ;
+
+        }
+        else if (_attackCounter == 2)
         {
             _enemy.SwitchState(_enemy.SuperAttackState);
             _attackCounter = 0 ;
-        }
-        else 
-        {
-            Debug.Log("BasicAttack");
-            _enemy.Animator.CrossFade(_BasicAttackHash, 0.15f);
-            _enemy.ReadyToSwitchState = false ;
-
-            _attackCounter++ ;
         }
 
     }
 
     public override void UpdateState()
     {
-
+        _direction = (_enemy.Player.transform.position - this.transform.position).normalized;
+        _lookRotation = Quaternion.LookRotation(_direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.BasicAttackRotationSpeed);
     }
 
     public override void ExitState()
     {
+        
+    }
+
+    void AttackComplete()
+    {
         _enemy.ReadyToSwitchState = true ;
+        _enemy.SwitchState(_enemy.IdleState);
     }
 
 }
