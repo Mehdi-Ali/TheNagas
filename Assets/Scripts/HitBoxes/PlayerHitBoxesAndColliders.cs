@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class PlayerHitBoxes : MonoBehaviour
+public class PlayerHitBoxesAndColliders : MonoBehaviour
 {
-    [SerializeField] public HitBox HitBox1;
+    [SerializeField] public PlayerHitBox HitBox1;
 
-    [SerializeField] public HitBox HitBox2;
+    [SerializeField] public PlayerHitBox HitBox2;
 
-    [SerializeField] public HitBox HitBox3;
+    [SerializeField] public PlayerHitBox HitBox3;
 
-    [SerializeField] public HitBox HitBoxU;
+    [SerializeField] public PlayerHitBox HitBoxU;
 
     public RotationConstraint RotationConstraint;
 

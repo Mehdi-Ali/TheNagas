@@ -54,7 +54,9 @@ public class StateManger : NetworkBehaviour
     
     public void SwitchState(BaseState state)
     {   
-        if (CurrentState == DeadState) return ;
+        // I think it can be deleted because we never call it if CurrentState == DeadState
+        if (CurrentState == DeadState) return ; 
+        
         if (ReadyToSwitchState || state == DeadState)
         {
             CurrentState.ExitState();

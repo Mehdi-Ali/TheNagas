@@ -31,8 +31,8 @@ public class PlayerStateManger : StateManger
     Vector2 _currentAimingInput ;
     Vector3 _currentAimingAt ;
     Quaternion _currentAimingRotation;
-    public PlayerHitBoxes HitBoxes;
-    public HitBox ActiveHitBox;
+    public PlayerHitBoxesAndColliders HitBoxes;
+    public PlayerHitBox ActiveHitBox;
     public AttackCollider ActiveAttackCollider;
 
     //Variables to handle Gravity
@@ -82,7 +82,7 @@ public class PlayerStateManger : StateManger
         UltimateState = GetComponent<PlayerUltimateState>();
 
         CharacterController = GetComponent<CharacterController>();
-        HitBoxes = FindObjectOfType<PlayerHitBoxes>();
+        HitBoxes = FindObjectOfType<PlayerHitBoxesAndColliders>();
         CooldownSystem = FindObjectOfType<CooldownSystem>();
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();

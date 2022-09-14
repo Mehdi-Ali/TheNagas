@@ -5,13 +5,13 @@ using UnityEngine;
 public class AttackCollider : MonoBehaviour
 {
 
-    [SerializeField] PlayerHitBoxes _hitBoxes;
+    [SerializeField] PlayerHitBoxesAndColliders _hitBoxes;
     [SerializeField] public Collider Collider ; 
 
 
         private void Awake() 
     {
-        _hitBoxes = GetComponentInParent<PlayerHitBoxes>() ;
+        _hitBoxes = GetComponentInParent<PlayerHitBoxesAndColliders>() ;
     }
 
         private void OnTriggerEnter(Collider other)

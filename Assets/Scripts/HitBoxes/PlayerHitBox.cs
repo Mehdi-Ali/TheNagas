@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitBox : MonoBehaviour
+public class PlayerHitBox : MonoBehaviour
 {
-    [SerializeField] PlayerHitBoxes _hitBoxes;
+    [SerializeField] PlayerHitBoxesAndColliders _hitBoxes;
     [SerializeField] public bool Movable;
 
     private void Awake() 
     {
-        _hitBoxes = GetComponentInParent<PlayerHitBoxes>() ;
+        _hitBoxes = GetComponentInParent<PlayerHitBoxesAndColliders>() ;
     }
 
     private void OnEnable() 
