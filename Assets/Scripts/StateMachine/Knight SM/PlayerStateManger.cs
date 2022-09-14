@@ -82,7 +82,7 @@ public class PlayerStateManger : StateManger
         UltimateState = GetComponent<PlayerUltimateState>();
 
         CharacterController = GetComponent<CharacterController>();
-        HitBoxes = FindObjectOfType<PlayerHitBoxesAndColliders>();
+        HitBoxes = GetComponentInChildren<PlayerHitBoxesAndColliders>();
         CooldownSystem = FindObjectOfType<CooldownSystem>();
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();

@@ -18,6 +18,10 @@ public class EnemyStateManger : StateManger
     public EnemyAnimationsLength AnimationsLength;
     public EnemyStatics Statics ;
     public NavMeshAgent NavAgent;
+    public EnemyHitBoxesAndColliders HitBoxes ;
+    public EnemyHitBox ActiveHitBox;
+    public AttackCollider ActiveAttackCollider;
+
 
     // TODO find object when the client is ON
     public PlayerStateManger Player ;
@@ -49,6 +53,7 @@ public class EnemyStateManger : StateManger
         Statics = GetComponent<EnemyStatics>();
         AnimationsLength = GetComponent<EnemyAnimationsLength>();
         NavAgent = GetComponent<NavMeshAgent>();
+        HitBoxes = GetComponentInChildren<EnemyHitBoxesAndColliders>();
     }
 
     public override void Update()

@@ -7,6 +7,9 @@ public class EnemyBasicAttackState : BaseState
     //A reference for the Player State Manger
     EnemyStateManger _enemy;
 
+    // Cashing Instances
+
+
     //Variables to store optimized Setter / getter parameter IDs
     int _basicAttackHash;
     int _basicAttackMultiplierHash;
@@ -36,7 +39,10 @@ public class EnemyBasicAttackState : BaseState
 
         if (_attackCounter < 2)
         {
-            _attackCounter++ ;
+            //
+            _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(true);
+            //_enemy.HitBoxes.BasicCollider.Collider.enabled = true ; // we don't have any 
+            //
 
             Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackSpeed );
 
@@ -44,6 +50,7 @@ public class EnemyBasicAttackState : BaseState
             _enemy.Animator.CrossFade(_basicAttackHash, 0.15f);
             _enemy.ReadyToSwitchState = false ;
 
+            _attackCounter++ ;
         }
         else if (_attackCounter == 2)
         {
@@ -62,13 +69,22 @@ public class EnemyBasicAttackState : BaseState
 
     public override void ExitState()
     {
-        
+        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false); // delete
     }
 
     void AttackComplete()
     {
         _enemy.ReadyToSwitchState = true ;
         _enemy.SwitchState(_enemy.IdleState);
+    }
+
+    void BasicAttackEvent()
+    {
+        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false);
+
+        //Do Damage or SHoot or slow or whatever
+
+        //_enemy.HitBoxes.BasicCollider.Collider.enabled = false ; // we don't have any 
     }
 
 }
