@@ -13,17 +13,18 @@ public class EnemyStatics : MonoBehaviour
     public float RoamingSpeed =  1.5f ;
     public float ChasingSpeed =  3.5f ;
     public float BasicAttackDamage =  15.0f ;
-    public float BasicAttackSpeed =  1.0f ;
+    public float BasicAttackAnimationSpeed =  1.0f ;
+    public float BasicAttackProjectionSpeed =  5.0f ;
     public float BasicAttackRotationSpeed =  10f ;
     public float SuperAttackDamage =  15.0f ;
     public float SuperAttackSpeed =  1.0f ;
     public float SuperAttackRotationSpeed =  10f ;
 
 
-        private void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
-          Gizmos.DrawWireSphere(transform.position, VisionRange);
-          Gizmos.DrawWireSphere(transform.position, AttackRange);
-          Gizmos.DrawWireSphere(transform.position, DropAggroRange);
+        Gizmos.DrawWireSphere(transform.position, VisionRange);
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
+        Gizmos.DrawWireSphere(transform.position, DropAggroRange);
     }
 }

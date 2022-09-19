@@ -20,7 +20,7 @@ public class EnemyStateManger : StateManger
     public NavMeshAgent NavAgent;
     public EnemyHitBoxesAndColliders HitBoxes ;
     public EnemyHitBox ActiveHitBox;
-    public AttackCollider ActiveAttackCollider;
+    public PlayerAttackCollider ActiveAttackCollider;
 
 
     // TODO find object when the client is ON

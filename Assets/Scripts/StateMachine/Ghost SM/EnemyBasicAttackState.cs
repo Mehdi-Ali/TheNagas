@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class EnemyBasicAttackState : BaseState
 {    
@@ -8,6 +9,12 @@ public class EnemyBasicAttackState : BaseState
     EnemyStateManger _enemy;
 
     // Cashing Instances
+    private BasicAttackSpawner _spawner ;
+
+    //prefabs
+    [SerializeField] private EnemyProjectile _projectilePrefab ;
+
+    private ObjectPool<EnemyProjectile> _pool ;
 
 
     //Variables to store optimized Setter / getter parameter IDs
@@ -19,23 +26,46 @@ public class EnemyBasicAttackState : BaseState
     private int _attackCounter ;
     private Vector3 _direction ;
     private Quaternion _lookRotation ;
+    private EnemyProjectile _projectile ;
 
+
+    private void Awake()
+    {
+
+    }
+
+    
     public void Start()
     {
 
         //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
+        _spawner = GetComponentInChildren<BasicAttackSpawner>();
 
         //caching Hashes
         _basicAttackHash = Animator.StringToHash("BasicAttack");
         _basicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
 
-        _enemy.Animator.SetFloat(_basicAttackMultiplierHash, _enemy.Statics.BasicAttackSpeed);
+        //Pooling ; Move to awake
+        _pool = new ObjectPool<EnemyProjectile>(
+
+        () => {return Instantiate(_projectilePrefab);},
+
+        _projectile => {_projectile.gameObject.SetActive(true);},
+
+        _projectile => {_projectile.gameObject.SetActive(false);},
+
+        _projectile => {Destroy(_projectile.gameObject);},
+
+        false, 2,2 );
+
+        //Init things
         _attackCounter = 0 ;
 
     }
     public override void EnterState()
     {
+        _enemy.Animator.SetFloat(_basicAttackMultiplierHash, _enemy.Statics.BasicAttackAnimationSpeed);
 
         if (_attackCounter < 2)
         {
@@ -44,7 +74,7 @@ public class EnemyBasicAttackState : BaseState
             //_enemy.HitBoxes.BasicCollider.Collider.enabled = true ; // we don't have any 
             //
 
-            Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackSpeed );
+            Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackAnimationSpeed );
 
 
             _enemy.Animator.CrossFade(_basicAttackHash, 0.15f);
@@ -69,7 +99,7 @@ public class EnemyBasicAttackState : BaseState
 
     public override void ExitState()
     {
-        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false); // delete
+        
     }
 
     void AttackComplete()
@@ -82,9 +112,24 @@ public class EnemyBasicAttackState : BaseState
     {
         _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false);
 
-        //Do Damage or SHoot or slow or whatever
+        _projectile = _pool.Get();
+
+
+        _projectile.transform.position = _spawner.transform.position; 
+        _projectile.transform.rotation = _spawner.transform.rotation; 
+        _projectile.Damage = _enemy.Statics.BasicAttackDamage ;
+        _projectile.Speed = _enemy.Statics.BasicAttackProjectionSpeed ;
+        _projectile.Range = _enemy.Statics.AttackRange ;
+        
+        _projectile.Init(CollidedAction);
+
 
         //_enemy.HitBoxes.BasicCollider.Collider.enabled = false ; // we don't have any 
+    }
+
+    private void CollidedAction(EnemyProjectile _projectile)
+    {
+        _pool.Release(_projectile);
     }
 
 }

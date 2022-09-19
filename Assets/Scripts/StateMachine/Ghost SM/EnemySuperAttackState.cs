@@ -24,12 +24,13 @@ public class EnemySuperAttackState : BaseState
         //caching Hashes
         _superAttackHash = Animator.StringToHash("SuperAttack");
         _superAttackMultiplierHash = Animator.StringToHash("SuperAttack__Multiplier");
-
-        _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackSpeed);
+        
     }
 
     public override void EnterState()
     {
+
+        _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackSpeed);
         Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackSpeed );
 
         _enemy.Animator.CrossFade(_superAttackHash, 0.15f);

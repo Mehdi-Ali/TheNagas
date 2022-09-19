@@ -19,11 +19,11 @@ public class PlayerHitBoxesAndColliders : MonoBehaviour
 
     ConstraintSource ConstraintSource;
 
-    [SerializeField] public AttackCollider AttackColliderAA ;
-    [SerializeField] public AttackCollider AttackCollider1 ;
-    [SerializeField] public AttackCollider AttackCollider2 ;
-    [SerializeField] public AttackCollider AttackCollider3 ;
-    [SerializeField] public AttackCollider AttackColliderU ;
+    [SerializeField] public PlayerAttackCollider AttackColliderAA ;
+    [SerializeField] public PlayerAttackCollider AttackCollider1 ;
+    [SerializeField] public PlayerAttackCollider AttackCollider2 ;
+    [SerializeField] public PlayerAttackCollider AttackCollider3 ;
+    [SerializeField] public PlayerAttackCollider AttackColliderU ;
 
     //Storing Variables
     public HashSet<EnemyBase> Targets = new HashSet<EnemyBase>();
