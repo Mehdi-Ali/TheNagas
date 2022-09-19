@@ -222,8 +222,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4290150032055408595}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0.2}
-  m_LocalScale: {x: 297.27, y: 237.4, z: 210.083}
+  m_LocalPosition: {x: 0, y: 0, z: 1.09}
+  m_LocalScale: {x: 400.9, y: 608.4, z: 500}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2772316247711718740}
@@ -238,7 +238,7 @@ MeshCollider:
   m_GameObject: {fileID: 4290150032055408595}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -307,8 +307,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BasicHitBox: {fileID: 4333382494640789837}
   SuperHitBox: {fileID: 1977426956056907721}
-  BasicCollider: {fileID: 0}
-  SuperCollider: {fileID: 0}
+  BasicCollider: {fileID: 5364925771169577369}
+  SuperCollider: {fileID: 6047060129761182158}
 --- !u!1 &7197833741113760919
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,7 +489,7 @@ MonoBehaviour:
   BasicAttackAnimationSpeed: 1
   BasicAttackProjectionSpeed: 5
   BasicAttackRotationSpeed: 5
-  SuperAttackDamage: 15
+  SuperAttackDamage: 30
   SuperAttackSpeed: 1
   SuperAttackRotationSpeed: 5
 --- !u!95 &7324678761862502599

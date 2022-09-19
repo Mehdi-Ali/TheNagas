@@ -8,11 +8,11 @@ public class EnemyHitBoxesAndColliders : MonoBehaviour
     [SerializeField] public EnemyHitBox SuperHitBox;
 
 
-    [SerializeField] public PlayerAttackCollider BasicCollider ;
-    [SerializeField] public PlayerAttackCollider SuperCollider ;
+    [SerializeField] public EnemyAttackCollider BasicCollider ;
+    [SerializeField] public EnemyAttackCollider SuperCollider ;
 
     //Storing Variables
-    public HashSet<EnemyBase> Targets = new HashSet<EnemyBase>();
+    public HashSet<PlayerBase> Targets = new HashSet<PlayerBase>();
     //create something like EnemyBase for PLayers.
 
 }

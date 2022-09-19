@@ -15,6 +15,7 @@ public class EnemySuperAttackState : BaseState
 
 
     // utilities 
+    private bool _doLookAt ;
 
     public void Start()
     {
@@ -29,16 +30,19 @@ public class EnemySuperAttackState : BaseState
 
     public override void EnterState()
     {
-
         _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackSpeed);
+        _enemy.HitBoxes.SuperHitBox.gameObject.SetActive(true);
+        _enemy.HitBoxes.SuperCollider.Collider.enabled = true ;
         Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackSpeed );
 
         _enemy.Animator.CrossFade(_superAttackHash, 0.15f);
         _enemy.ReadyToSwitchState = false ;
+        _doLookAt = true;
     }
 
     public override void UpdateState()
     {
+        if (!_doLookAt) return;
         _direction = (_enemy.Player.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.SuperAttackRotationSpeed);
@@ -53,5 +57,20 @@ public class EnemySuperAttackState : BaseState
     {
         _enemy.ReadyToSwitchState = true ;
         _enemy.SwitchState(_enemy.IdleState);
+    }
+
+    void SuperAttackEvent()
+    {
+        _doLookAt = false;
+        
+        _enemy.HitBoxes.SuperHitBox.gameObject.SetActive(false);
+
+        foreach(PlayerBase player in _enemy.HitBoxes.Targets)
+        {
+            player.TakeDamage(_enemy.Statics.SuperAttackDamage);
+        }
+
+
+        _enemy.HitBoxes.SuperCollider.Collider.enabled = false ;
     }
 }

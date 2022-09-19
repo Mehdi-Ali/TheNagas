@@ -914,6 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  AutoAimRange: 6
 --- !u!143 &616992439676264450
 CharacterController:
   m_ObjectHideFlags: 0

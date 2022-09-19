@@ -28,10 +28,24 @@ public class EnemyBasicAttackState : BaseState
     private Quaternion _lookRotation ;
     private EnemyProjectile _projectile ;
 
+    // utilities 
+    private bool _doLookAt ;
+
 
     private void Awake()
     {
+        //Pooling ; Move to awake
+        _pool = new ObjectPool<EnemyProjectile>(
 
+        () => {return Instantiate(_projectilePrefab);},
+
+        _projectile => {_projectile.gameObject.SetActive(true);},
+
+        _projectile => {_projectile.gameObject.SetActive(false);},
+
+        _projectile => {Destroy(_projectile.gameObject);},
+
+        false, 2,2 );
     }
 
     
@@ -46,19 +60,6 @@ public class EnemyBasicAttackState : BaseState
         _basicAttackHash = Animator.StringToHash("BasicAttack");
         _basicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
 
-        //Pooling ; Move to awake
-        _pool = new ObjectPool<EnemyProjectile>(
-
-        () => {return Instantiate(_projectilePrefab);},
-
-        _projectile => {_projectile.gameObject.SetActive(true);},
-
-        _projectile => {_projectile.gameObject.SetActive(false);},
-
-        _projectile => {Destroy(_projectile.gameObject);},
-
-        false, 2,2 );
-
         //Init things
         _attackCounter = 0 ;
 
@@ -69,13 +70,8 @@ public class EnemyBasicAttackState : BaseState
 
         if (_attackCounter < 2)
         {
-            //
             _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(true);
-            //_enemy.HitBoxes.BasicCollider.Collider.enabled = true ; // we don't have any 
-            //
-
             Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackAnimationSpeed );
-
 
             _enemy.Animator.CrossFade(_basicAttackHash, 0.15f);
             _enemy.ReadyToSwitchState = false ;
@@ -88,10 +84,13 @@ public class EnemyBasicAttackState : BaseState
             _attackCounter = 0 ;
         }
 
+        _doLookAt = true;
+
     }
 
     public override void UpdateState()
     {
+        if (!_doLookAt) return;
         _direction = (_enemy.Player.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.BasicAttackRotationSpeed);
@@ -110,6 +109,8 @@ public class EnemyBasicAttackState : BaseState
 
     void BasicAttackEvent()
     {
+        _doLookAt = false;        
+
         _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false);
 
         _projectile = _pool.Get();
@@ -120,7 +121,7 @@ public class EnemyBasicAttackState : BaseState
         _projectile.Damage = _enemy.Statics.BasicAttackDamage ;
         _projectile.Speed = _enemy.Statics.BasicAttackProjectionSpeed ;
         _projectile.Range = _enemy.Statics.AttackRange ;
-        
+
         _projectile.Init(CollidedAction);
 
 
