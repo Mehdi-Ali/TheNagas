@@ -5,7 +5,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     //Name of The Abbility
     public string AbilityName = "Spin" ;
 
-    //Game Designe Vars, Mak a stat Script maybe
+    //Game Design Vars, Mak a stat Script maybe
     [SerializeField] float _movementSpeed = 7.5f;
     [SerializeField] float _cooldown = 5.0f ;
     [SerializeField] float _damage = 20.0f;

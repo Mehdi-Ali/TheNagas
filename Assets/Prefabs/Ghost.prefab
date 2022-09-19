@@ -477,7 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1a3f137ae39584b8e41b5c5ddd2f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  MaxHealth: 200
   VisionRange: 10
   AttackRange: 4
   DropAggroRange: 14

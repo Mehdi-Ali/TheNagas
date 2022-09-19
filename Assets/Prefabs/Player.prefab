@@ -913,7 +913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd1cab16b43fe8418e630eaf1fd730d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  MaxHealth: 500
   AutoAimRange: 6
 --- !u!143 &616992439676264450
 CharacterController:

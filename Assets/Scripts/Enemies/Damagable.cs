@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Damageable : MonoBehaviour // make a damageable Enemy and player 
+public class Damageable : MonoBehaviour
 {
     //Variables to cache Instances
     private EnemyStatics _enemyStatics ;
@@ -52,10 +52,10 @@ public class Damageable : MonoBehaviour // make a damageable Enemy and player
         if (_health == 0) Die();
 
         _healthBar.SetHealth(_health);
-        //popup dmg number
         
-        
-     }
+        DamagePopUp.Create(this.transform.position , damage);
+
+    }
 
     public virtual void Die()
     {

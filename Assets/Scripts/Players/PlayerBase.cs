@@ -52,8 +52,7 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
         if (_health == 0) Die();
 
         _healthBar.SetHealth(_health);
-        //popup dmg number
-        
+        DamagePopUp.Create(this.transform.position , damage);        
         
      }
 
