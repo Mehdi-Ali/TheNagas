@@ -53,7 +53,7 @@ public class Damageable : MonoBehaviour
 
         _healthBar.SetHealth(_health);
         
-        DamagePopUp.Create(this.transform.position , damage);
+        DamagePopUp.Create(this.transform.position , damage, Color.yellow);
 
     }
 

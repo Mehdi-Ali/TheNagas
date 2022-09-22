@@ -52,7 +52,7 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
         if (_health == 0) Die();
 
         _healthBar.SetHealth(_health);
-        DamagePopUp.Create(this.transform.position , damage);        
+        DamagePopUp.Create(this.transform.position , damage, Color.red);        
         
      }
 

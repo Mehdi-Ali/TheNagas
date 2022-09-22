@@ -5,7 +5,7 @@ using TMPro;
 public class DamagePopUp : MonoBehaviour
 {
     private TextMeshPro _text ;
-    private Color _textColor = Color.red ;
+    private Color _textColor ;
     [SerializeField] private Vector3 _moveVector = new Vector3(0.7f * 60f , 0f, 60f);
     [SerializeField] private float _maxDisappearTime = 1.0f;
     [SerializeField] private float _disappearSpeed = 5.0f;
@@ -18,13 +18,13 @@ public class DamagePopUp : MonoBehaviour
 
 
     private static int _sortingOrder ;
-    public static DamagePopUp Create(Vector3 position, float damage)
+    public static DamagePopUp Create(Vector3 position, float damage, Color color)
     {         
-        var i = Instantiate(GameAssets.i.DamagePopUp, position, Quaternion.identity) ;
-        var j = i.GetComponent<DamagePopUp>();
-        j.SetUp(damage) ;
+        var instance = Instantiate(GameAssets.i.DamagePopUp, position, Quaternion.identity) ;
+        var damagePopUpInstance = instance.GetComponent<DamagePopUp>();
+        damagePopUpInstance.SetUp(damage, color) ;
 
-        return j ;
+        return damagePopUpInstance ;
     }
 
     void Awake()
@@ -32,10 +32,10 @@ public class DamagePopUp : MonoBehaviour
         _text = GetComponent<TextMeshPro>();
     }
 
-    public void SetUp(float damage)
+    public void SetUp(float damage, Color color)
     {
         _text.SetText(damage.ToString());
-        _text.color = _textColor;
+        _text.color = color;
         _disappearTime = _maxDisappearTime ;
         _text.sortingOrder = _sortingOrder ;
         _sortingOrder ++ ;
@@ -61,6 +61,7 @@ public class DamagePopUp : MonoBehaviour
 
         if (_disappearTime > 0 )
         {
+            _textColor = _text.color ;
             _textColor.a -= _disappearSpeed * Time.deltaTime ;
             _text.color = _textColor ;
 
