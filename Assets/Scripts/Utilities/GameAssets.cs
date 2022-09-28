@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class  GameAssets : MonoBehaviour
 {
+    //the game object holding this script must be in the resources folder
     private static GameAssets _i ;
 
     public static GameAssets i 

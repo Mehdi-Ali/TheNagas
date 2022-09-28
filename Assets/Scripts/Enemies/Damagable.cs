@@ -4,7 +4,6 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     //Variables to cache Instances
-    private EnemyStatics _enemyStatics ;
     private EnemyStateManger _enemy ;
     private Animator _animator;
     private HealthBar _healthBar ;
@@ -30,12 +29,11 @@ public class Damageable : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _DeadHash = Animator.StringToHash("Dead");
-        _enemyStatics = GetComponent<EnemyStatics>() ;
         _enemy = GetComponent<EnemyStateManger>();
 
         _healthBar = GetComponentInChildren<HealthBar>();
 
-        _maxHealth = _enemyStatics.MaxHealth ;
+        _maxHealth = _enemy.Statics.MaxHealth ;
 
         _health = _maxHealth;
         _healthBar.SetMaxHealth(_maxHealth) ;

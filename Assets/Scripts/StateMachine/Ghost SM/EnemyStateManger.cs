@@ -6,6 +6,8 @@ using UnityEngine.AI ;
 
 public class EnemyStateManger : StateManger
 {
+    [SerializeField] // TODO how to put it at the top in the editor 
+    public EnemyStaticsScriptableObject Statics ;
 
     //Initiating the states.
     public EnemyRoamingState RoamingState ;
@@ -16,11 +18,11 @@ public class EnemyStateManger : StateManger
 
     //Variables to cache Instances 
     public EnemyAnimationsLength AnimationsLength;
-    public EnemyStatics Statics ;
     public NavMeshAgent NavAgent;
     public EnemyHitBoxesAndColliders HitBoxes ;
     public EnemyHitBox ActiveHitBox;
     public PlayerAttackCollider ActiveAttackCollider;
+    //get animator component here and get it in other instance from here
 
 
     // TODO find object when the client is ON
@@ -50,7 +52,6 @@ public class EnemyStateManger : StateManger
         BasicAttackState = GetComponent<EnemyBasicAttackState>();
         SuperAttackState = GetComponent<EnemySuperAttackState>();
 
-        Statics = GetComponent<EnemyStatics>();
         AnimationsLength = GetComponent<EnemyAnimationsLength>();
         NavAgent = GetComponent<NavMeshAgent>();
         HitBoxes = GetComponentInChildren<EnemyHitBoxesAndColliders>();

@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateManger : StateManger
 {
+    [SerializeField] // TODO how to put it at the top in the editor 
+    public PlayerStaticsScriptableObject Statics ;
 
     #region Fields and Properties
 

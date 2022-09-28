@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 995ad2e3f5847734ab4848b207de15e6, type: 3}
+  m_Name: GhostEnemyStatics
+  m_EditorClassIdentifier: 
+  MaxHealth: 200
+  VisionRange: 10
+  AttackRange: 4
+  DropAggroRange: 14
+  MinRoamingPause: 3
+  MaxRoamingPause: 6
+  RoamingSpeed: 1.5
+  ChasingSpeed: 3.5
+  BasicAttackDamage: 15
+  BasicAttackAnimationSpeed: 1
+  BasicAttackProjectionSpeed: 5
+  BasicAttackRotationSpeed: 5
+  SuperAttackDamage: 30
+  SuperAttackSpeed: 1
+  SuperAttackRotationSpeed: 5

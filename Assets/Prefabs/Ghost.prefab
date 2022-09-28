@@ -423,11 +423,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4205181676574850689}
-  - component: {fileID: 2281181580626822390}
   - component: {fileID: 7324678761862502599}
   - component: {fileID: 2706404492712859365}
   - component: {fileID: 2853911130452667003}
-  - component: {fileID: 4252005596395057578}
   - component: {fileID: 1522711315874546608}
   - component: {fileID: 2173564305596942674}
   - component: {fileID: 2546039537808458831}
@@ -436,6 +434,7 @@ GameObject:
   - component: {fileID: 7234850922456280030}
   - component: {fileID: 5745639388223354640}
   - component: {fileID: 5789112543792799957}
+  - component: {fileID: 883959914585170906}
   - component: {fileID: 8966469563047282533}
   - component: {fileID: 7893324485583620652}
   - component: {fileID: 1835414585024779192}
@@ -465,33 +464,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2281181580626822390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267754348304856137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da1a3f137ae39584b8e41b5c5ddd2f75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 200
-  VisionRange: 10
-  AttackRange: 4
-  DropAggroRange: 14
-  MinRoamingPause: 3
-  MaxRoamingPause: 6
-  RoamingSpeed: 1.5
-  ChasingSpeed: 3.5
-  BasicAttackDamage: 15
-  BasicAttackAnimationSpeed: 1
-  BasicAttackProjectionSpeed: 5
-  BasicAttackRotationSpeed: 5
-  SuperAttackDamage: 30
-  SuperAttackSpeed: 1
-  SuperAttackRotationSpeed: 5
 --- !u!95 &7324678761862502599
 Animator:
   serializedVersion: 4
@@ -542,18 +514,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4252005596395057578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267754348304856137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d3681ee67cfb7439dd95718be3bdd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1522711315874546608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,12 +536,12 @@ MonoBehaviour:
   Animator: {fileID: 0}
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
+  Statics: {fileID: 11400000, guid: 0980d9dd133e7ef4a8f013bdebf7be56, type: 2}
   RoamingState: {fileID: 0}
   ChasingState: {fileID: 0}
   BasicAttackState: {fileID: 0}
   SuperAttackState: {fileID: 0}
   AnimationsLength: {fileID: 0}
-  Statics: {fileID: 0}
   NavAgent: {fileID: 0}
   HitBoxes: {fileID: 0}
   ActiveHitBox: {fileID: 0}
@@ -697,6 +657,18 @@ MonoBehaviour:
   _componentIndexCache: 7
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
+--- !u!114 &883959914585170906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8267754348304856137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13d3681ee67cfb7439dd95718be3bdd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8966469563047282533
 MonoBehaviour:
   m_ObjectHideFlags: 0

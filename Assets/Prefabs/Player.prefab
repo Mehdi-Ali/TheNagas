@@ -857,7 +857,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4673185021982604604}
-  - component: {fileID: 3081675290102635994}
   - component: {fileID: 616992439676264450}
   - component: {fileID: 4570720078839338132}
   - component: {fileID: 1473949094486602799}
@@ -901,20 +900,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3081675290102635994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8479496936149924893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd1cab16b43fe8418e630eaf1fd730d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 500
-  AutoAimRange: 6
 --- !u!143 &616992439676264450
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1092,6 +1077,7 @@ MonoBehaviour:
   Animator: {fileID: 0}
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
+  Statics: {fileID: 11400000, guid: 0adba4b7aa87ffe4788a0fb23c20763e, type: 2}
   AutoAttackState: {fileID: 0}
   FirstAbilityState: {fileID: 0}
   SecondAbilityState: {fileID: 0}

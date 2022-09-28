@@ -22,7 +22,7 @@ public class DamagePopUp : MonoBehaviour
     {         
         var instance = Instantiate(GameAssets.i.DamagePopUp, position, Quaternion.identity) ;
         var damagePopUpInstance = instance.GetComponent<DamagePopUp>();
-        damagePopUpInstance.SetUp(damage, color) ;
+        damagePopUpInstance.SetUp(damage, color);
 
         return damagePopUpInstance ;
     }
