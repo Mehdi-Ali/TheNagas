@@ -40,7 +40,7 @@ MonoBehaviour:
   ThirdAbilityAnimationSpeed: 2
   ThirdAbilityCooldown: 0
   ThirdAbilityDamage: 20
-  ThirdAbilityRange: 5
+  ThirdAbilityRange: 10
   UltimateAbilityAbilityName: Dank
   UltimateAbilityAnimationSpeed: 1.5
   UltimateAbilityCooldown: 0

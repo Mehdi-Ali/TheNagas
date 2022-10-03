@@ -290,6 +290,7 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         _aimingRange = Statics.ThirdAbilityRange;
+        if (!_isAimingPressed) AutoAiming();
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox3;
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
@@ -298,6 +299,7 @@ public class PlayerStateManger : StateManger
     {
         if (    CooldownSystem.IsOnCooldown(ThirdAbilityState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
+                _isAutoAiming = false ;
         HitBoxes.HitBox3.gameObject.SetActive(true);
     }
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
