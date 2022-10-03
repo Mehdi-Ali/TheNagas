@@ -65,8 +65,7 @@ public class DamagePopUp : MonoBehaviour
             _textColor.a -= _disappearSpeed * Time.deltaTime ;
             _text.color = _textColor ;
 
-            if (_textColor.a <= 0) Destroy(this.gameObject);
-            // make it pool for performance.
+            //if (_textColor.a <= 0) Destroy(this.gameObject);
         }
     }
 }

@@ -8,6 +8,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     //Game Design Vars, Mak a stat Script maybe
     [SerializeField] private float _animationSpeed = 1.5f;
+    [SerializeField] public float Range = 5.0f;
     [SerializeField] float _cooldown = 5.0f;
     [SerializeField] float _damage = 99.0f;
 
@@ -51,7 +52,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         _grounded = false;
         _tLerp = 0.0f ;
         _start = transform.position ;
-        _end = _player.HitBoxes.transform.position ; // because it is movable 
+        _end = _player.HitBoxes.transform.position ;
 
 
         Invoke( nameof(AttackComplete),
@@ -70,9 +71,13 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     public override void UpdateState()
     {
+  
+        
+       
         if (_grounded) return;
         _tLerp += Time.deltaTime * _animationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
         transform.position = Vector3.Lerp( _start, _end, _tLerp );
+
     }
 
     public override void ExitState()

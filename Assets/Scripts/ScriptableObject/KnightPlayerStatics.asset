@@ -12,8 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c08428abf4848a4bbfeaadee77b2b59, type: 3}
   m_Name: KnightPlayerStatics
   m_EditorClassIdentifier: 
-  MaxHealth: 10000
-  FirstAbilityStateRange: 5
-  SecondAbilityStateRange: 5
-  ThirdAbilityStateRange: 5
-  UltimateAbilityStateRange: 5
+  MaxHealth: 100
+  AutoAimRange: 6

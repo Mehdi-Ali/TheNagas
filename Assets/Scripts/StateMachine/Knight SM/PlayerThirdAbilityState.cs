@@ -49,7 +49,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         _tLerp = 0.0f;
         _start = transform.position;
-        _end = _player.ActiveHitBox.transform.position; // because it is not movable 
+        _end = _player.ActiveHitBox.transform.position;
 
         Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_animationSpeed );
         _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
