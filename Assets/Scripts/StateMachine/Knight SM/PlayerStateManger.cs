@@ -146,7 +146,6 @@ public class PlayerStateManger : StateManger
     {
         ReadAimingInput();
         HandleAimingRotation();
-
         if (ActiveHitBox.Movable) HandleAimingLocation();
     }
 
@@ -162,11 +161,6 @@ public class PlayerStateManger : StateManger
 
     }
 
-    private void HandleAimingLocation()
-    {   
-        HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
-    } 
-
     private void HandleAimingRotation()
     {
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
@@ -175,10 +169,16 @@ public class PlayerStateManger : StateManger
                                                         100f );
     }
 
+    private void HandleAimingLocation()
+    {   
+        HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
+    } 
+
     void RotateToHitBox()
     {
         transform.LookAt(ActiveHitBox.transform);
         _isAutoAiming = false ;
+        HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
@@ -265,9 +265,9 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         _aimingRange = Statics.SecondAbilityRange;
+        ActiveHitBox = HitBoxes.HitBox2;
         if (!_isAimingPressed) AutoAiming();
         HitBoxes.HitBox2.gameObject.SetActive(true);
-        ActiveHitBox = HitBoxes.HitBox2;
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
     }
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
@@ -290,9 +290,9 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         _aimingRange = Statics.ThirdAbilityRange;
+        ActiveHitBox = HitBoxes.HitBox3;
         if (!_isAimingPressed) AutoAiming();
         HitBoxes.HitBox3.gameObject.SetActive(true);
-        ActiveHitBox = HitBoxes.HitBox3;
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
     }
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
@@ -315,8 +315,9 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         _aimingRange = Statics.UltimateAbilityRange;
-        HitBoxes.HitBoxU.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBoxU;
+        if (!_isAimingPressed) AutoAiming();
+        HitBoxes.HitBoxU.gameObject.SetActive(true);
           ActiveAttackCollider = HitBoxes.AttackColliderU ;
     }
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
@@ -324,6 +325,7 @@ public class PlayerStateManger : StateManger
         if (    CooldownSystem.IsOnCooldown(UltimateState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
+        _isAutoAiming = false ;
     }
     private void OnUltimateInputCanceled(InputAction.CallbackContext context)
     {
@@ -343,7 +345,7 @@ public class PlayerStateManger : StateManger
         }
 
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
-        if ( _isAimingPressed) {HandleAiming();}
+        if ( _isAimingPressed) HandleAiming();
         else if (!_isAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
  
       
@@ -374,6 +376,7 @@ public class PlayerStateManger : StateManger
         Debug.Log("Auto aimed to:" + _targetPos.name );
         //transform.LookAt(_targetPos);
         HitBoxes.transform.LookAt(_targetPos);
+        if (ActiveHitBox.Movable) HitBoxes.transform.position = _targetPos.position;
 
     }
  

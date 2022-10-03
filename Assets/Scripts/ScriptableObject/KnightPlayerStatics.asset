@@ -35,12 +35,12 @@ MonoBehaviour:
   SecondAbilityAnimationSpeed: 2
   SecondAbilityCooldown: 0
   SecondAbilityDamage: 20
-  SecondAbilityRange: 50
+  SecondAbilityRange: 5
   ThirdAbilityAbilityName: Dash
   ThirdAbilityAnimationSpeed: 2
   ThirdAbilityCooldown: 0
   ThirdAbilityDamage: 20
-  ThirdAbilityRange: 10
+  ThirdAbilityRange: 5
   UltimateAbilityAbilityName: Dank
   UltimateAbilityAnimationSpeed: 1.5
   UltimateAbilityCooldown: 0
