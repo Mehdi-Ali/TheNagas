@@ -3,14 +3,6 @@ using UnityEngine;
 
 public class PlayerSecondAbilityState : BaseState, IHasCooldown
 {
-    //Name of The Ability
-    public string AbilityName = "Slash";
-
-    //Game Design Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 2.0f;
-    [SerializeField] float _cooldown = 5.0f;
-    [SerializeField] float _damage = 20.0f;
-
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
@@ -19,8 +11,8 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     int _secondAbilityMultiplierHash ;
 
     // cooldown things
-    public string Id => AbilityName;
-    public float CooldownDuration => _cooldown;
+    public string Id => _player.Statics.SecondAbilityAbilityName;
+    public float CooldownDuration => _player.Statics.SecondAbilityCooldown;
 
     private void Awake()
     {       
@@ -31,15 +23,15 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         _secondAbilityHash = Animator.StringToHash("SecondAbility");
         _secondAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
        
-       _player.Animator.SetFloat(_secondAbilityMultiplierHash, _animationSpeed);
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
+        _player.Animator.SetFloat(_secondAbilityMultiplierHash, _player.Statics.SecondAbilityAnimationSpeed);
         _player.CooldownSystem.PutOnCooldown(this);
 
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _animationSpeed);
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _player.Statics.SecondAbilityAnimationSpeed);
                 
         _player.Animator.CrossFade(_secondAbilityHash, 0.1f);
         _player.ReadyToSwitchState = false;
@@ -70,7 +62,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     {
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
-            enemy.TakeDamage(_damage);
+            enemy.TakeDamage(_player.Statics.SecondAbilityDamage);
         }
 
         _player.ActiveAttackCollider.Collider.enabled = false ;

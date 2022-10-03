@@ -2,18 +2,7 @@ using UnityEngine;
 
 public class PlayerAutoAttackState : BaseState
 {
-    //Name of The Ability
-    public string AbilityName = "Auto Attack";
 
-    //Game Design Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 1.5f;
-    [SerializeField] private float _dashingMovementSpeed = 10f;
-    [SerializeField] private float _dashingTime = 0.25f;
-    [SerializeField] private float _rotationSpeed = 10.0f;
-    [SerializeField] float _damage1 = 10.0f;
-    [SerializeField] float _damage2 = 5.0f;
-    [SerializeField] float _damage3 = 20.0f;
-    
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
@@ -38,16 +27,16 @@ public class PlayerAutoAttackState : BaseState
         _autoAttack3Hash = Animator.StringToHash("AutoAttack3");
         _AutoAttackMultiplierHash = Animator.StringToHash("AutoAttack_Multiplier");
 
-        _player.Animator.SetFloat(_AutoAttackMultiplierHash, _animationSpeed);
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
+        _player.Animator.SetFloat(_AutoAttackMultiplierHash, _player.Statics.AutoAttackAnimationSpeed);
 
-        Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
+        Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _player.Statics.AutoAttackAnimationSpeed);
         _dashed = false;
-        Invoke(nameof(Dashed), _dashingTime);
+        Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
         _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         _player.ReadyToSwitchState = false;
@@ -60,8 +49,8 @@ public class PlayerAutoAttackState : BaseState
     public override void UpdateState()
     {
         if (_dashed || !_player.IsMovementPressed) return ;
-        _player.Move(_dashingMovementSpeed);
-        _player.Rotate(_rotationSpeed);
+        _player.Move(_player.Statics.AutoAttackDashingMovementSpeed);
+        _player.Rotate(_player.Statics.AutoAttackRotationSpeed);
     }
 
     public override void ExitState()
@@ -78,9 +67,9 @@ public class PlayerAutoAttackState : BaseState
     {
         if (Continue)
         {
-            Invoke(nameof(Attack2Complete), _player.AnimationsLength.AutoAttack2Duration / _animationSpeed);
+            Invoke(nameof(Attack2Complete), _player.AnimationsLength.AutoAttack2Duration / _player.Statics.AutoAttackAnimationSpeed);
             _dashed = false;
-            Invoke(nameof(Dashed), _dashingTime);
+            Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
         }
@@ -94,9 +83,9 @@ public class PlayerAutoAttackState : BaseState
     {
         if (Continue)
         {
-            Invoke(nameof(Attack3Complete), _player.AnimationsLength.AutoAttack3Duration / _animationSpeed);
+            Invoke(nameof(Attack3Complete), _player.AnimationsLength.AutoAttack3Duration / _player.Statics.AutoAttackAnimationSpeed);
             _dashed = false;
-            Invoke(nameof(Dashed), _dashingTime);
+            Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
 
@@ -112,9 +101,9 @@ public class PlayerAutoAttackState : BaseState
     {
         if (Continue)
         {
-            Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _animationSpeed);
+            Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _player.Statics.AutoAttackAnimationSpeed);
             _dashed = false;
-            Invoke(nameof(Dashed), _dashingTime);
+            Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
         }
@@ -136,15 +125,15 @@ public class PlayerAutoAttackState : BaseState
 
     void AutoAttack1Event()
     {
-        DoDamage(_damage1);
+        DoDamage(_player.Statics.AutoAttackDamage1);
     }
     void AutoAttack2Event()
     {
-        DoDamage(_damage2); 
+        DoDamage(_player.Statics.AutoAttackDamage2); 
     }
     void AutoAttack3Event()
     {
-        DoDamage(_damage3);
+        DoDamage(_player.Statics.AutoAttackDamage3);
     }
 
     private void DoDamage(float damage)

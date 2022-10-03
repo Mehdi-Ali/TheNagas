@@ -2,15 +2,6 @@ using UnityEngine;
 
 public class PlayerFirstAbilityState : BaseState, IHasCooldown
 {
-    //Name of The Abbility
-    public string AbilityName = "Spin" ;
-
-    //Game Design Vars, Mak a stat Script maybe
-    [SerializeField] float _movementSpeed = 7.5f;
-    [SerializeField] float _cooldown = 5.0f ;
-    [SerializeField] float _damage = 20.0f;
-    [SerializeField] int _tick = 7;
-
     //Utilities
     float _tickTimer ;
     float _tickPeriod ;
@@ -19,11 +10,12 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     PlayerStateManger _player;
 
     //Variables to store optimized Setter / getter parameter IDs
-    int _firstAbility;
+    int _firstAbilityHash;
+    int _firstAbilityMultiplierHash ;
 
     // cooldown things
-    public string Id => AbilityName ;
-    public float CooldownDuration => _cooldown ;
+    public string Id => _player.Statics.FirstAbilityAbilityName;
+    public float CooldownDuration => _player.Statics.FirstAbilityCooldown ;
 
     private void Awake()
     {
@@ -31,7 +23,8 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         _player = GetComponent<PlayerStateManger>();
 
         //caching Hashes
-        _firstAbility = Animator.StringToHash("FirstAbility");
+        _firstAbilityHash = Animator.StringToHash("FirstAbility");
+        _firstAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
 
     }
 
@@ -39,16 +32,17 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     {
         if (!base.IsOwner) return;
         //check cooldown
+        _player.Animator.SetFloat(_firstAbilityMultiplierHash, _player.Statics.FirstAbilityAnimationSpeed);
         _player.CooldownSystem.PutOnCooldown(this);
         
         Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
         
-        _player.Animator.CrossFade(_firstAbility, 0.1f);
+        _player.Animator.CrossFade(_firstAbilityHash, 0.1f);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
         FirstAbilityEvent();
 
-        _tickPeriod = _player.AnimationsLength.FirstAbilityDuration / (float)_tick ;
+        _tickPeriod = _player.AnimationsLength.FirstAbilityDuration / (float)_player.Statics.FirstAbilityTicks ;
         // so that first frame of the animation deals damage 
         _tickTimer = _tickPeriod ;
         
@@ -57,7 +51,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     public override void UpdateState()
     {
         if (!base.IsOwner) return;
-        _player.Move(_movementSpeed);
+        _player.Move(_player.Statics.FirstAbilityMovementSpeed);
 
         
         
@@ -68,7 +62,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         {
             foreach(EnemyBase enemy in _player.HitBoxes.Targets)
             {
-                enemy.TakeDamage(_damage);
+                enemy.TakeDamage(_player.Statics.FirstAbilityDamage);
             }
 
             _tickTimer -= _tickPeriod  ;

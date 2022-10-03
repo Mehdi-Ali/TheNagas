@@ -3,10 +3,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerRunningState : RunningState
 {
-    //Game Designe Vars, Mak a stat Script maybe
-    [SerializeField] private float _movementSpeed = 5.0f;
-    [SerializeField] private float _rotationSpeed = 10.0f;
-    
     //A reference for the Player State Manger
     PlayerStateManger _player;
    
@@ -35,8 +31,8 @@ public class PlayerRunningState : RunningState
     public override void UpdateState()
     {
         if (!base.IsOwner) return;
-        _player.Move(_movementSpeed);
-        _player.Rotate(_rotationSpeed);
+        _player.Move(_player.Statics.MovementSpeed);
+        _player.Rotate(_player.Statics.RotationSpeed);
     }
 
     public override void ExitState()

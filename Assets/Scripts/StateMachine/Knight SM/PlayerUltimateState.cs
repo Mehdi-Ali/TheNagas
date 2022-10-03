@@ -3,16 +3,6 @@ using UnityEngine;
 
 public class PlayerUltimateState : BaseState, IHasCooldown
 {
-    //Name of The Ability
-    public string AbilityName = "Dank";
-
-    //Game Design Vars, Mak a stat Script maybe
-    [SerializeField] private float _animationSpeed = 1.5f;
-    [SerializeField] public float Range = 5.0f;
-    [SerializeField] float _cooldown = 5.0f;
-    [SerializeField] float _damage = 99.0f;
-
-
     //Variables...
     bool _grounded ;
     float _tLerp ;
@@ -28,8 +18,8 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     int _ultimateMultiplierHash;
 
     // cooldown things
-    public string Id => AbilityName;
-    public float CooldownDuration => _cooldown;
+    public string Id => _player.Statics.UltimateAbilityAbilityName;
+    public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
 
 
     private void Awake()
@@ -56,9 +46,9 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
 
         Invoke( nameof(AttackComplete),
-                (_player.AnimationsLength.UltimateDuration / _animationSpeed ));
+                (_player.AnimationsLength.UltimateDuration / _player.Statics.UltimateAbilityAnimationSpeed ));
         
-        _player.Animator.SetFloat(_ultimateMultiplierHash, _animationSpeed);
+        _player.Animator.SetFloat(_ultimateMultiplierHash, _player.Statics.UltimateAbilityAnimationSpeed);
         _player.Animator.CrossFade(_ultimateHash, 0.1f);
 
 
@@ -75,7 +65,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         
        
         if (_grounded) return;
-        _tLerp += Time.deltaTime * _animationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
+        _tLerp += Time.deltaTime * _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
         transform.position = Vector3.Lerp( _start, _end, _tLerp );
 
     }
@@ -101,7 +91,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     {
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
-            enemy.TakeDamage(_damage);
+            enemy.TakeDamage(_player.Statics.UltimateAbilityDamage);
         }
 
         _player.ActiveAttackCollider.Collider.enabled = false ;

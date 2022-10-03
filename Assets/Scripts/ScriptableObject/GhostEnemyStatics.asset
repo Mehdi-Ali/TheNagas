@@ -22,8 +22,8 @@ MonoBehaviour:
   ChasingSpeed: 3.5
   BasicAttackDamage: 15
   BasicAttackAnimationSpeed: 1
-  BasicAttackProjectionSpeed: 5
   BasicAttackRotationSpeed: 5
+  BasicAttackProjectionSpeed: 10
   SuperAttackDamage: 30
-  SuperAttackSpeed: 1
-  SuperAttackRotationSpeed: 5
+  SuperAttackAnimationSpeed: 1
+  SuperAttackRotationSpeed: 3

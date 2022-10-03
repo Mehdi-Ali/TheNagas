@@ -30,10 +30,10 @@ public class EnemySuperAttackState : BaseState
 
     public override void EnterState()
     {
-        _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackSpeed);
+        _enemy.Animator.SetFloat(_superAttackMultiplierHash, _enemy.Statics.SuperAttackAnimationSpeed);
         _enemy.HitBoxes.SuperHitBox.gameObject.SetActive(true);
         _enemy.HitBoxes.SuperCollider.Collider.enabled = true ;
-        Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackSpeed );
+        Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackAnimationSpeed );
 
         _enemy.Animator.CrossFade(_superAttackHash, 0.15f);
         _enemy.ReadyToSwitchState = false ;

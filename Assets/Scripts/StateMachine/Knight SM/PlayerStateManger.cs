@@ -8,9 +8,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerStateManger : StateManger
 {
-    [SerializeField] // TODO how to put it at the top in the editor 
+    [Header("Scriptable Objects")]
+    [SerializeField] 
     public PlayerStaticsScriptableObject Statics ;
 
+    [Space(10)]
     #region Fields and Properties
 
     //Initiating the states.
@@ -33,6 +35,7 @@ public class PlayerStateManger : StateManger
     Vector2 _currentAimingInput ;
     Vector3 _currentAimingAt ;
     Quaternion _currentAimingRotation;
+    private float _aimingRange ;
     public PlayerHitBoxesAndColliders HitBoxes;
     public PlayerHitBox ActiveHitBox;
     public PlayerAttackCollider ActiveAttackCollider;
@@ -152,7 +155,7 @@ public class PlayerStateManger : StateManger
 
     private void HandleAimingLocation()
     {   
-        HitBoxes.transform.localPosition = _currentAimingAt * UltimateState.Range ;
+        HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     } 
 
     private void HandleAimingRotation()
@@ -210,6 +213,7 @@ public class PlayerStateManger : StateManger
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false;
+        _aimingRange = Statics.AutoAttackRange;
         HitBoxes.AttackColliderAA.gameObject.SetActive(true); //to check
         ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
@@ -227,6 +231,7 @@ public class PlayerStateManger : StateManger
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
+        _aimingRange = Statics.FirstAbilityRange;
         HitBoxes.HitBox1.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox1;
         ActiveAttackCollider = HitBoxes.AttackCollider1 ;
@@ -249,6 +254,7 @@ public class PlayerStateManger : StateManger
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
+        _aimingRange = Statics.SecondAbilityRange;
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox2;
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
@@ -272,6 +278,7 @@ public class PlayerStateManger : StateManger
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
+        _aimingRange = Statics.ThirdAbilityRange;
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox3;
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
@@ -294,6 +301,7 @@ public class PlayerStateManger : StateManger
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
+        _aimingRange = Statics.UltimateAbilityRange;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBoxU;
           ActiveAttackCollider = HitBoxes.AttackColliderU ;

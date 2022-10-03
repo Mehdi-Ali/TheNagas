@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyStatics", menuName = "ScriptableObject/Enemies/EnemyStatics")]
 public class EnemyStaticsScriptableObject : ScriptableObject
 {
-    // TODO groupe and organize the numbers better.
+    [Header("General")]
+
     public float MaxHealth ;
     public float VisionRange ;
     public float AttackRange ;
@@ -14,12 +15,22 @@ public class EnemyStaticsScriptableObject : ScriptableObject
     public float MaxRoamingPause ;
     public float RoamingSpeed ;
     public float ChasingSpeed ;
+
+    [Space(10)]
+
+    [Header("Basic Attack")]
+
     public float BasicAttackDamage ;
     public float BasicAttackAnimationSpeed ;
-    public float BasicAttackProjectionSpeed ;
     public float BasicAttackRotationSpeed ;
+    public float BasicAttackProjectionSpeed ;
+
+    [Space(10)]
+
+    [Header("Super Attack")]
+
     public float SuperAttackDamage ;
-    public float SuperAttackSpeed ;
+    public float SuperAttackAnimationSpeed ;
     public float SuperAttackRotationSpeed ;
 
 }

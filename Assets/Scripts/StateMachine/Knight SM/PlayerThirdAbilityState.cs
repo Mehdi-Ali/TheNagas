@@ -3,14 +3,6 @@ using UnityEngine;
 
 public class PlayerThirdAbilityState : BaseState, IHasCooldown
 {
-    //Ability Name
-    public string AbilityName = "Dash" ;
-
-    //Game Design Vars, Mak a stat Script maybe
-    [SerializeField] float _animationSpeed = 2f;
-    [SerializeField] float _cooldown = 5.0f;
-    [SerializeField] float _damage = 20.0f;
-
     //Cashing the Player State Manager : Should do to all state scripts 
     PlayerStateManger _player;
 
@@ -25,8 +17,8 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     int _thirdAbilityMultiplierHash ;
 
     // cooldown things
-    public string Id => AbilityName;
-    public float CooldownDuration => _cooldown;
+    public string Id => _player.Statics.ThirdAbilityAbilityName;
+    public float CooldownDuration => _player.Statics.ThirdAbilityCooldown;
 
     private void Awake()
     {
@@ -37,13 +29,13 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _thirdAbilityHash = Animator.StringToHash("ThirdAbility");
         _thirdAbilityMultiplierHash = Animator.StringToHash("ThirdAbility_Multiplier");
 
-        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _animationSpeed);
 
     }
 
     public override void EnterState()
     {
         if (!base.IsOwner) return;
+        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _player.Statics.ThirdAbilityAnimationSpeed);
         //check cooldown
         _player.CooldownSystem.PutOnCooldown(this);
 
@@ -51,7 +43,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _start = transform.position;
         _end = _player.ActiveHitBox.transform.position;
 
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_animationSpeed );
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_player.Statics.ThirdAbilityAnimationSpeed );
         _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
 
         _player.HitBoxes.Targets.Clear();
@@ -63,14 +55,14 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
     public override void UpdateState()
     {
-        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _animationSpeed);
+        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _player.Statics.ThirdAbilityAnimationSpeed);
 
-        _tLerp += Time.deltaTime * _animationSpeed / _player.AnimationsLength.ThirdAbilityDuration;
+        _tLerp += Time.deltaTime * _player.Statics.ThirdAbilityAnimationSpeed / _player.AnimationsLength.ThirdAbilityDuration;
         transform.position = Vector3.Lerp(_start, _end, _tLerp);
 
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
-            enemy.TakeDamage(_damage);
+            enemy.TakeDamage(_player.Statics.ThirdAbilityDamage);
 
             _targetsToRemove.Add(enemy);
         }
