@@ -48,8 +48,9 @@ public class PlayerStateManger : StateManger
 
     //StateMachine Variables (logic and animation)
     public bool IsMovementPressed ;
-    public bool IsAimingPressed ;
-    public bool _TempDeadStateSim = false;
+    private bool _isAimingPressed ;
+    private bool _isAutoAiming ;
+
 
 
 
@@ -58,6 +59,11 @@ public class PlayerStateManger : StateManger
     private Player_Controls _playerControls;
     public CooldownSystem CooldownSystem;
     public PlayerAnimationsLength AnimationsLength;
+
+    //Auto Aiming vars
+    private float _smallestDistance;
+    private Transform _targetPos;
+    private float _distance;
 
 
 
@@ -70,7 +76,7 @@ public class PlayerStateManger : StateManger
     {
         base.Awake();
         CashingPlayerInstances() ;
-        IsAimingPressed = false;
+        _isAimingPressed = false;
         SubscriptionToPlayerControls();
 
         CharacterController.enableOverlapRecovery = true ;
@@ -133,12 +139,15 @@ public class PlayerStateManger : StateManger
     private void OnAimingInput(InputAction.CallbackContext context)
     {
         if (ActiveHitBox == null ) return;
+        HandleAiming();
+    }
 
+    private void HandleAiming()
+    {
         ReadAimingInput();
         HandleAimingRotation();
 
         if (ActiveHitBox.Movable) HandleAimingLocation();
-
     }
 
     private void ReadAimingInput()
@@ -148,8 +157,8 @@ public class PlayerStateManger : StateManger
         _currentAimingAt.y = 0.0f;
         _currentAimingAt.z = _currentAimingInput.y;
 
-        IsAimingPressed =    _currentAimingAt.x != 0 ||
-                            _currentAimingAt.z != 0 ;
+        _isAimingPressed =    _currentAimingInput.x != 0 ||
+                            _currentAimingInput.y != 0 ;
 
     }
 
@@ -168,7 +177,8 @@ public class PlayerStateManger : StateManger
 
     void RotateToHitBox()
     {
-        transform.LookAt(HitBoxes.HitBox2.transform);
+        transform.LookAt(ActiveHitBox.transform);
+        _isAutoAiming = false ;
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
@@ -255,6 +265,7 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         _aimingRange = Statics.SecondAbilityRange;
+        if (!_isAimingPressed) AutoAiming();
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox2;
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
@@ -263,14 +274,14 @@ public class PlayerStateManger : StateManger
     {
         if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
-
+        _isAutoAiming = false ;
         HitBoxes.HitBox2.gameObject.SetActive(true);
     }
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
-        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotateToHitBox();
+        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
@@ -330,11 +341,38 @@ public class PlayerStateManger : StateManger
         }
 
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
-        if ( IsAimingPressed) {ReadAimingInput(); HandleAimingRotation();}
-        else HitBoxes.transform.localEulerAngles = Vector3.zero;
-
-        if (base.IsOwner && _TempDeadStateSim) SwitchState(DeadState);   
+        if ( _isAimingPressed) {HandleAiming();}
+        else if (!_isAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
+ 
       
+    }
+
+    
+    //Auto Aiming 
+    private void AutoAiming()
+    {
+        _isAutoAiming = true ;
+        _smallestDistance = _aimingRange;
+        _targetPos = null ;
+
+        Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
+        foreach (Collider enemy in _nearbyEnemies)
+        {
+            if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
+            {
+                _distance = Vector3.Distance(this.transform.position, target.transform.position);
+                if (_distance > _smallestDistance ) continue ;
+                _smallestDistance = _distance;
+                _targetPos = target.transform;
+                
+            }
+        }
+
+        if (_targetPos == null) return ;
+        Debug.Log("Auto aimed to:" + _targetPos.name );
+        //transform.LookAt(_targetPos);
+        HitBoxes.transform.LookAt(_targetPos);
+
     }
  
     // PlayerControls Enable / Disable 

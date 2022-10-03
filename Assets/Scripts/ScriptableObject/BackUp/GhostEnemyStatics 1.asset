@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 995ad2e3f5847734ab4848b207de15e6, type: 3}
-  m_Name: GhostEnemyStatics
+  m_Name: GhostEnemyStatics 1
   m_EditorClassIdentifier: 
-  MaxHealth: 500
+  MaxHealth: 200
   VisionRange: 10
   AttackRange: 4
   DropAggroRange: 14
