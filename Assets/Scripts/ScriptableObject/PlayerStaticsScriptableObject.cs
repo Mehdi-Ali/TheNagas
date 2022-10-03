@@ -6,5 +6,19 @@ using UnityEngine;
 public class PlayerStaticsScriptableObject : ScriptableObject
 {
     public float MaxHealth ;
-    public float AutoAimRange ;
+
+
+    //FirstAbilityState
+    public float FirstAbilityStateRange;
+
+    //SecondAbilityState
+    public float SecondAbilityStateRange;
+
+    //ThirdAbilityState
+    public float ThirdAbilityStateRange;
+
+    //UltimateAbilityState
+    public float UltimateAbilityStateRange;
+
+
 }
