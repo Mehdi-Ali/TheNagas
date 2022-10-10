@@ -15,6 +15,7 @@ public class DamagePopUp : MonoBehaviour
 
     //Utilities
     private float _disappearTime ;
+    private PopupsParent _popupsParent ;
 
 
     private static int _sortingOrder ;
@@ -30,10 +31,13 @@ public class DamagePopUp : MonoBehaviour
     void Awake()
     {
         _text = GetComponent<TextMeshPro>();
+        _popupsParent = FindObjectOfType<PopupsParent>();
     }
 
     public void SetUp(float damage, Color color)
     {
+        // set parent to , _popupsParent.transform
+        this.transform.SetParent(_popupsParent.transform);
         _text.SetText(damage.ToString());
         _text.color = color;
         _disappearTime = _maxDisappearTime ;
