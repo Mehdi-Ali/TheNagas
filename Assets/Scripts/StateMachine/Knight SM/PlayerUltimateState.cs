@@ -62,8 +62,6 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     public override void UpdateState()
     {
   
-        
-       
         if (_grounded) return;
         _tLerp += Time.deltaTime * _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
         transform.position = Vector3.Lerp( _start, _end, _tLerp );

@@ -24,7 +24,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
         //caching Hashes
         _firstAbilityHash = Animator.StringToHash("FirstAbility");
-        _firstAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
+        _firstAbilityMultiplierHash = Animator.StringToHash("FirstAbility_Multiplier");
 
     }
 
@@ -35,7 +35,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         _player.Animator.SetFloat(_firstAbilityMultiplierHash, _player.Statics.FirstAbilityAnimationSpeed);
         _player.CooldownSystem.PutOnCooldown(this);
         
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration);
+        Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration / _player.Statics.FirstAbilityAnimationSpeed);
         
         _player.Animator.CrossFade(_firstAbilityHash, 0.1f);
         _player.ReadyToSwitchState = false;
@@ -51,7 +51,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     public override void UpdateState()
     {
         if (!base.IsOwner) return;
-        _player.Move(_player.Statics.FirstAbilityMovementSpeed);
+        _player.SimpleMove(_player.Statics.FirstAbilityMovementSpeed);
 
         
         

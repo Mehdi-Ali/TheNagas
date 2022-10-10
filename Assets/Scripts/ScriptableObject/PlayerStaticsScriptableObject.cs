@@ -19,6 +19,7 @@ public class PlayerStaticsScriptableObject : ScriptableObject
     public float AutoAttackAnimationSpeed;
     public float AutoAttackDashingMovementSpeed;
     public float AutoAttackDashingTime;
+    public float AutoAttackStopDistance ;
     public float AutoAttackRotationSpeed;
     public float AutoAttackDamage1;
     public float AutoAttackDamage2;

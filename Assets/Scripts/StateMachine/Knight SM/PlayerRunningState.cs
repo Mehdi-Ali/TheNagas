@@ -31,8 +31,8 @@ public class PlayerRunningState : RunningState
     public override void UpdateState()
     {
         if (!base.IsOwner) return;
-        _player.Move(_player.Statics.MovementSpeed);
-        _player.Rotate(_player.Statics.RotationSpeed);
+        _player.SimpleMove(_player.Statics.MovementSpeed);
+        _player.Rotate(_player.Statics.RotationSpeed, _player.CurrentMovement);
     }
 
     public override void ExitState()

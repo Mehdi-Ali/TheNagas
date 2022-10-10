@@ -9,6 +9,8 @@ public class PlayerAutoAttackState : BaseState
     //Variables 
     public bool Continue;
     bool _dashed ;
+    private float _distance ;
+    private Vector3 _offset ;
 
     //Variables to store optimized Setter / getter parameter IDs
     int _autoAttack1Hash;
@@ -39,23 +41,56 @@ public class PlayerAutoAttackState : BaseState
         Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
         _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
+
+        // TODO must repeat on each auto attack
+        AutoAim();
+
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
 
         _player.HitBoxes.Targets.Clear();
-        _player.ActiveAttackCollider.Collider.enabled = true ;
+        _player.ActiveAttackCollider.Collider.enabled = true;
     }
 
     public override void UpdateState()
     {
-        if (_dashed || !_player.IsMovementPressed) return ;
-        _player.Move(_player.Statics.AutoAttackDashingMovementSpeed);
-        _player.Rotate(_player.Statics.AutoAttackRotationSpeed);
+        if (_dashed) return ;
+
+        if (_player.IsMovementPressed && !_player.IsAutoAiming )
+        {
+            _player.SimpleMove(_player.Statics.AutoAttackDashingMovementSpeed);
+            _player.Rotate(_player.Statics.AutoAttackRotationSpeed, _player.CurrentMovement);
+        }
+
+        if ( _distance > _player.Statics.AutoAttackStopDistance )
+        {
+            // dash
+            _player.CharacterController.SimpleMove( _offset.normalized * _player.Statics.AutoAttackDashingMovementSpeed);
+            _player.Rotate(_player.Statics.AutoAttackRotationSpeed, _offset);
+
+        }
     }
 
     public override void ExitState()
     {
         //enable SwitchState
+    }
+
+    private void AutoAim()
+    {
+        if (!_player.IsMovementPressed)
+        {
+            _distance = _player.AutoAim();
+
+            _player.RotateToHitBox();
+
+            if (_distance > _player.Statics.AutoAttackStopDistance)
+            {
+                _offset = _player.TargetPos.position - transform.position;
+            }
+
+        }
+        else _distance = -1f;
     }
 
     void Dashed()
@@ -72,6 +107,8 @@ public class PlayerAutoAttackState : BaseState
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
+
+            AutoAim();;
         }
         else
         {
@@ -88,6 +125,8 @@ public class PlayerAutoAttackState : BaseState
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
+
+            AutoAim();
 
         }
         else
@@ -106,6 +145,9 @@ public class PlayerAutoAttackState : BaseState
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
             _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
+
+            AutoAim();
+
         }
         else
         {

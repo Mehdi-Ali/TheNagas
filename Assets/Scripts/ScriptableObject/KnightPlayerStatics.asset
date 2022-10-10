@@ -18,7 +18,8 @@ MonoBehaviour:
   AutoAttackAbilityName: Slashes
   AutoAttackAnimationSpeed: 1.5
   AutoAttackDashingMovementSpeed: 10
-  AutoAttackDashingTime: 0.25
+  AutoAttackDashingTime: 0.2
+  AutoAttackStopDistance: 0.85
   AutoAttackRotationSpeed: 10
   AutoAttackDamage1: 10
   AutoAttackDamage2: 5

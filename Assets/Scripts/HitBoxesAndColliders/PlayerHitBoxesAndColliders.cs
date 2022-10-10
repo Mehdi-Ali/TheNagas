@@ -5,6 +5,7 @@ using UnityEngine.Animations;
 
 public class PlayerHitBoxesAndColliders : MonoBehaviour
 {
+    [SerializeField] public PlayerHitBox HitBoxAA;
     [SerializeField] public PlayerHitBox HitBox1;
 
     [SerializeField] public PlayerHitBox HitBox2;

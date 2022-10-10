@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &6698824677255714707
 CapsuleCollider:
@@ -92,7 +92,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2839875944172862332
 CapsuleCollider:
@@ -289,7 +289,7 @@ Transform:
   m_Children:
   - {fileID: 560060419982342154}
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2979363044844787090
 MonoBehaviour:
@@ -336,7 +336,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &3539571576118183765
 SpriteRenderer:
@@ -404,6 +404,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hitBoxes: {fileID: 0}
   Movable: 1
+--- !u!1 &1784273895160416648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7085819654522712901}
+  - component: {fileID: 6193614517490886469}
+  m_Layer: 0
+  m_Name: AbilityHitBox_AA
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7085819654522712901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784273895160416648}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6656375592314909681}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &6193614517490886469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784273895160416648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
+  Movable: 0
 --- !u!1 &2034158316825229032
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +481,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &8387852871576861356
 SpriteRenderer:
@@ -529,12 +575,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2256348051351351708}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.07, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 0.08, y: 0.07999998, z: 0.07999998}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &8695548962750523629
 SpriteRenderer:
@@ -631,6 +677,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7085819654522712901}
   - {fileID: 6401397835162887978}
   - {fileID: 6060401361930298120}
   - {fileID: 1111092448088423424}
@@ -655,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6313d081491953849aca5031579a16da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitBoxAA: {fileID: 6193614517490886469}
   HitBox1: {fileID: 7357285480015409602}
   HitBox2: {fileID: 3692613208259820304}
   HitBox3: {fileID: 2979363044844787090}
@@ -696,7 +744,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!64 &8999141928391108352
 MeshCollider:
@@ -707,7 +755,7 @@ MeshCollider:
   m_GameObject: {fileID: 4617014157867078984}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -757,7 +805,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!64 &2153617412059715787
 MeshCollider:
@@ -818,7 +866,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6656375592314909681}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &6998622577216103727
 CapsuleCollider:
@@ -1088,11 +1136,11 @@ MonoBehaviour:
   ActiveAttackCollider: {fileID: 0}
   _gravity: {x: 0, y: -9.8, z: 0}
   IsMovementPressed: 0
-  IsAimingPressed: 0
-  _TempDeadStateSim: 0
+  IsAutoAiming: 0
   CharacterController: {fileID: 0}
   CooldownSystem: {fileID: 0}
   AnimationsLength: {fileID: 0}
+  TargetPos: {fileID: 0}
 --- !u!114 &6858166303471902967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,8 +1171,6 @@ MonoBehaviour:
   _componentIndexCache: 5
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  _movementSpeed: 5
-  _rotationSpeed: 10
 --- !u!114 &5947815961018107451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,14 +1186,6 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbilityName: Auto Attack
-  _animationSpeed: 1.5
-  _dashingMovementSpeed: 10
-  _dashingTime: 0.1
-  _rotationSpeed: 20
-  _damage1: 10
-  _damage2: 5
-  _damage3: 20
   Continue: 0
 --- !u!114 &5803099296968801611
 MonoBehaviour:
@@ -1164,11 +1202,6 @@ MonoBehaviour:
   _componentIndexCache: 7
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbilityName: Spin
-  _movementSpeed: 7.5
-  _cooldown: -0.1
-  _damage: 20.21
-  _tick: 7
 --- !u!114 &4027057840975592395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1184,10 +1217,6 @@ MonoBehaviour:
   _componentIndexCache: 8
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbilityName: Slash
-  _animationSpeed: 2
-  _cooldown: 0
-  _damage: 20
 --- !u!114 &8109761303020472251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,10 +1232,6 @@ MonoBehaviour:
   _componentIndexCache: 9
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbilityName: Dash
-  _animationSpeed: 2
-  _cooldown: 0
-  _damage: 20
 --- !u!114 &6993583831906917193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1222,11 +1247,6 @@ MonoBehaviour:
   _componentIndexCache: 10
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
-  AbilityName: Dank
-  _animationSpeed: 1.5
-  Range: 5
-  _cooldown: 0
-  _damage: 99
 --- !u!114 &2676623566172398361
 MonoBehaviour:
   m_ObjectHideFlags: 0
