@@ -1,5 +1,7 @@
+using System.Net.Mime;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSecondAbilityState : BaseState, IHasCooldown
 {
@@ -13,6 +15,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.SecondAbilityAbilityName;
     public float CooldownDuration => _player.Statics.SecondAbilityCooldown;
+    public Image Image => _player.CooldownUIManager.CooldownUI2.Image;
 
     private void Awake()
     {       

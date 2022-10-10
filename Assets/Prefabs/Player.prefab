@@ -920,6 +920,7 @@ GameObject:
   - component: {fileID: 8109761303020472251}
   - component: {fileID: 6993583831906917193}
   - component: {fileID: 2676623566172398361}
+  - component: {fileID: 5074517598174067970}
   - component: {fileID: 1079290804763206085}
   - component: {fileID: 4352899014363915566}
   - component: {fileID: 2787697755095461621}
@@ -1131,6 +1132,7 @@ MonoBehaviour:
   SecondAbilityState: {fileID: 0}
   ThirdAbilityState: {fileID: 0}
   UltimateState: {fileID: 0}
+  CurrentMovement: {x: 0, y: 0, z: 0}
   HitBoxes: {fileID: 0}
   ActiveHitBox: {fileID: 0}
   ActiveAttackCollider: {fileID: 0}
@@ -1262,6 +1264,18 @@ MonoBehaviour:
   _componentIndexCache: 11
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+--- !u!114 &5074517598174067970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8479496936149924893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474cbb6c637afca48868320381bef065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1079290804763206085
 MonoBehaviour:
   m_ObjectHideFlags: 0

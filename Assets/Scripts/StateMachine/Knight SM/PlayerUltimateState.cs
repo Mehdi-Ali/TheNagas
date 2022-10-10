@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerUltimateState : BaseState, IHasCooldown
 {
@@ -20,6 +21,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.UltimateAbilityAbilityName;
     public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
+        public Image Image => _player.CooldownUIManager.CooldownUIU.Image;
 
 
     private void Awake()

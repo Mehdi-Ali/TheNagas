@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerFirstAbilityState : BaseState, IHasCooldown
 {
@@ -16,6 +17,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.FirstAbilityAbilityName;
     public float CooldownDuration => _player.Statics.FirstAbilityCooldown ;
+    public Image Image => _player.CooldownUIManager.CooldownUI1.Image;
 
     private void Awake()
     {

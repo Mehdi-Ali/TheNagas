@@ -58,6 +58,7 @@ public class PlayerStateManger : StateManger
     public CharacterController CharacterController;
     private Player_Controls _playerControls;
     public CooldownSystem CooldownSystem;
+    public CooldownUIManager CooldownUIManager;
     public PlayerAnimationsLength AnimationsLength;
 
     //Auto Aiming vars
@@ -94,7 +95,8 @@ public class PlayerStateManger : StateManger
 
         CharacterController = GetComponent<CharacterController>();
         HitBoxes = GetComponentInChildren<PlayerHitBoxesAndColliders>();
-        CooldownSystem = FindObjectOfType<CooldownSystem>();
+        CooldownSystem = GetComponent<CooldownSystem>();
+        CooldownUIManager = FindObjectOfType<CooldownUIManager>();
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();
         

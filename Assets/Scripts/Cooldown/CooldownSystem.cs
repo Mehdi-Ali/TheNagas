@@ -6,6 +6,7 @@ using UnityEngine;
 public class CooldownSystem : MonoBehaviour
 {
     private readonly List<CooldownData> cooldowns = new List<CooldownData>();
+    
 
     private void Update() 
     {
@@ -35,7 +36,7 @@ public class CooldownSystem : MonoBehaviour
         {
             if (cooldown.Id == cd.Id) 
             {
-                cooldown.ReminingTime = cd.CooldownDuration;
+                cooldown.RemainingTime = cd.CooldownDuration;
                 return;
             }
         }
@@ -57,7 +58,7 @@ public class CooldownSystem : MonoBehaviour
     {
         foreach (CooldownData cd in cooldowns)
         {
-            if (cd.Id == id) return cd.ReminingTime ;
+            if (cd.Id == id) return cd.RemainingTime ;
         }
 
         return 0.0f;

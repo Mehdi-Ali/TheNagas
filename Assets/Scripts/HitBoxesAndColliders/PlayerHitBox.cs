@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHitBox : MonoBehaviour
 {
-    [SerializeField] PlayerHitBoxesAndColliders _hitBoxes;
+    PlayerHitBoxesAndColliders _hitBoxes;
     [SerializeField] public bool Movable;
 
     private void Awake() 

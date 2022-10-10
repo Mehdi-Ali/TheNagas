@@ -27,23 +27,23 @@ MonoBehaviour:
   AutoAttackRange: 5
   FirstAbilityAbilityName: Spin
   FirstAbilityAnimationSpeed: 1
-  FirstAbilityCooldown: 0
+  FirstAbilityCooldown: 5
   FirstAbilityDamage: 20
   FirstAbilityRange: 5
   FirstAbilityMovementSpeed: 7.5
   FirstAbilityTicks: 7
   SecondAbilityAbilityName: Slash
   SecondAbilityAnimationSpeed: 2
-  SecondAbilityCooldown: 0
+  SecondAbilityCooldown: 5
   SecondAbilityDamage: 20
   SecondAbilityRange: 5
   ThirdAbilityAbilityName: Dash
   ThirdAbilityAnimationSpeed: 2
-  ThirdAbilityCooldown: 0
+  ThirdAbilityCooldown: 5
   ThirdAbilityDamage: 20
   ThirdAbilityRange: 5
   UltimateAbilityAbilityName: Dank
   UltimateAbilityAnimationSpeed: 1.5
-  UltimateAbilityCooldown: 0
+  UltimateAbilityCooldown: 5
   UltimateAbilityDamage: 99
   UltimateAbilityRange: 5

@@ -1,23 +1,30 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CooldownData
 {
     public CooldownData(IHasCooldown cooldown)
     {
         Id = cooldown.Id ;
-        ReminingTime = cooldown.CooldownDuration ;
+        RemainingTime = cooldown.CooldownDuration ;
+        Cooldown = cooldown.CooldownDuration ;
+        Image = cooldown.Image ;
     }
     
 
     public string Id { get; }
-    public float ReminingTime { get; set;}
+    public float RemainingTime { get; set;}
+    public float Cooldown { get; set;}
+    public Image Image { get; set;}
 
 
     public bool DecrementalCooldown(float deltaTime)
     {
-        ReminingTime = Mathf.Max(ReminingTime - deltaTime, 0.0f) ;
+        RemainingTime = Mathf.Max(RemainingTime - deltaTime, 0.0f) ;
+
+        Image.fillAmount =  RemainingTime / Cooldown ;
         
-        return ReminingTime == 0.0f ;
+        return RemainingTime == 0.0f ;
     }
 
 }

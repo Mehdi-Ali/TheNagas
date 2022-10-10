@@ -108,7 +108,7 @@ public class PlayerAutoAttackState : BaseState
 
             _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
 
-            AutoAim();;
+            AutoAim();
         }
         else
         {
