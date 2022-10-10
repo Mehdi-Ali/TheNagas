@@ -30,6 +30,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
+        if (!base.IsOwner) return;
         _player.Animator.SetFloat(_secondAbilityMultiplierHash, _player.Statics.SecondAbilityAnimationSpeed);
         _player.CooldownSystem.PutOnCooldown(this);
 

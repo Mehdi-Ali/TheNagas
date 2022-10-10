@@ -18,6 +18,7 @@ public class PlayerIdleState : IdleState
 
     public override void EnterState()
     {
+        if (!base.IsOwner) return;
         _player.Animator.CrossFade(_Idle, 0.15f);
     }
 

@@ -32,6 +32,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
+        if (!base.IsOwner) return;
         //check cooldown
         _player.Animator.SetFloat(_firstAbilityMultiplierHash, _player.Statics.FirstAbilityAnimationSpeed);
         _player.CooldownSystem.PutOnCooldown(this);
@@ -51,6 +52,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
     public override void UpdateState()
     {
+        if (!base.IsOwner) return;
         _player.SimpleMove(_player.Statics.FirstAbilityMovementSpeed);
 
         

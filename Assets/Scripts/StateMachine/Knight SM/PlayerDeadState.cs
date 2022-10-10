@@ -17,6 +17,7 @@ public class PlayerDeadState : DeadState
 
     public override void EnterState()
     {
+        if (!base.IsOwner) return;
         _player.Animator.CrossFade(_DeadHash, 0.15f);
         _player.ReadyToSwitchState = false;
 

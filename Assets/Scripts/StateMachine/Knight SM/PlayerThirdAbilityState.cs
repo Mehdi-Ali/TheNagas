@@ -36,6 +36,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
+        if (!base.IsOwner) return;
         _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _player.Statics.ThirdAbilityAnimationSpeed);
         //check cooldown
         _player.CooldownSystem.PutOnCooldown(this);

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
-public class CameraFollowController : MonoBehaviour
+public class CameraFollowController : NetworkBehaviour
 {
     public CameraTarget _cameraTarget;
 
-    Vector3 controllerPosition;
+    Vector3 controllerPostion;
 
     [SerializeField]
     float zOffset = -5.0f ;
@@ -17,22 +18,22 @@ public class CameraFollowController : MonoBehaviour
     // Camera projection : Field of View = 60 ; Axis = Vertical
 
 
-    public bool ClientConnected = false;
+    public bool ClinetConnected = false;
 
     void Start()
     {
-        controllerPosition = new Vector3();
+        controllerPostion = new Vector3();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!ClientConnected) return ;
-        controllerPosition.x = _cameraTarget.transform.position.x;
-        controllerPosition.z = _cameraTarget.transform.position.z + zOffset;
-        controllerPosition.y = yOffset;
+        if (!ClinetConnected) return ;
+        controllerPostion.x = _cameraTarget.transform.position.x;
+        controllerPostion.z = _cameraTarget.transform.position.z + zOffset;
+        controllerPostion.y = yOffset;
 
-        this.transform.position = controllerPosition;
+        this.transform.position = controllerPostion;
 
 
     }
