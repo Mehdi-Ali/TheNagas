@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using FishNet.Component.Animating;
-using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -227,6 +225,7 @@ public class PlayerStateManger : StateManger
         AutoAttackState.Continue = false;
         _aimingRange = Statics.AutoAttackRange;
         ActiveHitBox = HitBoxes.HitBoxAA;
+        ActiveHitBox.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
@@ -244,8 +243,8 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
         _aimingRange = Statics.FirstAbilityRange;
-        HitBoxes.HitBox1.gameObject.SetActive(true);
         ActiveHitBox = HitBoxes.HitBox1;
+        ActiveHitBox.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider1 ;
     }
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
@@ -259,7 +258,7 @@ public class PlayerStateManger : StateManger
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
         if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        HitBoxes.HitBox1.gameObject.SetActive(false);
+        ActiveHitBox.gameObject.SetActive(false);
     }
 
 

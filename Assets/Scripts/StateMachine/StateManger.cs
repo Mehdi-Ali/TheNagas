@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using FishNet.Object;
 using UnityEngine;
 
-public class StateManger : NetworkBehaviour
+public class StateManger : MonoBehaviour
 {
     //Initiating the states.
     public BaseState CurrentState;

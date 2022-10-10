@@ -23,14 +23,12 @@ public class PlayerRunningState : RunningState
 
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
         _player.Animator.CrossFade(_RunningHash, 0.1f);
 
     }
 
     public override void UpdateState()
     {
-        if (!base.IsOwner) return;
         _player.SimpleMove(_player.Statics.MovementSpeed);
         _player.Rotate(_player.Statics.RotationSpeed, _player.CurrentMovement);
     }

@@ -1,7 +1,6 @@
 using UnityEngine;
-using FishNet.Object;
 
-public abstract class BaseState : NetworkBehaviour 
+public abstract class BaseState : MonoBehaviour 
 {
 
     public abstract void EnterState();

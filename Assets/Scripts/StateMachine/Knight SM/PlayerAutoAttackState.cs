@@ -33,7 +33,6 @@ public class PlayerAutoAttackState : BaseState
 
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
         _player.Animator.SetFloat(_AutoAttackMultiplierHash, _player.Statics.AutoAttackAnimationSpeed);
 
         Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _player.Statics.AutoAttackAnimationSpeed);

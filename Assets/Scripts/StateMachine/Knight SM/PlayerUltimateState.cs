@@ -37,8 +37,6 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
-        //check cooldown
         _player.CooldownSystem.PutOnCooldown(this);
 
         _grounded = false;
