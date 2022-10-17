@@ -303,7 +303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitBoxes: {fileID: 0}
   Movable: 0
 --- !u!1 &1725123932843481487
 GameObject:
@@ -402,7 +401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitBoxes: {fileID: 0}
   Movable: 1
 --- !u!1 &1784273895160416648
 GameObject:
@@ -448,7 +446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitBoxes: {fileID: 0}
   Movable: 0
 --- !u!1 &2034158316825229032
 GameObject:
@@ -547,7 +544,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitBoxes: {fileID: 0}
   Movable: 0
 --- !u!1 &2256348051351351708
 GameObject:
@@ -646,7 +642,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3577b6297ea4244d924d6eede3faf0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitBoxes: {fileID: 0}
   Movable: 0
 --- !u!1 &3997462032446882025
 GameObject:
@@ -1020,6 +1015,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 1473949094486602799}
   - {fileID: 2532546308901304050}
@@ -1033,16 +1030,16 @@ MonoBehaviour:
   - {fileID: 8109761303020472251}
   - {fileID: 6993583831906917193}
   - {fileID: 2676623566172398361}
-  SceneTransformProperties:
-    Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0, w: 1}
-    LocalScale: {x: 1, y: 1, z: 1}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
-  _hasParentNetworkObjectAtEdit: 0
+  _isGlobal: 0
+  _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  _prefabId: 2
+  <PrefabId>k__BackingField: -1
   _scenePathHash: 0
-  _sceneId: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 7807759643866311769
   _sceneNetworkObjects:
   - {fileID: 5701580062507666206}
   - {fileID: 0}
@@ -1141,6 +1138,7 @@ MonoBehaviour:
   IsAutoAiming: 0
   CharacterController: {fileID: 0}
   CooldownSystem: {fileID: 0}
+  CooldownUIManager: {fileID: 0}
   AnimationsLength: {fileID: 0}
   TargetPos: {fileID: 0}
 --- !u!114 &6858166303471902967

@@ -17,6 +17,7 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
     private float _maxHealth ;
     private float _health ;
     private float _shield ;
+    private Vector3 _position;
     
     
     //Events
@@ -32,26 +33,22 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
         _player = GetComponent<PlayerStateManger>();
 
         _healthBar = GetComponentInChildren<HealthBar>();
+        _position = this.transform.position;
 
         _maxHealth = _player.Statics.MaxHealth ;
 
         _health = _maxHealth;
         _healthBar.SetMaxHealth(_maxHealth) ;
 
-        
-
-
     }
 
     public void TakeDamage(float damage)
     {
         _health = Mathf.Max(0.0f, _health - damage);
+        _healthBar.SetHealth(_health);
+        DamagePopUp.Create(_position , damage, Color.red);   
 
         if (_health == 0) Die();
-
-        _healthBar.SetHealth(_health);
-        DamagePopUp.Create(this.transform.position , damage, Color.red);        
-        
      }
 
     public virtual void Die()
@@ -60,7 +57,6 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
         _player.SwitchState(_player.DeadState);
         
         _healthBar.gameObject.SetActive(false);
-
     }
 
     public virtual void GetHeal(float heal)
