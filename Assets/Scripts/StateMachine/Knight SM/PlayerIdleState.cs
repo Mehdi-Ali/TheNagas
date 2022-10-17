@@ -1,4 +1,4 @@
-using UnityEngine;
+using FishNet.Object;
 
 public class PlayerIdleState : IdleState
 {
@@ -9,16 +9,13 @@ public class PlayerIdleState : IdleState
     public override void Awake()
     {
         base.Awake();
-
-        //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
 
-
     }
-
+    
+    [Client(RequireOwnership = true)]
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
         _player.Animator.CrossFade(_Idle, 0.15f);
     }
 

@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -102,42 +98,6 @@ public class PlayerStateManger : StateManger
         
     }
 
-    private void SubscriptionToPlayerControls()
-    {
-        //player Input callbacks.
-        _playerControls = new Player_Controls();
-
-        _playerControls.DefaultMap.Move.started += OnMovementInput;
-        _playerControls.DefaultMap.Move.canceled += OnMovementInput;
-        _playerControls.DefaultMap.Move.performed += OnMovementInput;
-
-        _playerControls.DefaultMap.Aim.started += OnAimingInput;
-        _playerControls.DefaultMap.Aim.canceled += OnAimingInput;
-        _playerControls.DefaultMap.Aim.performed += OnAimingInput;
-
-        _playerControls.DefaultMap.AutoAttack.started += OnAutoAttackInputStarted;
-        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformed;
-        _playerControls.DefaultMap.AutoAttack.canceled += OnAutoAttackInputcanceled;
-
-        _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
-        _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
-        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCanceled;
-
-        _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInputStarted; 
-        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInputPerformed; 
-        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInputCanceled; 
-        
-        _playerControls.DefaultMap.ThirdAbility.started += OnThirdAbilityInputStarted;
-        _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInputPerformed;
-        _playerControls.DefaultMap.ThirdAbility.canceled += OnThirdAbilityInputCanceled;
-
-        _playerControls.DefaultMap.Ultimate.started += OnUltimateInputStarted;
-        _playerControls.DefaultMap.Ultimate.performed += OnUltimateInputPerformed;
-        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceled;
-
-        
-    }
-
     private void OnAimingInput(InputAction.CallbackContext context)
     {
         if (ActiveHitBox == null ) return;
@@ -146,21 +106,20 @@ public class PlayerStateManger : StateManger
 
     private void HandleAiming()
     {
-        ReadAimingInput();
+        ReadAndSetAimingInput();
         HandleAimingRotation();
         if (ActiveHitBox.Movable) HandleAimingLocation();
     }
 
-    private void ReadAimingInput()
+    private void ReadAndSetAimingInput()
     {
         _currentAimingInput = _playerControls.DefaultMap.Aim.ReadValue<Vector2>();
         _currentAimingAt.x = _currentAimingInput.x;
         _currentAimingAt.y = 0.0f;
         _currentAimingAt.z = _currentAimingInput.y;
 
-        _isAimingPressed =    _currentAimingInput.x != 0 ||
+        _isAimingPressed =  _currentAimingInput.x != 0 ||
                             _currentAimingInput.y != 0 ;
-
     }
 
     private void HandleAimingRotation()
@@ -176,20 +135,20 @@ public class PlayerStateManger : StateManger
         HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     } 
 
-    public void RotateToHitBox()
+    public void RotatePlayerToHitBox()
     {
         transform.LookAt(ActiveHitBox.transform);
         IsAutoAiming = false ;
         HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
-    private void OnMovementInput(InputAction.CallbackContext context)
+    public void SimpleMove(float movementSpeed)
     {
-        if (CurrentState != RunningState) SwitchState(RunningState);
+        ReadAndSetMovementInput();
+        CharacterController.SimpleMove(CurrentMovement * movementSpeed);
     }
 
-
-    public void ReadMovementInput()
+    public void ReadAndSetMovementInput()
     {
         _currentMovementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
         CurrentMovement.x = _currentMovementInput.x;
@@ -199,13 +158,7 @@ public class PlayerStateManger : StateManger
                             _currentMovementInput.y != 0 ;
     }
 
-    public void SimpleMove(float movementSpeed)
-    {
-        ReadMovementInput();
-        CharacterController.SimpleMove(CurrentMovement * movementSpeed);
-    }
-
-    public void Rotate(float rotationSpeed, Vector3 movementDirection)
+    public void RotatePlayer(float rotationSpeed, Vector3 movementDirection)
     {
         //the change in position our character should point to
         _positionToLookAt.x = movementDirection.x;
@@ -220,8 +173,13 @@ public class PlayerStateManger : StateManger
 
     }
 
+    [Client(RequireOwnership = true)]
+    private void OnMovementInput(InputAction.CallbackContext context)
+    {
+        if (CurrentState != RunningState) SwitchState(RunningState);
+    }
 
-
+    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false;
@@ -230,16 +188,18 @@ public class PlayerStateManger : StateManger
         ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
+    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputPerformed(InputAction.CallbackContext context)
     {
         if (AutoAttackState.Continue == false) AutoAttackState.Continue = true ;
     }
+    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false ;
     }
 
-
+    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
@@ -248,6 +208,7 @@ public class PlayerStateManger : StateManger
         ActiveHitBox = HitBoxes.HitBox1;
         ActiveAttackCollider = HitBoxes.AttackCollider1 ;
     }
+    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
@@ -255,6 +216,7 @@ public class PlayerStateManger : StateManger
 
         HitBoxes.HitBox1.gameObject.SetActive(true);
     }
+    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
@@ -262,7 +224,7 @@ public class PlayerStateManger : StateManger
         HitBoxes.HitBox1.gameObject.SetActive(false);
     }
 
-
+    [Client(RequireOwnership = true)]
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
@@ -272,6 +234,7 @@ public class PlayerStateManger : StateManger
         HitBoxes.HitBox2.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
     }
+    [Client(RequireOwnership = true)]
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
@@ -279,15 +242,16 @@ public class PlayerStateManger : StateManger
         IsAutoAiming = false ;
         HitBoxes.HitBox2.gameObject.SetActive(true);
     }
+    [Client(RequireOwnership = true)]
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
-        RotateToHitBox();
+        RotatePlayerToHitBox();
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
-
+    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
@@ -297,6 +261,7 @@ public class PlayerStateManger : StateManger
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
     }
+    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(ThirdAbilityState.Id) ||
@@ -304,15 +269,16 @@ public class PlayerStateManger : StateManger
                 IsAutoAiming = false ;
         HitBoxes.HitBox3.gameObject.SetActive(true);
     }
+    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
-        RotateToHitBox();
+        RotatePlayerToHitBox();
         HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
-
+    [Client(RequireOwnership = true)]
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
@@ -322,6 +288,7 @@ public class PlayerStateManger : StateManger
         HitBoxes.HitBoxU.gameObject.SetActive(true);
           ActiveAttackCollider = HitBoxes.AttackColliderU ;
     }
+    [Client(RequireOwnership = true)]
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(UltimateState.Id) ||
@@ -329,14 +296,16 @@ public class PlayerStateManger : StateManger
         HitBoxes.HitBoxU.gameObject.SetActive(true);
         IsAutoAiming = false ;
     }
+    [Client(RequireOwnership = true)]
     private void OnUltimateInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
-        RotateToHitBox();
+        RotatePlayerToHitBox();
         HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
+    [Client(RequireOwnership = true)]
     public override void Update()
     {
         base.Update();
@@ -384,7 +353,39 @@ public class PlayerStateManger : StateManger
         return _smallestDistance ;
     }
  
-    // PlayerControls Enable / Disable 
+    // PlayerControls Setup
+    private void SubscriptionToPlayerControls()
+    {
+        _playerControls = new Player_Controls();
+
+        _playerControls.DefaultMap.Move.started += OnMovementInput;
+        _playerControls.DefaultMap.Move.canceled += OnMovementInput;
+        _playerControls.DefaultMap.Move.performed += OnMovementInput;
+
+        _playerControls.DefaultMap.Aim.started += OnAimingInput;
+        _playerControls.DefaultMap.Aim.canceled += OnAimingInput;
+        _playerControls.DefaultMap.Aim.performed += OnAimingInput;
+
+        _playerControls.DefaultMap.AutoAttack.started += OnAutoAttackInputStarted;
+        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformed;
+        _playerControls.DefaultMap.AutoAttack.canceled += OnAutoAttackInputcanceled;
+
+        _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
+        _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
+        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCanceled;
+
+        _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInputStarted; 
+        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInputPerformed; 
+        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInputCanceled; 
+        
+        _playerControls.DefaultMap.ThirdAbility.started += OnThirdAbilityInputStarted;
+        _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInputPerformed;
+        _playerControls.DefaultMap.ThirdAbility.canceled += OnThirdAbilityInputCanceled;
+
+        _playerControls.DefaultMap.Ultimate.started += OnUltimateInputStarted;
+        _playerControls.DefaultMap.Ultimate.performed += OnUltimateInputPerformed;
+        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceled;        
+    }
     private void OnEnable()
     {
         _playerControls.DefaultMap.Enable();

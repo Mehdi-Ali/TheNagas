@@ -10,7 +10,6 @@ public class PlayerRunningState : RunningState
     
     int _RunningHash;
 
-    // not sure if the mono behavior part will work (Awake and IsOwner)
     private void Awake() 
     {
         //Caching The Player State Manger
@@ -23,16 +22,13 @@ public class PlayerRunningState : RunningState
 
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
         _player.Animator.CrossFade(_RunningHash, 0.1f);
-
     }
 
     public override void UpdateState()
     {
-        if (!base.IsOwner) return;
         _player.SimpleMove(_player.Statics.MovementSpeed);
-        _player.Rotate(_player.Statics.RotationSpeed, _player.CurrentMovement);
+        _player.RotatePlayer(_player.Statics.RotationSpeed, _player.CurrentMovement);
     }
 
     public override void ExitState()

@@ -33,7 +33,6 @@ public class PlayerAutoAttackState : BaseState
 
     public override void EnterState()
     {
-        if (!base.IsOwner) return;
         _player.Animator.SetFloat(_AutoAttackMultiplierHash, _player.Statics.AutoAttackAnimationSpeed);
 
         Invoke(nameof(Attack1Complete), _player.AnimationsLength.AutoAttack1Duration / _player.Statics.AutoAttackAnimationSpeed);
@@ -59,14 +58,14 @@ public class PlayerAutoAttackState : BaseState
         if (_player.IsMovementPressed && !_player.IsAutoAiming )
         {
             _player.SimpleMove(_player.Statics.AutoAttackDashingMovementSpeed);
-            _player.Rotate(_player.Statics.AutoAttackRotationSpeed, _player.CurrentMovement);
+            _player.RotatePlayer(_player.Statics.AutoAttackRotationSpeed, _player.CurrentMovement);
         }
 
         if ( _distance > _player.Statics.AutoAttackStopDistance )
         {
             // dash
             _player.CharacterController.SimpleMove( _offset.normalized * _player.Statics.AutoAttackDashingMovementSpeed);
-            _player.Rotate(_player.Statics.AutoAttackRotationSpeed, _offset);
+            _player.RotatePlayer(_player.Statics.AutoAttackRotationSpeed, _offset);
 
         }
     }
@@ -82,7 +81,7 @@ public class PlayerAutoAttackState : BaseState
         {
             _distance = _player.AutoAim();
 
-            _player.RotateToHitBox();
+            _player.RotatePlayerToHitBox();
 
             if (_distance > _player.Statics.AutoAttackStopDistance)
             {
