@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyProjectile : MonoBehaviour
+public class EnemyProjectile : MonoBehaviour // TODO make it a scriptable Object.
 {
     //SetUp
     private Action<EnemyProjectile> _collidedAction ;
