@@ -1453,7 +1453,7 @@ PrefabInstance:
     - target: {fileID: 4679678395130051749, guid: cc3c8a5e44c523945a53ea184b874883,
         type: 3}
       propertyPath: m_Name
-      value: HP
+      value: UI_TopOfHead
       objectReference: {fileID: 0}
     - target: {fileID: 4679678395130051750, guid: cc3c8a5e44c523945a53ea184b874883,
         type: 3}
@@ -1579,6 +1579,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6937860390107212724, guid: cc3c8a5e44c523945a53ea184b874883,
+        type: 3}
+      propertyPath: m_text
+      value: Ghost*
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054403561052835337, guid: cc3c8a5e44c523945a53ea184b874883,
+        type: 3}
+      propertyPath: m_text
+      value: Ghost*
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc3c8a5e44c523945a53ea184b874883, type: 3}

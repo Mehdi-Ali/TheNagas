@@ -1,13 +1,18 @@
 using System;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour // make a damageable Enemy and player 
+public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player 
 {
     //Variables to cache Instances
     private PlayerStateManger _player ;
     private Animator _animator;
     private HealthBar _healthBar ;
 
+    // synched vars
+    [SyncVar] private float _health ;
+    private float _shield ;
 
 
     //Variables to store optimized Setter / getter parameter IDs
@@ -15,8 +20,6 @@ public class PlayerBase : MonoBehaviour // make a damageable Enemy and player
 
     // utilities
     private float _maxHealth ;
-    private float _health ;
-    private float _shield ;
     private Vector3 _position;
     
     

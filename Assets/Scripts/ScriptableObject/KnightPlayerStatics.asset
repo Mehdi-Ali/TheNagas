@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c08428abf4848a4bbfeaadee77b2b59, type: 3}
   m_Name: KnightPlayerStatics
   m_EditorClassIdentifier: 
+  MonsterName: Knight
   MaxHealth: 300
   MovementSpeed: 5
   RotationSpeed: 15

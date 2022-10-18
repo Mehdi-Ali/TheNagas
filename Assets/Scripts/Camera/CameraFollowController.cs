@@ -5,18 +5,19 @@ using UnityEngine;
 
 public class CameraFollowController : NetworkBehaviour
 {
+    [Header("Scriptable Objects")]
+
+    [SerializeField]
+    private CameraSettingsScriptableObject _cameraSettings;
+    // Camera projection : Field of View = 60 ; Axis = Vertical
+    
+    [Space(10)]
+
     public CameraTarget _cameraTarget;
 
     Vector3 controllerPosition;
     Vector3 _cameraPosition;
 
-    [SerializeField]
-    float zOffset = -5.0f ;
-    [SerializeField]
-    float yOffset =  8.0f ;
-
-    // Camera rotation : x = 55 ;  y = z = 0
-    // Camera projection : Field of View = 60 ; Axis = Vertical
 
 
     public bool ClientConnected = false;
@@ -32,12 +33,16 @@ public class CameraFollowController : NetworkBehaviour
         if (!ClientConnected) return ;
 
         _cameraPosition = _cameraTarget.transform.position ;
+        // TODO oce this parameters are set and done we get them only once in the start method.
+        Vector3 offset = _cameraSettings.Offset ;
+        Vector3 rotation = _cameraSettings.Rotation ;
+
         controllerPosition.x = _cameraPosition.x;
-        controllerPosition.z = _cameraPosition.z + zOffset;
-        controllerPosition.y = yOffset;
+        controllerPosition.z = _cameraPosition.z + offset.z;
+        controllerPosition.y = offset.y;
 
         this.transform.position = controllerPosition;
-
+        this.transform.eulerAngles = rotation;
 
     }
 }

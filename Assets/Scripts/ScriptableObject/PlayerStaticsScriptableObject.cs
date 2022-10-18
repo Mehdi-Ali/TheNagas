@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerStatics", menuName = "ScriptableObject/Player/PlayerStatics")]
 public class PlayerStaticsScriptableObject : ScriptableObject
 {
+    public string MonsterName ;
+    [Space(10)]
+
     [Header("General")]
 
     public float MaxHealth ;

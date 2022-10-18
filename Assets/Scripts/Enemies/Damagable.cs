@@ -1,22 +1,24 @@
 using System;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 
-public class Damageable : MonoBehaviour
+public class Damageable : NetworkBehaviour
 {
     //Variables to cache Instances
     private EnemyStateManger _enemy ;
     private Animator _animator;
     private HealthBar _healthBar ;
 
-
+    // synched vars
+    [SyncVar] private float _health ;
+    private float _shield ;
 
     //Variables to store optimized Setter / getter parameter IDs
     int _DeadHash ;
 
     // utilities
     private float _maxHealth ;
-    private float _health ;
-    private float _shield ;
     
     
     //Events
