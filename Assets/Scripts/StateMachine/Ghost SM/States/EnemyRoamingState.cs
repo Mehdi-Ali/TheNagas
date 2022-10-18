@@ -29,7 +29,7 @@ public class EnemyRoamingState : BaseState
 
     public override void EnterState()
     {
-        _enemy.Animator.CrossFade(_RunningHash, 0.15f);
+        _enemy.NetworkAnimator.CrossFade(_RunningHash, 0.15f, 0);
         _enemy.NavAgent.speed = _enemy.Statics.RoamingSpeed ;
 
         _roamingPos = GetRandomPosition();

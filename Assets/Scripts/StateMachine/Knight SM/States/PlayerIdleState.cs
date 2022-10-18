@@ -16,7 +16,7 @@ public class PlayerIdleState : IdleState
     [Client(RequireOwnership = true)]
     public override void EnterState()
     {
-        _player.Animator.CrossFade(_Idle, 0.15f);
+        _player.NetworkAnimator.CrossFade(_Idle, 0.15f, 0);
     }
 
     public override void UpdateState()

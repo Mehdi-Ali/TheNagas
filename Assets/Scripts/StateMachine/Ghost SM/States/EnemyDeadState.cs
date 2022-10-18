@@ -18,7 +18,7 @@ public class EnemyDeadState : DeadState
     {
         GetComponent<CapsuleCollider>().enabled = false ;
         
-        _Enemy.Animator.CrossFade(_DeadHash, 0.15f);
+        _Enemy.NetworkAnimator.CrossFade(_DeadHash, 0.15f, 0);
         _Enemy.ReadyToSwitchState = false;
     }
 

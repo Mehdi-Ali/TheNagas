@@ -35,7 +35,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
 
         Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _player.Statics.SecondAbilityAnimationSpeed);
                 
-        _player.Animator.CrossFade(_secondAbilityHash, 0.1f);
+        _player.NetworkAnimator.CrossFade(_secondAbilityHash, 0.1f, 0);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
 

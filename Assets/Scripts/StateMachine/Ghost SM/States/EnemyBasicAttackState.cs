@@ -73,7 +73,7 @@ public class EnemyBasicAttackState : BaseState
             _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(true);
             Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackAnimationSpeed );
 
-            _enemy.Animator.CrossFade(_basicAttackHash, 0.15f);
+            _enemy.NetworkAnimator.CrossFade(_basicAttackHash, 0.15f, 0);
             _enemy.ReadyToSwitchState = false ;
 
             _attackCounter++ ;

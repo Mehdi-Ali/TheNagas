@@ -22,7 +22,7 @@ public class PlayerRunningState : RunningState
 
     public override void EnterState()
     {
-        _player.Animator.CrossFade(_RunningHash, 0.1f);
+        _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
     }
 
     public override void UpdateState()

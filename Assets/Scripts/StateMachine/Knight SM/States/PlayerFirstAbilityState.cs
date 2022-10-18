@@ -38,7 +38,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         
         Invoke(nameof(AttackComplete), _player.AnimationsLength.FirstAbilityDuration / _player.Statics.FirstAbilityAnimationSpeed);
         
-        _player.Animator.CrossFade(_firstAbilityHash, 0.1f);
+        _player.NetworkAnimator.CrossFade(_firstAbilityHash, 0.1f, 0);
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
         FirstAbilityEvent();

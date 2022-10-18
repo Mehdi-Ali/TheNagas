@@ -39,7 +39,7 @@ public class PlayerAutoAttackState : BaseState
         _dashed = false;
         Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
-        _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
+        _player.NetworkAnimator.CrossFade(_autoAttack1Hash, 0.2f, 0);
 
         // TODO must repeat on each auto attack
         AutoAim();
@@ -105,7 +105,7 @@ public class PlayerAutoAttackState : BaseState
             _dashed = false;
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
-            _player.Animator.CrossFade(_autoAttack2Hash, 0.0f);
+            _player.NetworkAnimator.CrossFade(_autoAttack2Hash, 0.0f, 0);
 
             AutoAim();
         }
@@ -123,7 +123,7 @@ public class PlayerAutoAttackState : BaseState
             _dashed = false;
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
-            _player.Animator.CrossFade(_autoAttack3Hash, 0.0f);
+            _player.NetworkAnimator.CrossFade(_autoAttack3Hash, 0.0f, 0);
 
             AutoAim();
 
@@ -143,7 +143,7 @@ public class PlayerAutoAttackState : BaseState
             _dashed = false;
             Invoke(nameof(Dashed), _player.Statics.AutoAttackDashingTime);
 
-            _player.Animator.CrossFade(_autoAttack1Hash, 0.2f);
+            _player.NetworkAnimator.CrossFade(_autoAttack1Hash, 0.2f, 0);
 
             AutoAim();
 

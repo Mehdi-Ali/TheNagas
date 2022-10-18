@@ -35,7 +35,7 @@ public class EnemySuperAttackState : BaseState
         _enemy.HitBoxes.SuperCollider.Collider.enabled = true ;
         Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackAnimationSpeed );
 
-        _enemy.Animator.CrossFade(_superAttackHash, 0.15f);
+        _enemy.NetworkAnimator.CrossFade(_superAttackHash, 0.15f, 0);
         _enemy.ReadyToSwitchState = false ;
         _doLookAt = true;
     }

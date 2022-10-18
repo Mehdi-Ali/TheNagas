@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
 
@@ -14,6 +13,7 @@ public class StateManger : NetworkBehaviour
 
     //Variables to cache Instances 
     public Animator Animator;
+    public NetworkAnimator NetworkAnimator;
 
 
     //StateMachine Variables (logic and animation)
@@ -44,6 +44,7 @@ public class StateManger : NetworkBehaviour
         DeadState = GetComponent<DeadState>();
 
         Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
         
     }
 

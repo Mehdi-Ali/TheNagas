@@ -50,7 +50,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
                 (_player.AnimationsLength.UltimateDuration / _player.Statics.UltimateAbilityAnimationSpeed ));
         
         _player.Animator.SetFloat(_ultimateMultiplierHash, _player.Statics.UltimateAbilityAnimationSpeed);
-        _player.Animator.CrossFade(_ultimateHash, 0.1f);
+        _player.NetworkAnimator.CrossFade(_ultimateHash, 0.1f, 0);
 
 
         _player.ReadyToSwitchState = false;

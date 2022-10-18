@@ -45,7 +45,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _end = _player.ActiveHitBox.transform.position;
 
         Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_player.Statics.ThirdAbilityAnimationSpeed );
-        _player.Animator.CrossFade(_thirdAbilityHash,0.1f);
+        _player.NetworkAnimator.CrossFade(_thirdAbilityHash,0.1f, 0);
 
         _player.HitBoxes.Targets.Clear();
         _player.ActiveAttackCollider.Collider.enabled = true ;

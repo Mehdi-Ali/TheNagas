@@ -18,7 +18,7 @@ public class EnemyIdleState : IdleState
     }
     public override void EnterState()
     {
-        _Enemy.Animator.CrossFade(_Idle, 0.15f);
+        _Enemy.NetworkAnimator.CrossFade(_Idle, 0.15f, 0);
 
         Invoke(nameof(GoRoam), Random.Range(_Enemy.Statics.MinRoamingPause , _Enemy.Statics.MaxRoamingPause));
 

@@ -17,7 +17,7 @@ public class PlayerDeadState : DeadState
 
     public override void EnterState()
     {
-        _player.Animator.CrossFade(_DeadHash, 0.15f);
+        _player.NetworkAnimator.CrossFade(_DeadHash, 0.15f, 0);
         _player.ReadyToSwitchState = false;
 
     }
