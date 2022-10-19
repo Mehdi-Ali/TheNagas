@@ -150,6 +150,7 @@ public class PlayerStateManger : StateManger
 
     public void ReadAndSetMovementInput()
     {
+        // TODO make it a local variable.
         _currentMovementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
         CurrentMovement.x = _currentMovementInput.x;
         CurrentMovement.z = _currentMovementInput.y;

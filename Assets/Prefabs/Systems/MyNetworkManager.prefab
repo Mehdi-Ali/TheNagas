@@ -553,6 +553,7 @@ GameObject:
   - component: {fileID: 8273114373687558462}
   - component: {fileID: 1557204520356454424}
   - component: {fileID: 8273114373687558448}
+  - component: {fileID: 8125591444364108126}
   m_Layer: 0
   m_Name: MyNetworkManager
   m_TagString: Untagged
@@ -591,6 +592,7 @@ MonoBehaviour:
   _refreshDefaultPrefabs: 0
   _runInBackground: 1
   _dontDestroyOnLoad: 1
+  _objectPool: {fileID: 0}
   _persistence: 0
   _logging: {fileID: 0}
   _spawnablePrefabs: {fileID: 11400000, guid: ec64eb18c93ab344892891f33edbf82a, type: 2}
@@ -606,6 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d331f979d46e8e4a9fc90070c596d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _updateHostVisibility: 1
   _defaultConditions:
   - {fileID: 11400000, guid: 2033f54fd2794464bae08fa5a55c8996, type: 2}
 --- !u!114 &8273114373687558448
@@ -620,6 +623,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211a9f6ec51ddc14f908f5acc0cd0423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
+    type: 3}
   _addToDefaultScene: 1
   Spawns: []
+--- !u!114 &8125591444364108126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8273114373687558463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fdaae44044276a49a52229c1597e33b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _allowTickDropping: 0
+  _maximumFrameTicks: 3
+  _tickRate: 30
+  _pingInterval: 1
+  _timingInterval: 2
+  _physicsMode: 1
+  _maximumBufferedInputs: 15
