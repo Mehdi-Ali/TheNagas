@@ -10,22 +10,22 @@ public class CSPMovement : NetworkBehaviour
 
     public struct MoveData
     {
-        public float Horizontal;
-        public float Vertical;
+        public float XAxis;
+        public float ZAxis;
 
-        public MoveData(float horizontal, float vertical)
+        public MoveData(float xAxis, float yAxis)
         {
-            Horizontal = horizontal;
-            Vertical = vertical;
+            XAxis = xAxis;
+            ZAxis = yAxis;
         }
     }
 
-    public struct ReconcileData
+    public struct ReconcileMoveData
     {
         public Vector3 Position;
         public Quaternion Rotation;
 
-        public ReconcileData(Vector3 position, Quaternion rotation)
+        public ReconcileMoveData(Vector3 position, Quaternion rotation)
         {
             Position = position;
             Rotation = rotation;
@@ -42,7 +42,6 @@ public class CSPMovement : NetworkBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        _playerControls = new Player_Controls();
     }
 
     #region Subscriptions
@@ -66,24 +65,28 @@ public class CSPMovement : NetworkBehaviour
         }
     }
 
-    private void OnDestroy()
+    public override void OnStartNetwork()
     {
-        SubscribeToTimeManager(false);
-        _playerControls.DefaultMap.Disable();
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
+        base.OnStartNetwork();
         SubscribeToTimeManager(true);
-        _characterController.enabled = (base.IsServer || base.IsOwner);
+
+        if(base.IsServer ||  base.Owner.IsLocalClient)
+            _characterController.enabled = true;
+        
+        if (!base.Owner.IsLocalClient) return;
+        _playerControls = new Player_Controls();
         _playerControls.DefaultMap.Enable();
+
+
     }
 
-    public override void OnStartServer()
+    public override void OnStopNetwork()
     {
-        base.OnStartServer();
-        SubscribeToTimeManager(true);
+        base.OnStopNetwork();
+        SubscribeToTimeManager(false);
+
+        if (base.Owner.IsLocalClient)
+            _playerControls.DefaultMap.Disable();
     }
    
    #endregion
@@ -95,20 +98,20 @@ public class CSPMovement : NetworkBehaviour
             Reconciliate(default, false);
             GetInput(out MoveData moveData);
             Move(moveData, false);
+            // Here we can add the animation, sounds and effects...
         }
 
         if (base.IsServer)
         {
             Move(default, true);
-            ReconcileData reconData = new ReconcileData(transform.position, transform.rotation);
+            ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);
             Reconciliate(reconData, true);
         }
     }
 
-    // used for rigidboddies and physic related stuff.
     private void TimeManager_OnPostTick()
     {
-        
+        // used for rigidboddies and physic related stuff.  
     }
 
     private void GetInput(out MoveData moveData)
@@ -117,22 +120,22 @@ public class CSPMovement : NetworkBehaviour
 
         var movementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
 
-        float horizontal = movementInput.x;
-        float vertical = movementInput.y;
+        float xAxis = movementInput.x;
+        float zAxis = movementInput.y;
 
-        if (horizontal == 0f && vertical == 0f) return;
-        moveData = new MoveData(horizontal, vertical);
+        if (xAxis == 0f && zAxis == 0f) return;
+        moveData = new MoveData(xAxis, zAxis);
     }
 
     [Replicate]
     private void Move(MoveData moveData, bool asServer, bool replaying = false)
     {
-        Vector3 move = new Vector3(moveData.Horizontal, 0f, moveData.Vertical);
+        Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis);
         _characterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
     }
 
     [Reconcile]
-    private void Reconciliate(ReconcileData recData, bool asServer)
+    private void Reconciliate(ReconcileMoveData recData, bool asServer)
     {
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;
