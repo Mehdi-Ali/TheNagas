@@ -653,28 +653,24 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
+  Statics: {fileID: 11400000, guid: 0980d9dd133e7ef4a8f013bdebf7be56, type: 2}
   CurrentState: {fileID: 0}
   IdleState: {fileID: 0}
   RunningState: {fileID: 0}
   DeadState: {fileID: 0}
-  Animator: {fileID: 0}
-  NetworkAnimator: {fileID: 0}
-  ReadyToSwitchState: 0
-  IsCastingAnAbility: 0
-  Statics: {fileID: 11400000, guid: 0980d9dd133e7ef4a8f013bdebf7be56, type: 2}
   RoamingState: {fileID: 0}
   ChasingState: {fileID: 0}
   BasicAttackState: {fileID: 0}
   SuperAttackState: {fileID: 0}
+  Animator: {fileID: 0}
+  NetworkAnimator: {fileID: 0}
   AnimationsLength: {fileID: 0}
   NavAgent: {fileID: 0}
   HitBoxes: {fileID: 0}
   ActiveHitBox: {fileID: 0}
   ActiveAttackCollider: {fileID: 0}
   Player: {fileID: 0}
-  x: {x: 0, y: 0, z: 0}
-  y: {x: 0, y: 0, z: 0}
-  z: 0
+  ReadyToSwitchState: 0
 --- !u!114 &2173564305596942674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1662,7 +1658,8 @@ PrefabInstance:
       propertyPath: m_text
       value: Ghost*
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7391129768155691073, guid: cc3c8a5e44c523945a53ea184b874883, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cc3c8a5e44c523945a53ea184b874883, type: 3}
 --- !u!224 &3805144262313235548 stripped
 RectTransform:

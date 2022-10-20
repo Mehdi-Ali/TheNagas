@@ -1,17 +1,22 @@
+using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerStateManger : StateManger
+public class PlayerStateManger : NetworkBehaviour
 {
     [Header("Scriptable Objects")]
-    [SerializeField] 
+    [SerializeField]
     public PlayerStaticsScriptableObject Statics ;
 
     [Space(10)]
     #region Fields and Properties
 
-    //Initiating the states.
+    //Initiating the states.    
+    public BaseState CurrentState;
+    public IdleState IdleState ;
+    public RunningState RunningState ;
+    public DeadState DeadState ;
     public PlayerAutoAttackState AutoAttackState ;
     public PlayerFirstAbilityState FirstAbilityState ;
     public PlayerSecondAbilityState SecondAbilityState ;
@@ -35,14 +40,19 @@ public class PlayerStateManger : StateManger
     public PlayerHitBoxesAndColliders HitBoxes;
     public PlayerHitBox ActiveHitBox;
     public PlayerAttackCollider ActiveAttackCollider;
+    public Animator Animator;
+    public NetworkAnimator NetworkAnimator;
 
-    //Variables to handle Gravity
-    [SerializeField] Vector3 _gravity = new Vector3(0.0f , -9.8f , 0.0f);
+    // Variables to handle Gravity
+    // Create a Static Class Called world's physics to store gravity and such.
+    [SerializeField] Vector3 _gravity = new Vector3(0.0f , -9.8f , 0.0f); 
 
 
 
 
     //StateMachine Variables (logic and animation)
+    public bool ReadyToSwitchState;
+    public bool IsCastingAnAbility ;
     public bool IsMovementPressed ;
     private bool _isAimingPressed ;
     public bool IsAutoAiming ;
@@ -69,10 +79,17 @@ public class PlayerStateManger : StateManger
 
     #region Execution
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
         CashingPlayerInstances() ;
+
+        CurrentState = IdleState;
+        CurrentState.EnterState();
+
+        // we`ll see if we don't use it in Enemy we move it to Player
+        ReadyToSwitchState = true;
+        IsCastingAnAbility = false; 
+
         _isAimingPressed = false;
         SubscriptionToPlayerControls();
 
@@ -82,6 +99,12 @@ public class PlayerStateManger : StateManger
 
     private void CashingPlayerInstances()
     {
+        IdleState = GetComponent<IdleState>();
+        RunningState = GetComponent<RunningState>();
+        DeadState = GetComponent<DeadState>();
+
+        Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
 
         AutoAttackState = GetComponent<PlayerAutoAttackState>();
         FirstAbilityState = GetComponent<PlayerFirstAbilityState>();
@@ -95,7 +118,7 @@ public class PlayerStateManger : StateManger
         CooldownUIManager = FindObjectOfType<CooldownUIManager>();
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();
-        
+
     }
 
     private void OnAimingInput(InputAction.CallbackContext context)
@@ -307,9 +330,9 @@ public class PlayerStateManger : StateManger
     }
 
     [Client(RequireOwnership = true)]
-    public override void Update()
+    public void Update()
     {
-        base.Update();
+        CurrentState.UpdateState();
 
         if (!CharacterController.isGrounded)
         {
@@ -320,6 +343,20 @@ public class PlayerStateManger : StateManger
         if ( _isAimingPressed) HandleAiming();
         else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
  
+
+    }
+
+    public void SwitchState(BaseState state)
+    {   
+        // I think it can be deleted because we never call it if CurrentState == DeadState
+        if (CurrentState == DeadState) return ; 
+        
+        if (ReadyToSwitchState || state == DeadState)
+        {
+            CurrentState.ExitState();
+            CurrentState = state;
+            CurrentState.EnterState();
+        }
 
     }
 
@@ -358,34 +395,42 @@ public class PlayerStateManger : StateManger
     private void SubscriptionToPlayerControls()
     {
         _playerControls = new Player_Controls();
+        var map = _playerControls.DefaultMap ;
 
-        _playerControls.DefaultMap.Move.started += OnMovementInput;
-        _playerControls.DefaultMap.Move.canceled += OnMovementInput;
-        _playerControls.DefaultMap.Move.performed += OnMovementInput;
+        var action = map.Move ;
+        action.started += OnMovementInput;
+        action.canceled += OnMovementInput;
+        action.performed += OnMovementInput;
 
-        _playerControls.DefaultMap.Aim.started += OnAimingInput;
-        _playerControls.DefaultMap.Aim.canceled += OnAimingInput;
-        _playerControls.DefaultMap.Aim.performed += OnAimingInput;
+        action = map.Aim ;
+        action.started += OnAimingInput;
+        action.canceled += OnAimingInput;
+        action.performed += OnAimingInput;
 
-        _playerControls.DefaultMap.AutoAttack.started += OnAutoAttackInputStarted;
-        _playerControls.DefaultMap.AutoAttack.performed += OnAutoAttackInputPerformed;
-        _playerControls.DefaultMap.AutoAttack.canceled += OnAutoAttackInputcanceled;
+        action = map.AutoAttack;
+        action.started += OnAutoAttackInputStarted;
+        action.performed += OnAutoAttackInputPerformed;
+        action.canceled += OnAutoAttackInputcanceled;
 
-        _playerControls.DefaultMap.FirstAbility.started += OnFirstAbilityInputStarted;
-        _playerControls.DefaultMap.FirstAbility.performed += OnFirstAbilityInputPerformed;
-        _playerControls.DefaultMap.FirstAbility.canceled += OnFirstAbilityInputCanceled;
+        action = map.FirstAbility;
+        action.started += OnFirstAbilityInputStarted;
+        action.performed += OnFirstAbilityInputPerformed;
+        action.canceled += OnFirstAbilityInputCanceled;
 
-        _playerControls.DefaultMap.SecondAbility.started += OnSecondAbilityInputStarted; 
-        _playerControls.DefaultMap.SecondAbility.performed += OnSecondAbilityInputPerformed; 
-        _playerControls.DefaultMap.SecondAbility.canceled += OnSecondAbilityInputCanceled; 
+        action = map.SecondAbility;
+        action.started += OnSecondAbilityInputStarted; 
+        action.performed += OnSecondAbilityInputPerformed; 
+        action.canceled += OnSecondAbilityInputCanceled; 
         
-        _playerControls.DefaultMap.ThirdAbility.started += OnThirdAbilityInputStarted;
-        _playerControls.DefaultMap.ThirdAbility.performed += OnThirdAbilityInputPerformed;
-        _playerControls.DefaultMap.ThirdAbility.canceled += OnThirdAbilityInputCanceled;
+        action = map.ThirdAbility;
+        action.started += OnThirdAbilityInputStarted;
+        action.performed += OnThirdAbilityInputPerformed;
+        action.canceled += OnThirdAbilityInputCanceled;
 
-        _playerControls.DefaultMap.Ultimate.started += OnUltimateInputStarted;
-        _playerControls.DefaultMap.Ultimate.performed += OnUltimateInputPerformed;
-        _playerControls.DefaultMap.Ultimate.canceled += OnUltimateInputCanceled;        
+        action = map.Ultimate;
+        action.started += OnUltimateInputStarted;
+        action.performed += OnUltimateInputPerformed;
+        action.canceled += OnUltimateInputCanceled;        
     }
     private void OnEnable()
     {

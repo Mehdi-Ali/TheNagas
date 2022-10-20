@@ -1,15 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using FishNet.Component.Animating;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.AI ;
 
-public class EnemyStateManger : StateManger
+public class EnemyStateManger : NetworkBehaviour
 {
-    [SerializeField] // TODO how to put it at the top in the editor 
+    [Header("Scriptable Objects")]
+    [SerializeField]
     public EnemyStaticsScriptableObject Statics ;
 
+    [Space(10)]
+
     //Initiating the states.
+    public BaseState CurrentState;
+    public IdleState IdleState ;
+    public RunningState RunningState ;
+    public DeadState DeadState ;
     public EnemyRoamingState RoamingState ;
     public EnemyChasingState ChasingState ;
     public EnemyBasicAttackState BasicAttackState ;
@@ -17,6 +23,8 @@ public class EnemyStateManger : StateManger
 
 
     //Variables to cache Instances 
+    public Animator Animator;
+    public NetworkAnimator NetworkAnimator;
     public EnemyAnimationsLength AnimationsLength;
     public NavMeshAgent NavAgent;
     public EnemyHitBoxesAndColliders HitBoxes ;
@@ -30,23 +38,32 @@ public class EnemyStateManger : StateManger
 
 
     //StateMachine Variables (logic and animation)
-
-        public Vector3 x ;
-        public Vector3 y ;
-        public float z ;
+    public bool ReadyToSwitchState;
 
 
-    public override void Awake()
+    public void Awake()
     {
         CashingEnemyInstances() ;
-        
 
-        base.Awake();
+        CurrentState = IdleState;
+        CurrentState.EnterState();
+
+        // we`ll see if we don't use it in Enemy we move it to Player
+        ReadyToSwitchState = true;
+
+
 
     }
 
     private void CashingEnemyInstances()
     {
+        IdleState = GetComponent<IdleState>();
+        RunningState = GetComponent<RunningState>();
+        DeadState = GetComponent<DeadState>();
+
+        Animator = GetComponent<Animator>();
+        NetworkAnimator = GetComponent<NetworkAnimator>();
+
         RoamingState = GetComponent<EnemyRoamingState>();
         ChasingState = GetComponent<EnemyChasingState>();
         BasicAttackState = GetComponent<EnemyBasicAttackState>();
@@ -57,13 +74,13 @@ public class EnemyStateManger : StateManger
         HitBoxes = GetComponentInChildren<EnemyHitBoxesAndColliders>();
     }
 
-    public override void Update()
+    public void Update()
     {
-        base.Update();
+        CurrentState.UpdateState();
 
         //TODO turn the target into an array Targets and make this a for each loop
         if (Player == null) {GettingTarget();}
-        else if (ReadyToSwitchState &
+        else if (ReadyToSwitchState &&
                  Vector3.Distance(transform.position, Player.transform.position) < Statics.VisionRange)
         {
             SwitchState(ChasingState);
@@ -74,5 +91,19 @@ public class EnemyStateManger : StateManger
     public void GettingTarget()
     {
         Player = FindObjectOfType<PlayerStateManger>();
+    }
+
+    public void SwitchState(BaseState state)
+    {   
+        // I think it can be deleted because we never call it if CurrentState == DeadState
+        if (CurrentState == DeadState) return ; 
+        
+        if (ReadyToSwitchState || state == DeadState)
+        {
+            CurrentState.ExitState();
+            CurrentState = state;
+            CurrentState.EnterState();
+        }
+
     }
 }
