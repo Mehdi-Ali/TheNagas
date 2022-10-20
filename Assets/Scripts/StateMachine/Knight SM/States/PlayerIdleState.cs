@@ -1,15 +1,21 @@
 using FishNet.Object;
+using UnityEngine;
 
-public class PlayerIdleState : IdleState
+public class PlayerIdleState : BaseState
 {
     //A reference for the Player State Manger
     PlayerStateManger _player;
 
+    //Variables to store optimized Setter / getter parameter IDs
+    protected int _Idle;
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
+        
+        //caching Hashes
+        _Idle = Animator.StringToHash("Idle");
 
     }
     

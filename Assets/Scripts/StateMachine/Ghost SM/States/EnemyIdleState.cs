@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyIdleState : IdleState
+public class EnemyIdleState : BaseState
 {
     //A reference for the Player State Manger
     EnemyStateManger _Enemy;
 
+    //Variables to store optimized Setter / getter parameter IDs
+    protected int _Idle;
 
-    public override void Awake()
+    public  void Awake()
     {
-        base.Awake();
-
         //Caching The Player State Manger
         _Enemy = GetComponent<EnemyStateManger>();
+        
+        //caching Hashes
+        _Idle = Animator.StringToHash("Idle");
         
     }
     public override void EnterState()

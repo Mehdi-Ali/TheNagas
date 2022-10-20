@@ -1,17 +1,21 @@
 using UnityEngine;
 
-public class PlayerDeadState : DeadState
+public class PlayerDeadState : BaseState
 {
     //A reference for the Player State Manger
     PlayerStateManger _player;
 
+    //Variables to store optimized Setter / getter parameter IDs
+    protected int _DeadHash;
 
-    public override void Awake()
+
+    public void Awake()
     {
-        base.Awake();
-
         //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
+
+        //caching Hashes
+        _DeadHash = Animator.StringToHash("Dead");
 
     }
 

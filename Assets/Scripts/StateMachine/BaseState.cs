@@ -1,4 +1,3 @@
-using UnityEngine;
 using FishNet.Object;
 
 public abstract class BaseState : NetworkBehaviour 

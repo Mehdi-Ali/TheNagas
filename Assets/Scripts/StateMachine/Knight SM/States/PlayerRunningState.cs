@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerRunningState : RunningState
+public class PlayerRunningState : BaseState
 {
     //A reference for the Player State Manger
     PlayerStateManger _player;

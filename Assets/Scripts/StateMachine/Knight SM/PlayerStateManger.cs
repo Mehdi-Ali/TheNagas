@@ -14,9 +14,9 @@ public class PlayerStateManger : NetworkBehaviour
 
     //Initiating the states.    
     public BaseState CurrentState;
-    public IdleState IdleState ;
-    public RunningState RunningState ;
-    public DeadState DeadState ;
+    public PlayerIdleState IdleState ;
+    public PlayerRunningState RunningState ;
+    public PlayerDeadState DeadState ;
     public PlayerAutoAttackState AutoAttackState ;
     public PlayerFirstAbilityState FirstAbilityState ;
     public PlayerSecondAbilityState SecondAbilityState ;
@@ -99,9 +99,9 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void CashingPlayerInstances()
     {
-        IdleState = GetComponent<IdleState>();
-        RunningState = GetComponent<RunningState>();
-        DeadState = GetComponent<DeadState>();
+        IdleState = GetComponent<PlayerIdleState>();
+        RunningState = GetComponent<PlayerRunningState>();
+        DeadState = GetComponent<PlayerDeadState>();
 
         Animator = GetComponent<Animator>();
         NetworkAnimator = GetComponent<NetworkAnimator>();

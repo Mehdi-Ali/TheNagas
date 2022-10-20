@@ -13,9 +13,9 @@ public class EnemyStateManger : NetworkBehaviour
 
     //Initiating the states.
     public BaseState CurrentState;
-    public IdleState IdleState ;
-    public RunningState RunningState ;
-    public DeadState DeadState ;
+    public EnemyIdleState IdleState ;
+    public EnemyRunningState RunningState ;
+    public EnemyDeadState DeadState ;
     public EnemyRoamingState RoamingState ;
     public EnemyChasingState ChasingState ;
     public EnemyBasicAttackState BasicAttackState ;
@@ -57,9 +57,9 @@ public class EnemyStateManger : NetworkBehaviour
 
     private void CashingEnemyInstances()
     {
-        IdleState = GetComponent<IdleState>();
-        RunningState = GetComponent<RunningState>();
-        DeadState = GetComponent<DeadState>();
+        IdleState = GetComponent<EnemyIdleState>();
+        RunningState = GetComponent<EnemyRunningState>();
+        DeadState = GetComponent<EnemyDeadState>();
 
         Animator = GetComponent<Animator>();
         NetworkAnimator = GetComponent<NetworkAnimator>();

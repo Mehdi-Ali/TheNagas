@@ -1,17 +1,21 @@
 
 using UnityEngine;
 
-public class EnemyDeadState : DeadState 
+public class EnemyDeadState : BaseState 
 {
     //A reference for the Player State Manger
     EnemyStateManger _Enemy;
-    
-    public override void Awake()
-    {
-        base.Awake();
 
+    //Variables to store optimized Setter / getter parameter IDs
+    protected int _DeadHash;
+    
+    public void Awake()
+    {
         //Caching The Player State Manger
         _Enemy = GetComponent<EnemyStateManger>();
+
+        //caching Hashes
+        _DeadHash = Animator.StringToHash("Dead");
 
     }
     public override void EnterState()
