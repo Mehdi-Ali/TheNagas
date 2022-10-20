@@ -130,7 +130,7 @@ public class CSPMovement : NetworkBehaviour
     [Replicate]
     private void Move(MoveData moveData, bool asServer, bool replaying = false)
     {
-        Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis);
+        Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         _characterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
     }
 

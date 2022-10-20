@@ -583,7 +583,7 @@ MonoBehaviour:
   _extrapolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
-  _clientAuthoritative: 1
+  _clientAuthoritative: 0
   _sendToOwner: 0
   _interval: 1
   _synchronizePosition: 1
@@ -633,7 +633,7 @@ MonoBehaviour:
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 6
+  <PrefabId>k__BackingField: 7
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 18369910026477970439
@@ -658,6 +658,7 @@ MonoBehaviour:
   RunningState: {fileID: 0}
   DeadState: {fileID: 0}
   Animator: {fileID: 0}
+  NetworkAnimator: {fileID: 0}
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
   Statics: {fileID: 11400000, guid: 0980d9dd133e7ef4a8f013bdebf7be56, type: 2}

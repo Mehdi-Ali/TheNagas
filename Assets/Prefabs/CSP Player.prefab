@@ -177,7 +177,7 @@ MonoBehaviour:
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 0
+  <PrefabId>k__BackingField: 2
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 5672884881039232253
@@ -266,4 +266,4 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8083410993170422374}
   _networkObjectCache: {fileID: 8083410993170422374}
-  MovementSpeed: 30
+  MovementSpeed: 10
