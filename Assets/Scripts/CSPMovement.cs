@@ -5,35 +5,6 @@ using UnityEngine;
 
 public class CSPMovement : NetworkBehaviour
 {
-
-    #region structData
-
-    public struct MoveData
-    {
-        public float XAxis;
-        public float ZAxis;
-
-        public MoveData(float xAxis, float yAxis)
-        {
-            XAxis = xAxis;
-            ZAxis = yAxis;
-        }
-    }
-
-    public struct ReconcileMoveData
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-
-        public ReconcileMoveData(Vector3 position, Quaternion rotation)
-        {
-            Position = position;
-            Rotation = rotation;
-        }
-    }
-
-    #endregion
-
     public float MovementSpeed = 30f;
     private CharacterController _characterController;
     private Player_Controls _playerControls;
