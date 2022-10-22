@@ -51,7 +51,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
     public override void UpdateState()
     {
-        _player.SimpleMove(_player.Statics.FirstAbilityMovementSpeed);
+        //_player.MoveAndRotate(_player.Statics.FirstAbilityMovementSpeed);
 
         
         

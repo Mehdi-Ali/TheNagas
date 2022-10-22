@@ -1,15 +1,22 @@
 using FishNet.Component.Animating;
 using FishNet.Object;
+using FishNet.Object.Prediction;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerStateManger : NetworkBehaviour
 {
+
+    #region Scriptable Objects
+
     [Header("Scriptable Objects")]
     [SerializeField]
     public PlayerStaticsScriptableObject Statics ;
 
     [Space(10)]
+
+    #endregion
+
     #region Fields and Properties
 
     //Initiating the states.    
@@ -23,61 +30,77 @@ public class PlayerStateManger : NetworkBehaviour
     public PlayerThirdAbilityState ThirdAbilityState ;
     public PlayerUltimateState UltimateState ;
 
-
-    //Variables to store player input values
-    Vector2 _currentMovementInput;
-    public Vector3 CurrentMovement;
-
-    //Variables to handle Rotation
-    Vector3 _positionToLookAt;
-    Quaternion _targetRotation;
-
-    //Variables to handle Aiming
-    Vector2 _currentAimingInput ;
-    Vector3 _currentAimingAt ;
-    Quaternion _currentAimingRotation;
-    private float _aimingRange ;
+    // Class references to cache Instances.
+    public CharacterController CharacterController;
+    private Player_Controls _playerControls;
+    public CooldownSystem CooldownSystem;
+    public CooldownUIManager CooldownUIManager;
+    public PlayerAnimationsLength AnimationsLength;
     public PlayerHitBoxesAndColliders HitBoxes;
     public PlayerHitBox ActiveHitBox;
     public PlayerAttackCollider ActiveAttackCollider;
     public Animator Animator;
     public NetworkAnimator NetworkAnimator;
 
-    // Variables to handle Gravity
-    // Create a Static Class Called world's physics to store gravity and such.
-    [SerializeField] Vector3 _gravity = new Vector3(0.0f , -9.8f , 0.0f); 
+    //Variables to handle movement.
+    private MoveData moveData;
+    public  float MovementSpeed ;
 
+    //Variables to handle Rotation
+    Vector3 _positionToLookAt;
+    Quaternion _targetRotation;
+    public float RotationSpeed;
 
-
+    //Variables to handle Aiming
+    Vector2 _currentAimingInput ;
+    Vector3 _currentAimingAt ;
+    Quaternion _currentAimingRotation;
+    private float _aimingRange ;
 
     //StateMachine Variables (logic and animation)
     public bool ReadyToSwitchState;
     public bool IsCastingAnAbility ;
     public bool IsMovementPressed ;
     private bool _isAimingPressed ;
-    public bool IsAutoAiming ;
-
-
-
-
-    //Variables to cache Instances 
-    public CharacterController CharacterController;
-    private Player_Controls _playerControls;
-    public CooldownSystem CooldownSystem;
-    public CooldownUIManager CooldownUIManager;
-    public PlayerAnimationsLength AnimationsLength;
 
     //Auto Aiming vars
+    public bool IsAutoAiming ;
     private float _smallestDistance;
     public Transform TargetPos;
     private float _distance;
 
+    // Variables to handle Gravity
+    // Create a Static Class Called world's physics to store gravity and such.
+    [SerializeField] Vector3 _gravity = new Vector3(0.0f , -9.8f , 0.0f);
 
-
+    // Network Variables.
+    private bool _subscribed;
 
     #endregion
 
     #region Execution
+
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+        SubscribeToTimeManager(true);
+
+        if(base.IsServer || base.Owner.IsLocalClient)
+            CharacterController.enabled = true ;
+
+        if (!base.Owner.IsLocalClient) return ;
+        SubscriptionToPlayerControls();
+        _playerControls.DefaultMap.Enable();
+    }
+
+    public override void OnStopNetwork()
+    {
+        base.OnStopNetwork();
+        SubscribeToTimeManager(false);
+
+        if (base.Owner.IsLocalClient)
+            _playerControls.DefaultMap.Disable();
+    }
 
     public void Awake()
     {
@@ -86,12 +109,11 @@ public class PlayerStateManger : NetworkBehaviour
         CurrentState = IdleState;
         CurrentState.EnterState();
 
-        // we`ll see if we don't use it in Enemy we move it to Player
+        
         ReadyToSwitchState = true;
         IsCastingAnAbility = false; 
 
         _isAimingPressed = false;
-        SubscriptionToPlayerControls();
 
         CharacterController.enableOverlapRecovery = true ;
 
@@ -165,43 +187,14 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
-    public void SimpleMove(float movementSpeed)
-    {
-        ReadAndSetMovementInput();
-        CharacterController.SimpleMove(CurrentMovement * movementSpeed);
-    }
-
-    public void ReadAndSetMovementInput()
-    {
-        // TODO make it a local variable.
-        _currentMovementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
-        CurrentMovement.x = _currentMovementInput.x;
-        CurrentMovement.z = _currentMovementInput.y;
-
-        IsMovementPressed = _currentMovementInput.x != 0 ||
-                            _currentMovementInput.y != 0 ;
-    }
-
-    public void RotatePlayer(float rotationSpeed, Vector3 movementDirection)
-    {
-        //the change in position our character should point to
-        _positionToLookAt.x = movementDirection.x;
-        _positionToLookAt.y = 0.0f;
-        _positionToLookAt.z = movementDirection.z;
-
-        //creates a new rotation bases on where the player is currently moving
-        _targetRotation = Quaternion.LookRotation(_positionToLookAt);
-        transform.rotation = Quaternion.Slerp(  transform.rotation,
-                                                _targetRotation,
-                                                rotationSpeed * Time.deltaTime);
-
-    }
 
     [Client(RequireOwnership = true)]
     private void OnMovementInput(InputAction.CallbackContext context)
     {
         if (CurrentState != RunningState) SwitchState(RunningState);
     }
+
+    #region  NOT YET
 
     [Client(RequireOwnership = true)]
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
@@ -329,39 +322,80 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 
+    #endregion
+
     [Client(RequireOwnership = true)]
     public void Update()
     {
         CurrentState.UpdateState();
 
-        if (!CharacterController.isGrounded)
-        {
-            CharacterController.Move(_gravity * Time.deltaTime);
-        }
-
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
+        
         if ( _isAimingPressed) HandleAiming();
         else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
- 
 
     }
 
-    public void SwitchState(BaseState state)
-    {   
-        // I think it can be deleted because we never call it if CurrentState == DeadState
-        if (CurrentState == DeadState) return ; 
-        
-        if (ReadyToSwitchState || state == DeadState)
+    private void TimeManager_OnTick()
+    {
+        if (base.IsOwner)
         {
-            CurrentState.ExitState();
-            CurrentState = state;
-            CurrentState.EnterState();
+            Reconciliate(default,false);
+            MoveAndRotate(moveData, false);
         }
 
+        if (base.IsOwner || base.IsServer)
+        {
+            if (!CharacterController.isGrounded)
+            {
+                CharacterController.Move(_gravity * (float)base.TimeManager.TickDelta);
+            }
+        }
+
+        if (base.IsServer)
+        {
+
+            MoveAndRotate(default, true);
+            ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);
+            Reconciliate(reconData, true);
+        }
+    }
+    
+    public void ReadAndSetMovementInput()
+    {
+        moveData = default;
+
+        var movementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
+
+        float xAxis = movementInput.x;
+        float zAxis = movementInput.y;
+
+        IsMovementPressed = xAxis != 0 || zAxis != 0 ;
+
+        if (!IsMovementPressed) return;
+        moveData = new MoveData(xAxis, zAxis);
     }
 
+    [Replicate]
+    private void MoveAndRotate(MoveData moveData, bool asServer, bool replaying = false)
+    {
+        if (!IsMovementPressed) return;
+
+        Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
+        CharacterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
+
+        Quaternion targetRotation = Quaternion.LookRotation(move);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * (float)base.TimeManager.TickDelta);
+
+    }
+
+    [Reconcile]
+    private void Reconciliate(ReconcileMoveData recData, bool asServer)
+    {
+        transform.position = recData.Position;
+        transform.rotation = recData.Rotation;
+    }
     
-    //Auto Aiming 
     public float AutoAim()
     {
         _smallestDistance = _aimingRange;
@@ -391,7 +425,38 @@ public class PlayerStateManger : NetworkBehaviour
         return _smallestDistance ;
     }
  
-    // PlayerControls Setup
+    public void SwitchState(BaseState state)
+    {   
+        // I think it can be deleted because we never call it if CurrentState == DeadState
+        if (CurrentState == DeadState) return ; 
+        
+        if (ReadyToSwitchState || state == DeadState)
+        {
+            CurrentState.ExitState();
+            CurrentState = state;
+            CurrentState.EnterState();
+        }
+
+    }
+
+    #endregion
+
+    #region Subscriptions
+
+    private void SubscribeToTimeManager(bool subscribe)
+    {
+        if (base.TimeManager == null) return;
+        if (subscribe == _subscribed) return;
+
+        _subscribed = subscribe;
+
+        if (subscribe)
+            base.TimeManager.OnTick += TimeManager_OnTick;
+
+        else
+            base.TimeManager.OnTick -= TimeManager_OnTick;
+    }
+
     private void SubscriptionToPlayerControls()
     {
         _playerControls = new Player_Controls();
@@ -432,15 +497,7 @@ public class PlayerStateManger : NetworkBehaviour
         action.performed += OnUltimateInputPerformed;
         action.canceled += OnUltimateInputCanceled;        
     }
-    private void OnEnable()
-    {
-        _playerControls.DefaultMap.Enable();
-    }
-    private void OnDisable()
-    {
-        _playerControls.DefaultMap.Disable();
-    }
-
+    
     #endregion
 
 }

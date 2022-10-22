@@ -57,15 +57,14 @@ public class PlayerAutoAttackState : BaseState
 
         if (_player.IsMovementPressed && !_player.IsAutoAiming )
         {
-            _player.SimpleMove(_player.Statics.AutoAttackDashingMovementSpeed);
-            _player.RotatePlayer(_player.Statics.AutoAttackRotationSpeed, _player.CurrentMovement);
+            //_player.MoveAndRotate(_player.Statics.AutoAttackDashingMovementSpeed);
         }
 
         if ( _distance > _player.Statics.AutoAttackStopDistance )
         {
             // dash
             _player.CharacterController.SimpleMove( _offset.normalized * _player.Statics.AutoAttackDashingMovementSpeed);
-            _player.RotatePlayer(_player.Statics.AutoAttackRotationSpeed, _offset);
+           //_player.RotatePlayer(_player.Statics.AutoAttackRotationSpeed, _offset);
 
         }
     }

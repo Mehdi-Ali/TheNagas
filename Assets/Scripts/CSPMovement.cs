@@ -47,8 +47,6 @@ public class CSPMovement : NetworkBehaviour
         if (!base.Owner.IsLocalClient) return;
         _playerControls = new Player_Controls();
         _playerControls.DefaultMap.Enable();
-
-
     }
 
     public override void OnStopNetwork()

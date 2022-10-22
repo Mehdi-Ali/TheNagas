@@ -7,7 +7,6 @@ public class PlayerRunningState : BaseState
     PlayerStateManger _player;
    
     //Variables to store optimized Setter / getter parameter IDs
-    
     int _RunningHash;
 
     private void Awake() 
@@ -27,14 +26,11 @@ public class PlayerRunningState : BaseState
 
     public override void UpdateState()
     {
-        _player.SimpleMove(_player.Statics.MovementSpeed);
-        _player.RotatePlayer(_player.Statics.RotationSpeed, _player.CurrentMovement);
+       _player.ReadAndSetMovementInput(); 
     }
 
     public override void ExitState()
     {
-
-
 
     }
 
