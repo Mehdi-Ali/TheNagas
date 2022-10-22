@@ -338,13 +338,13 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void TimeManager_OnTick()
     {
-        if (base.IsOwner)
+        if (IsOwner)
         {
             Reconciliate(default,false);
             MoveAndRotate(moveData, false);
         }
 
-        if (base.IsOwner || base.IsServer)
+        if (IsOwner || IsServer)
         {
             if (!CharacterController.isGrounded)
             {
@@ -352,7 +352,7 @@ public class PlayerStateManger : NetworkBehaviour
             }
         }
 
-        if (base.IsServer)
+        if (IsServer)
         {
 
             MoveAndRotate(default, true);
@@ -374,6 +374,13 @@ public class PlayerStateManger : NetworkBehaviour
 
         if (!IsMovementPressed) return;
         moveData = new MoveData(xAxis, zAxis);
+    }
+
+    [ServerRpc]
+    public void ServerSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
+    {
+        MovementSpeed = movementSpeed;
+        RotationSpeed = rotationSpeed;
     }
 
     [Replicate]

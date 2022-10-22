@@ -22,6 +22,10 @@ public class PlayerRunningState : BaseState
     public override void EnterState()
     {
         _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
+
+        var statics = _player.Statics ;
+        _player.ServerSetMoveAndRotateSpeed(statics.MovementSpeed, statics.RotationSpeed);
+
     }
 
     public override void UpdateState()

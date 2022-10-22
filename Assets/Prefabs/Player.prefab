@@ -1121,7 +1121,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
   _graphicalObject: {fileID: 5443093462058804729}
-  _smoothTicks: 1
+  _smoothTicks: 0
   _durationType: 0
   _smoothingDuration: 0.125
   _enableTeleport: 0
@@ -1166,7 +1166,7 @@ MonoBehaviour:
   Animator: {fileID: 0}
   NetworkAnimator: {fileID: 0}
   MovementSpeed: 0
-  CurrentMovement: {x: 0, y: 0, z: 0}
+  RotationSpeed: 0
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
   IsMovementPressed: 0
