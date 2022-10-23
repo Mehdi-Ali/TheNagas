@@ -80,28 +80,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     #region Execution
 
-    public override void OnStartNetwork()
-    {
-        base.OnStartNetwork();
-        SubscribeToTimeManager(true);
-
-        if(base.IsServer || base.Owner.IsLocalClient)
-            CharacterController.enabled = true ;
-
-        if (!base.Owner.IsLocalClient) return ;
-        SubscriptionToPlayerControls();
-        _playerControls.DefaultMap.Enable();
-    }
-
-    public override void OnStopNetwork()
-    {
-        base.OnStopNetwork();
-        SubscribeToTimeManager(false);
-
-        if (base.Owner.IsLocalClient)
-            _playerControls.DefaultMap.Disable();
-    }
-
     public void Awake()
     {
         CashingPlayerInstances() ;
@@ -118,6 +96,29 @@ public class PlayerStateManger : NetworkBehaviour
         CharacterController.enableOverlapRecovery = true ;
 
     }
+
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+        SubscribeToTimeManager(true);
+
+        if(IsServer || Owner.IsLocalClient)
+            CharacterController.enabled = true ;
+
+        if (!Owner.IsLocalClient) return ;
+        SubscriptionToPlayerControls();
+        _playerControls.DefaultMap.Enable();
+    }
+
+    public override void OnStopNetwork()
+    {
+        base.OnStopNetwork();
+        SubscribeToTimeManager(false);
+
+        if (Owner.IsLocalClient)
+            _playerControls.DefaultMap.Disable();
+    }
+
 
     private void CashingPlayerInstances()
     {
@@ -191,6 +192,13 @@ public class PlayerStateManger : NetworkBehaviour
     [Client(RequireOwnership = true)]
     private void OnMovementInput(InputAction.CallbackContext context)
     {
+        ServerSwitchToRunningState();
+    }
+
+    [ServerRpc(RunLocally = true)]
+    private void ServerSwitchToRunningState()
+    {
+        IsMovementPressed = true ;
         if (CurrentState != RunningState) SwitchState(RunningState);
     }
 
@@ -338,9 +346,11 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void TimeManager_OnTick()
     {
+        
         if (IsOwner)
         {
             Reconciliate(default,false);
+            CurrentState.OnTickState();
             MoveAndRotate(moveData, false);
         }
 
@@ -354,33 +364,10 @@ public class PlayerStateManger : NetworkBehaviour
 
         if (IsServer)
         {
-
             MoveAndRotate(default, true);
             ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);
             Reconciliate(reconData, true);
         }
-    }
-    
-    public void ReadAndSetMovementInput()
-    {
-        moveData = default;
-
-        var movementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
-
-        float xAxis = movementInput.x;
-        float zAxis = movementInput.y;
-
-        IsMovementPressed = xAxis != 0 || zAxis != 0 ;
-
-        if (!IsMovementPressed) return;
-        moveData = new MoveData(xAxis, zAxis);
-    }
-
-    [ServerRpc]
-    public void ServerSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
-    {
-        MovementSpeed = movementSpeed;
-        RotationSpeed = rotationSpeed;
     }
 
     [Replicate]
@@ -401,6 +388,35 @@ public class PlayerStateManger : NetworkBehaviour
     {
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;
+    }
+    
+    public void ReadAndSetMovementInput()
+    {
+        moveData = default;
+
+        var movementInput = _playerControls.DefaultMap.Move.ReadValue<Vector2>();
+
+        float xAxis = movementInput.x;
+        float zAxis = movementInput.y;
+
+        IsMovementPressed = xAxis != 0 || zAxis != 0 ;
+        ServerSetMovementStatus(IsMovementPressed);
+
+        if (!IsMovementPressed) return;
+        moveData = new MoveData(xAxis, zAxis);
+    }
+
+    [ServerRpc(RunLocally = true)]
+    private void ServerSetMovementStatus(bool isMovementPressed)
+    {
+        IsMovementPressed = isMovementPressed;
+    }
+
+    [ServerRpc(RunLocally = true)]
+    public void ServerSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
+    {
+        MovementSpeed = movementSpeed;
+        RotationSpeed = rotationSpeed;
     }
     
     public float AutoAim()

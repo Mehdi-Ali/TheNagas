@@ -9,4 +9,9 @@ public abstract class BaseState : NetworkBehaviour
 
     public abstract void ExitState();
 
+    public virtual void OnTickState()
+    {
+        
+    }
+
 }

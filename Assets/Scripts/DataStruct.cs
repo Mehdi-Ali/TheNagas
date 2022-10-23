@@ -6,10 +6,10 @@ public struct MoveData
     public float XAxis;
     public float ZAxis;
 
-    public MoveData(float xAxis, float yAxis)
+    public MoveData(float xAxis, float zAxis)
     {
         XAxis = xAxis;
-        ZAxis = yAxis;
+        ZAxis = zAxis;
     }
 }
 

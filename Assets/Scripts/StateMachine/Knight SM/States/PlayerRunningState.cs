@@ -1,3 +1,4 @@
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,28 +10,36 @@ public class PlayerRunningState : BaseState
     //Variables to store optimized Setter / getter parameter IDs
     int _RunningHash;
 
-    private void Awake() 
+    public override void OnStartNetwork()
     {
-        //Caching The Player State Manger
+        base.OnStartNetwork();
+
         _player = GetComponent<PlayerStateManger>();
         
-        //caching Hashes
-        _RunningHash = Animator.StringToHash("Running");
+        if (!Owner.IsLocalClient) return ;
+            _RunningHash = Animator.StringToHash("Running");
 
     }
 
     public override void EnterState()
     {
-        _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
-
         var statics = _player.Statics ;
         _player.ServerSetMoveAndRotateSpeed(statics.MovementSpeed, statics.RotationSpeed);
+
+        if (!IsOwner) return;
+        _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
 
     }
 
     public override void UpdateState()
     {
-       _player.ReadAndSetMovementInput(); 
+
+    }
+
+    [Client(RequireOwnership = true)]
+    public override void OnTickState()
+    {
+       _player.ReadAndSetMovementInput();  
     }
 
     public override void ExitState()

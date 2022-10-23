@@ -92,7 +92,9 @@ public class CSPMovement : NetworkBehaviour
         float xAxis = movementInput.x;
         float zAxis = movementInput.y;
 
-        if (xAxis == 0f && zAxis == 0f) return;
+        var IsMovementPressed = xAxis != 0 || zAxis != 0 ;
+
+        if (!IsMovementPressed) return;
         moveData = new MoveData(xAxis, zAxis);
     }
 
