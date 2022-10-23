@@ -46,6 +46,10 @@ public class PlayerStateManger : NetworkBehaviour
     private MoveData moveData;
     public  float MovementSpeed ;
 
+    //Variables to handle Abilities.
+    private AbilityData abilityData;
+    private bool _secondAbilityQueued;
+
     //Variables to handle Rotation
     Vector3 _positionToLookAt;
     Quaternion _targetRotation;
@@ -83,18 +87,6 @@ public class PlayerStateManger : NetworkBehaviour
     public void Awake()
     {
         CashingPlayerInstances() ;
-
-        CurrentState = IdleState;
-        CurrentState.EnterState();
-
-        
-        ReadyToSwitchState = true;
-        IsCastingAnAbility = false; 
-
-        _isAimingPressed = false;
-
-        CharacterController.enableOverlapRecovery = true ;
-
     }
 
     public override void OnStartNetwork()
@@ -102,8 +94,16 @@ public class PlayerStateManger : NetworkBehaviour
         base.OnStartNetwork();
         SubscribeToTimeManager(true);
 
+        CurrentState = IdleState;
+        CurrentState.EnterState();
+
+        ReadyToSwitchState = true;
+        IsCastingAnAbility = false; 
+        _isAimingPressed = false;
+
         if(IsServer || Owner.IsLocalClient)
             CharacterController.enabled = true ;
+            CharacterController.enableOverlapRecovery = true ;
 
         if (!Owner.IsLocalClient) return ;
         SubscriptionToPlayerControls();
@@ -118,7 +118,6 @@ public class PlayerStateManger : NetworkBehaviour
         if (Owner.IsLocalClient)
             _playerControls.DefaultMap.Disable();
     }
-
 
     private void CashingPlayerInstances()
     {
@@ -188,19 +187,60 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
+    #region Movement
 
-    [Client(RequireOwnership = true)]
     private void OnMovementInput(InputAction.CallbackContext context)
     {
-        ServerSwitchToRunningState();
+        RpcStartRunningState();
     }
 
     [ServerRpc(RunLocally = true)]
-    private void ServerSwitchToRunningState()
+    private void RpcStartRunningState()
     {
         IsMovementPressed = true ;
         if (CurrentState != RunningState) SwitchState(RunningState);
     }
+
+    #endregion
+
+    #region 2nd Ability
+
+    private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
+    {
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
+        _aimingRange = Statics.SecondAbilityRange;
+        ActiveHitBox = HitBoxes.HitBox2;
+        //if (!_isAimingPressed) AutoAim();
+        HitBoxes.HitBox2.gameObject.SetActive(true);
+        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
+    }
+
+    private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility) return;
+        //IsAutoAiming = false ;
+        HitBoxes.HitBox2.gameObject.SetActive(true);
+    }
+
+    private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
+    {
+        RpcStartSecondAbility();
+
+        RotatePlayerToHitBox();
+        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+        HitBoxes.HitBox2.gameObject.SetActive(false);
+    }
+
+    [ServerRpc(RunLocally = true)]
+    private void RpcStartSecondAbility()
+    {
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
+        _secondAbilityQueued = true ;
+        //finish here
+    }
+    
+    #endregion
 
     #region  NOT YET
 
@@ -249,32 +289,6 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.HitBox1.gameObject.SetActive(false);
     }
 
-    [Client(RequireOwnership = true)]
-    private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
-        _aimingRange = Statics.SecondAbilityRange;
-        ActiveHitBox = HitBoxes.HitBox2;
-        if (!_isAimingPressed) AutoAim();
-        HitBoxes.HitBox2.gameObject.SetActive(true);
-        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
-    }
-    [Client(RequireOwnership = true)]
-    private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
-    {
-        if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
-                !ReadyToSwitchState || IsCastingAnAbility) return;
-        IsAutoAiming = false ;
-        HitBoxes.HitBox2.gameObject.SetActive(true);
-    }
-    [Client(RequireOwnership = true)]
-    private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
-        RotatePlayerToHitBox();
-        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
-        HitBoxes.HitBox2.gameObject.SetActive(false);
-    }
 
     [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
@@ -340,34 +354,38 @@ public class PlayerStateManger : NetworkBehaviour
         if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         
         if ( _isAimingPressed) HandleAiming();
-        else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
+        //else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
 
     }
 
     private void TimeManager_OnTick()
     {
-        
-        if (IsOwner)
-        {
-            Reconciliate(default,false);
-            CurrentState.OnTickState();
-            MoveAndRotate(moveData, false);
-        }
+        CurrentState.OnTickState();
 
-        if (IsOwner || IsServer)
-        {
-            if (!CharacterController.isGrounded)
-            {
-                CharacterController.Move(_gravity * (float)base.TimeManager.TickDelta);
-            }
-        }
+        if (IsOwner) ClientSideLogic();
+        if (IsOwner || IsServer) SharedLogic();
+        if (IsServer) ServerSideLogic();
+    }
 
-        if (IsServer)
+    private void ClientSideLogic()
+    {
+        Reconciliate(default, false);
+        MoveAndRotate(moveData, false);
+    }
+
+    private void SharedLogic()
+    {
+        if (!CharacterController.isGrounded)
         {
-            MoveAndRotate(default, true);
-            ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);
-            Reconciliate(reconData, true);
+            CharacterController.Move(_gravity * (float)base.TimeManager.TickDelta);
         }
+    }
+
+    private void ServerSideLogic()
+    {
+        MoveAndRotate(default, true);
+        ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);
+        Reconciliate(reconData, true);
     }
 
     [Replicate]

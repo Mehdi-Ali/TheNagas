@@ -36,10 +36,9 @@ public class PlayerRunningState : BaseState
 
     }
 
-    [Client(RequireOwnership = true)]
     public override void OnTickState()
     {
-       _player.ReadAndSetMovementInput();  
+       if (IsOwner) _player.ReadAndSetMovementInput();  
     }
 
     public override void ExitState()
