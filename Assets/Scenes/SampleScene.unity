@@ -9146,6 +9146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1578302926602290175, guid: 5b5eb9764b341f14ea802678e4e30710,
         type: 3}
+      propertyPath: _networkBehaviours.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1578302926602290175, guid: 5b5eb9764b341f14ea802678e4e30710,
+        type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[0]
       value: 
       objectReference: {fileID: 394142471}

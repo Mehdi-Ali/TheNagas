@@ -23,7 +23,7 @@ public class CameraTarget : NetworkBehaviour
     public override void OnStopClient()
     {
         base.OnStopClient();
-       _camera.ClientConnected = false ;
-    }   
-}
+        _camera.ClientConnected = false ;
+    }
 
+}  

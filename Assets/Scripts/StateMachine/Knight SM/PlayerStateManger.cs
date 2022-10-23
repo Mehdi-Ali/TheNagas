@@ -376,9 +376,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void SharedLogic()
     {
         if (!CharacterController.isGrounded)
-        {
             CharacterController.Move(_gravity * (float)base.TimeManager.TickDelta);
-        }
     }
 
     private void ServerSideLogic()
@@ -404,6 +402,7 @@ public class PlayerStateManger : NetworkBehaviour
     [Reconcile]
     private void Reconciliate(ReconcileMoveData recData, bool asServer)
     {
+        if (!IsMovementPressed) return;
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;
     }

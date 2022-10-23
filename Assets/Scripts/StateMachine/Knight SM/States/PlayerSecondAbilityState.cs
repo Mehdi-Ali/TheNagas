@@ -13,7 +13,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     int _secondAbilityMultiplierHash ;
 
     // cooldown things
-    public string Id => _player.Statics.SecondAbilityAbilityName;
+    public string Id =>  OwnerId + _player.Statics.SecondAbilityAbilityName;
     public float CooldownDuration => _player.Statics.SecondAbilityCooldown;
     public Image Image => _player.CooldownUIManager.CooldownUI2.Image;
 

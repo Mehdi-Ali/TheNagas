@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using FishNet.Object;
 using UnityEngine;
 
-public class CameraFollowController : NetworkBehaviour
+public class CameraFollowController : MonoBehaviour
 {
     [Header("Scriptable Objects")]
 
@@ -18,17 +15,9 @@ public class CameraFollowController : NetworkBehaviour
     Vector3 controllerPosition;
     Vector3 _cameraPosition;
 
-
-
     public bool ClientConnected = false;
 
-    void Start()
-    {
-        controllerPosition = new Vector3();
-    }
-
-    // Update is called once per frame
-    void Update()
+    public void LateUpdate()
     {
         if (!ClientConnected) return ;
 
@@ -37,10 +26,8 @@ public class CameraFollowController : NetworkBehaviour
         Vector3 offset = _cameraSettings.Offset ;
         Vector3 rotation = _cameraSettings.Rotation ;
 
-        controllerPosition.x = _cameraPosition.x;
-        controllerPosition.z = _cameraPosition.z + offset.z;
-        controllerPosition.y = offset.y;
-
+        controllerPosition = _cameraPosition + new Vector3(0f , offset.y, offset.z);
+        
         this.transform.position = controllerPosition;
         this.transform.eulerAngles = rotation;
 
