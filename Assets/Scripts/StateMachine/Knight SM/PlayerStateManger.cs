@@ -194,7 +194,6 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     } 
 
-    [ServerRpc(RunLocally = true)]
     public void RotatePlayerToHitBox(Vector3 position)
     {
         transform.LookAt(position);
@@ -207,12 +206,14 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnMovementInput(InputAction.CallbackContext context)
     {
-        RpcStartRunningState();
+        StartRunningState();
     }
 
     [ServerRpc(RunLocally = true)]
-    private void RpcStartRunningState()
+    private void StartRunningState()
     {
+        if ( !IsOwner && !IsServer ) return ;
+
         IsMovementPressed = true ;
         if (CurrentState != RunningState) SwitchState(RunningState);
     }
@@ -241,14 +242,14 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        RpcStartSecondAbility();
+        StartSecondAbility();
     }
 
     [ServerRpc(RunLocally = true)]
-    private void RpcStartSecondAbility()
+    private void StartSecondAbility()
     {
-        
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return ;
+
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotatePlayerToHitBox(ActiveHitBox.transform.position);
 
@@ -450,9 +451,10 @@ public class PlayerStateManger : NetworkBehaviour
         IsMovementPressed = isMovementPressed;
     }
 
-    [ServerRpc(RunLocally = true)]
-    public void RpcSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
+    public void SetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
     {
+        if ( !IsOwner && !IsServer ) return ;
+
         MovementSpeed = movementSpeed;
         RotationSpeed = rotationSpeed;
     }
