@@ -38,6 +38,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     {
         _player.CooldownSystem.PutOnCooldown(this);
         Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _player.Statics.SecondAbilityAnimationSpeed);
+
         _player.NetworkAnimator.CrossFade(_secondAbilityHash, 0.1f, 0);
                 
         _player.ReadyToSwitchState = false;
@@ -54,7 +55,6 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     [ServerRpc(RunLocally = true)]
     private void RpcEnterState()
     {
-
     }
 
     public override void UpdateState() {}

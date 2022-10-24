@@ -50,7 +50,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     //Variables to handle Abilities.
     private AbilityData abilityData;
-    private bool _secondAbilityQueued;
 
     //Variables to handle Rotation
     Vector3 _positionToLookAt;
@@ -195,11 +194,13 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     } 
 
-    public void RotatePlayerToHitBox()
+    [ServerRpc(RunLocally = true)]
+    public void RotatePlayerToHitBox(Vector3 position)
     {
-        transform.LookAt(ActiveHitBox.transform);
-        IsAutoAiming = false ;
-        HitBoxes.transform.localPosition = Vector3.zero ;
+        transform.LookAt(position);
+        //IsAutoAiming = false ;
+        if (IsOwner)
+            HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
     #region Movement
@@ -241,33 +242,18 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
         RpcStartSecondAbility();
-
-        RotatePlayerToHitBox();
-        //if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
-        HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
     [ServerRpc(RunLocally = true)]
     private void RpcStartSecondAbility()
     {
-        _secondAbilityQueued = true ;
         
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+        RotatePlayerToHitBox(ActiveHitBox.transform.position);
 
-        // Build pos and rot data 
-        //finish here
-
-        if (IsOwner)
-        {
-            // unrelated stuff
-        }
-        
-        if (IsServer)
-        {
-
-        }
-
+        if (IsOwner) 
+            HitBoxes.HitBox2.gameObject.SetActive(false);
     }
     
     #endregion
@@ -343,7 +329,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
-        RotatePlayerToHitBox();
+        RotatePlayerToHitBox(ActiveHitBox.transform.position);
         HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
@@ -370,7 +356,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
-        RotatePlayerToHitBox();
+        RotatePlayerToHitBox(ActiveHitBox.transform.position);
         HitBoxes.HitBoxU.gameObject.SetActive(false);
     }
 

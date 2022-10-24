@@ -80,7 +80,7 @@ public class PlayerAutoAttackState : BaseState
         {
             _distance = _player.AutoAim();
 
-            _player.RotatePlayerToHitBox();
+            _player.RotatePlayerToHitBox(_player.ActiveHitBox.transform.position);
 
             if (_distance > _player.Statics.AutoAttackStopDistance)
             {
