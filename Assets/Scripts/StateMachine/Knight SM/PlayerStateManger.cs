@@ -33,7 +33,7 @@ public class PlayerStateManger : NetworkBehaviour
     // Class references to cache Instances.
     public CharacterController CharacterController;
     public CooldownSystem CooldownSystem;
-
+    public PlayerHitBoxesAndColliders HitBoxes;
     public PlayerAttackCollider ActiveAttackCollider;
     public NetworkAnimator NetworkAnimator;
     public PlayerAnimationsLength AnimationsLength; 
@@ -88,7 +88,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     private Player_Controls _playerControls;
     public CooldownUIManager CooldownUIManager;
-    public PlayerHitBoxesAndColliders HitBoxes;
     public PlayerHitBox ActiveHitBox;
 
     #endif
@@ -229,7 +228,6 @@ public class PlayerStateManger : NetworkBehaviour
         ActiveHitBox = HitBoxes.HitBox2;
         //if (!_isAimingPressed) AutoAim();
         HitBoxes.HitBox2.gameObject.SetActive(true);
-        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
     }
 
     private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
@@ -242,16 +240,17 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        StartSecondAbility();
+        StartSecondAbility(ActiveHitBox.transform.position);
     }
 
     [ServerRpc(RunLocally = true)]
-    private void StartSecondAbility()
+    private void StartSecondAbility(Vector3 target)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return ;
 
+        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
-        RotatePlayerToHitBox(ActiveHitBox.transform.position);
+        RotatePlayerToHitBox(target);
 
         if (IsOwner) 
             HitBoxes.HitBox2.gameObject.SetActive(false);

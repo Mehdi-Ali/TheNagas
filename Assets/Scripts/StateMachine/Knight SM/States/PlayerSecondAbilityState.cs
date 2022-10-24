@@ -17,7 +17,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
-        
+
         _player = GetComponent<PlayerStateManger>();
 
         _secondAbilityHash = Animator.StringToHash("SecondAbility");
@@ -32,16 +32,14 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     {
         _player.CooldownSystem.PutOnCooldown(this);
         Invoke(nameof(AttackComplete), _player.AnimationsLength.SecondAbilityDuration / _player.Statics.SecondAbilityAnimationSpeed);
+        _player.Animator.SetFloat(_secondAbilityMultiplierHash, _player.Statics.SecondAbilityAnimationSpeed);
 
         _player.NetworkAnimator.CrossFade(_secondAbilityHash, 0.1f, 0);
                 
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
 
-        if (!IsOwner) return;
-        _player.Animator.SetFloat(_secondAbilityMultiplierHash, _player.Statics.SecondAbilityAnimationSpeed);
-
-
+        if (IsServer)
         _player.HitBoxes.Targets.Clear();
         _player.ActiveAttackCollider.Collider.enabled = true ;
     }
@@ -57,6 +55,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         _player.SwitchState(_player.IdleState);
     }
 
+    [Server]
     void SecondAbilityStartEvent()
     {
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
