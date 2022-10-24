@@ -5,7 +5,7 @@ using UnityEngine.Animations;
 
 public class PlayerHitBoxesAndColliders : NetworkBehaviour
 {
-        #region Only Client Vars
+    #region Only Client Vars
     #if !UNITY_SERVER
    
     [SerializeField] public PlayerHitBox HitBoxAA;
@@ -37,7 +37,7 @@ public class PlayerHitBoxesAndColliders : NetworkBehaviour
     [SyncObject]
     public readonly SyncHashSet<EnemyBase> Targets = new();
 
-    // need to understand to decide hoz to separate this logic.
+    // TODO need to understand to decide hoz to separate this logic.
     private void Awake()
     {
         RotationConstraint = GetComponentInParent<RotationConstraint>();

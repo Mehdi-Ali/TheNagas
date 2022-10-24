@@ -21,7 +21,8 @@ public class PlayerRunningState : BaseState
         var statics = _player.Statics ;
         _player.SetMoveAndRotateSpeed(statics.MovementSpeed, statics.RotationSpeed);
 
-        _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
+        if (IsServer)
+            _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
     }
 
     public override void UpdateState(){}

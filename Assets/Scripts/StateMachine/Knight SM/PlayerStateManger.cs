@@ -367,7 +367,6 @@ public class PlayerStateManger : NetworkBehaviour
     {
         CurrentState.UpdateState();
 
-        if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         
         if ( _isAimingPressed) HandleAiming();
         //else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
@@ -376,6 +375,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void TimeManager_OnTick()
     {
+        if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
         CurrentState.OnTickState();
 
         if (IsOwner) ClientSideLogic();
