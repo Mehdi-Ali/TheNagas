@@ -20,7 +20,6 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.ThirdAbilityAbilityName;
     public float CooldownDuration => _player.Statics.ThirdAbilityCooldown;
-    public Image Image => _player.CooldownUIManager.CooldownUI3.Image;
 
     private void Awake()
     {
@@ -31,6 +30,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _thirdAbilityHash = Animator.StringToHash("ThirdAbility");
         _thirdAbilityMultiplierHash = Animator.StringToHash("ThirdAbility_Multiplier");
 
+        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI3.Image);
 
     }
 

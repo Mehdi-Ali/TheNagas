@@ -17,25 +17,6 @@ public class CSPMovement : NetworkBehaviour
 
     #region Subscriptions
 
-    private void SubscribeToTimeManager(bool subscribe)
-    {
-        if (base.TimeManager == null) return;
-        if (subscribe == _subscribed) return;
-
-        _subscribed = subscribe;
-
-        if (subscribe)
-        {
-            base.TimeManager.OnTick += TimeManager_OnTick;
-            base.TimeManager.OnPostTick += TimeManager_OnPostTick;
-        }
-        else
-        {
-            base.TimeManager.OnTick -= TimeManager_OnTick;
-            base.TimeManager.OnPostTick -= TimeManager_OnPostTick;
-        }
-    }
-
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
@@ -57,12 +38,32 @@ public class CSPMovement : NetworkBehaviour
         if (base.Owner.IsLocalClient)
             _playerControls.DefaultMap.Disable();
     }
+    
+    private void SubscribeToTimeManager(bool subscribe)
+    {
+        if (base.TimeManager == null) return;
+        if (subscribe == _subscribed) return;
+
+        _subscribed = subscribe;
+
+        if (subscribe)
+        {
+            base.TimeManager.OnTick += TimeManager_OnTick;
+            base.TimeManager.OnPostTick += TimeManager_OnPostTick;
+        }
+        else
+        {
+            base.TimeManager.OnTick -= TimeManager_OnTick;
+            base.TimeManager.OnPostTick -= TimeManager_OnPostTick;
+        }
+    }
+
    
    #endregion
 
     private void TimeManager_OnTick()
     {
-        if (base.IsOwner)
+        if (IsOwner)
         {
             Reconciliate(default, false);
             GetInput(out MoveData moveData);
@@ -70,7 +71,7 @@ public class CSPMovement : NetworkBehaviour
             // Here we can add the animation, sounds and effects...
         }
 
-        if (base.IsServer)
+        if (IsServer)
         {
             Move(default, true);
             ReconcileMoveData reconData = new ReconcileMoveData(transform.position, transform.rotation);

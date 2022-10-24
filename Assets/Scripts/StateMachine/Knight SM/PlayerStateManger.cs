@@ -32,15 +32,17 @@ public class PlayerStateManger : NetworkBehaviour
 
     // Class references to cache Instances.
     public CharacterController CharacterController;
-    private Player_Controls _playerControls;
     public CooldownSystem CooldownSystem;
-    public CooldownUIManager CooldownUIManager;
-    public PlayerAnimationsLength AnimationsLength;
-    public PlayerHitBoxesAndColliders HitBoxes;
-    public PlayerHitBox ActiveHitBox;
+
     public PlayerAttackCollider ActiveAttackCollider;
-    public Animator Animator;
     public NetworkAnimator NetworkAnimator;
+    public PlayerAnimationsLength AnimationsLength; 
+    public Animator Animator;
+
+
+
+
+
 
     //Variables to handle movement.
     private MoveData moveData;
@@ -79,6 +81,19 @@ public class PlayerStateManger : NetworkBehaviour
 
     // Network Variables.
     private bool _subscribed;
+    
+
+    
+    #region Only Client Vars
+    #if !UNITY_SERVER
+
+    private Player_Controls _playerControls;
+    public CooldownUIManager CooldownUIManager;
+    public PlayerHitBoxesAndColliders HitBoxes;
+    public PlayerHitBox ActiveHitBox;
+
+    #endif
+    #endregion
 
     #endregion
 
@@ -228,16 +243,31 @@ public class PlayerStateManger : NetworkBehaviour
         RpcStartSecondAbility();
 
         RotatePlayerToHitBox();
-        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+        //if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         HitBoxes.HitBox2.gameObject.SetActive(false);
     }
 
     [ServerRpc(RunLocally = true)]
     private void RpcStartSecondAbility()
     {
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
         _secondAbilityQueued = true ;
+        
+        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
+        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+
+        // Build pos and rot data 
         //finish here
+
+        if (IsOwner)
+        {
+            // unrelated stuff
+        }
+        
+        if (IsServer)
+        {
+
+        }
+
     }
     
     #endregion
@@ -394,9 +424,14 @@ public class PlayerStateManger : NetworkBehaviour
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         CharacterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
 
+        Rotate(move);
+
+    }
+
+    private void Rotate(Vector3 move)
+    {
         Quaternion targetRotation = Quaternion.LookRotation(move);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * (float)base.TimeManager.TickDelta);
-
     }
 
     [Reconcile]
@@ -430,7 +465,7 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
     [ServerRpc(RunLocally = true)]
-    public void ServerSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
+    public void RpcSetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
     {
         MovementSpeed = movementSpeed;
         RotationSpeed = rotationSpeed;

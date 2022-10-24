@@ -21,7 +21,6 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.UltimateAbilityAbilityName;
     public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
-        public Image Image => _player.CooldownUIManager.CooldownUIU.Image;
 
 
     private void Awake()
@@ -32,6 +31,8 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         //caching Hashes
         _ultimateHash = Animator.StringToHash("Ultimate");
         _ultimateMultiplierHash = Animator.StringToHash("Ultimate_Multiplier");
+
+        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUIU.Image);
 
     }
 

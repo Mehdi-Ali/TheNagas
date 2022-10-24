@@ -4,11 +4,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerRunningState : BaseState
 {
-    //A reference for the Player State Manger
     PlayerStateManger _player;
    
-    //Variables to store optimized Setter / getter parameter IDs
+    #region Only Client Vars
+    #if !UNITY_SERVER
+
     int _RunningHash;
+
+    #endif
+    #endregion
 
     public override void OnStartNetwork()
     {
@@ -18,38 +22,25 @@ public class PlayerRunningState : BaseState
         
         if (!Owner.IsLocalClient) return ;
             _RunningHash = Animator.StringToHash("Running");
-
     }
 
     public override void EnterState()
     {
         var statics = _player.Statics ;
-        _player.ServerSetMoveAndRotateSpeed(statics.MovementSpeed, statics.RotationSpeed);
+        _player.RpcSetMoveAndRotateSpeed(statics.MovementSpeed, statics.RotationSpeed);
 
         if (!IsOwner) return;
         _player.NetworkAnimator.CrossFade(_RunningHash, 0.1f, 0);
-
     }
 
-    public override void UpdateState()
-    {
-
-    }
+    public override void UpdateState(){}
 
     public override void OnTickState()
     {
        if (IsOwner) _player.ReadAndSetMovementInput();  
     }
 
-    public override void ExitState()
-    {
-
-    }
-
-   
-    
-    
-
+    public override void ExitState(){}
    
 }
 

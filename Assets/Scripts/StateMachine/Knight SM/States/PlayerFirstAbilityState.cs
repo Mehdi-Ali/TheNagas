@@ -17,7 +17,6 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     // cooldown things
     public string Id => _player.Statics.FirstAbilityAbilityName;
     public float CooldownDuration => _player.Statics.FirstAbilityCooldown ;
-    public Image Image => _player.CooldownUIManager.CooldownUI1.Image;
 
     private void Awake()
     {
@@ -27,6 +26,8 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         //caching Hashes
         _firstAbilityHash = Animator.StringToHash("FirstAbility");
         _firstAbilityMultiplierHash = Animator.StringToHash("FirstAbility_Multiplier");
+
+        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI1.Image);
 
     }
 
