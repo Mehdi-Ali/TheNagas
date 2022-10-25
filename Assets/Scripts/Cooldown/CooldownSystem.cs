@@ -5,7 +5,6 @@ using FishNet.Object;
 
 public class CooldownSystem : NetworkBehaviour
 {
-    // TODO make it a SyncObject that only sync to client.
     private readonly List<CooldownData> cooldowns = new();
 
     #if !UNITY_SERVER
@@ -32,11 +31,11 @@ public class CooldownSystem : NetworkBehaviour
     }
     private void ProcessCooldowns()
     {
-        float deltaTime = Time.deltaTime ;
+        float tickDelta = (float)TimeManager.TickDelta ;
 
         for (int i = cooldowns.Count - 1; i >= 0 ; i--)
         {
-            var remainingTime = cooldowns[i].DecrementalCooldown(deltaTime);
+            var remainingTime = cooldowns[i].DecrementalCooldown(tickDelta);
 
             if (IsOwner) 
                 ImageDictionary[cooldowns[i].Id].fillAmount = remainingTime / cooldowns[i].Cooldown;

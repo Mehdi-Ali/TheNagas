@@ -641,7 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _allowTickDropping: 1
   _maximumFrameTicks: 3
-  _tickRate: 144
+  _tickRate: 60
   _pingInterval: 1
   _timingInterval: 2
   _physicsMode: 1

@@ -1,4 +1,5 @@
 using FishNet.Component.Animating;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
@@ -240,14 +241,20 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        StartSecondAbility(ActiveHitBox.transform.position);
+        RpcSecondAbility(ActiveHitBox.transform.position);
     }
 
-    [ServerRpc(RunLocally = true)]
-    private void StartSecondAbility(Vector3 target)
+    [ServerRpc]
+    private void RpcSecondAbility(Vector3 target)
     {
         if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return ;
+        RpcStartSecondAbility(Owner, target);
 
+    }
+
+    [TargetRpc(RunLocally = true)]
+    private void RpcStartSecondAbility(NetworkConnection conn, Vector3 target)
+    {
         ActiveAttackCollider = HitBoxes.AttackCollider2 ;
         if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
         RotatePlayerToHitBox(target);
