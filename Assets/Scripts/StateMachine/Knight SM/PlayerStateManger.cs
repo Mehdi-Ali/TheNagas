@@ -40,11 +40,6 @@ public class PlayerStateManger : NetworkBehaviour
     public PlayerAnimationsLength AnimationsLength; 
     public Animator Animator;
 
-
-
-
-
-
     //Variables to handle movement.
     private MoveData moveData;
     public  float MovementSpeed ;
@@ -236,11 +231,11 @@ public class PlayerStateManger : NetworkBehaviour
         if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
         //IsAutoAiming = false ;
-        HitBoxes.HitBox2.gameObject.SetActive(true);
     }
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
+        HitBoxes.HitBox2.gameObject.SetActive(true);
         RpcSecondAbility(ActiveHitBox.transform.position);
     }
 
