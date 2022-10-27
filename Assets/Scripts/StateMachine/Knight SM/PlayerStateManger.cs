@@ -65,7 +65,7 @@ public class PlayerStateManger : NetworkBehaviour
     private bool _isAimingPressed ;
 
     //Auto Aiming vars
-    public bool IsAutoAiming ;
+    //public bool IsAutoAiming ;
     private float _smallestDistance;
     public Transform TargetPos;
     private float _distance;
@@ -242,17 +242,18 @@ public class PlayerStateManger : NetworkBehaviour
     [ServerRpc]
     private void RpcSecondAbility(Vector3 target)
     {
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return ;
-        RpcStartSecondAbility(Owner, target);
-
+        RpcStartSecondAbility(Owner, target, CooldownSystem.IsOnCooldown(SecondAbilityState.Id));
     }
 
     [TargetRpc(RunLocally = true)]
-    private void RpcStartSecondAbility(NetworkConnection conn, Vector3 target)
+    private void RpcStartSecondAbility(NetworkConnection conn, Vector3 target, bool isOnCooldown)
     {
-        ActiveAttackCollider = HitBoxes.AttackCollider2 ;
-        if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
-        RotatePlayerToHitBox(target);
+        if (!isOnCooldown)
+        {
+            ActiveAttackCollider = HitBoxes.AttackCollider2 ;
+            if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
+            RotatePlayerToHitBox(target);
+        }
 
         if (IsOwner) 
             HitBoxes.HitBox2.gameObject.SetActive(false);
@@ -262,7 +263,6 @@ public class PlayerStateManger : NetworkBehaviour
 
     #region  NOT YET
 
-    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false;
@@ -271,18 +271,15 @@ public class PlayerStateManger : NetworkBehaviour
         ActiveAttackCollider = HitBoxes.AttackColliderAA ;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
-    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputPerformed(InputAction.CallbackContext context)
     {
         if (AutoAttackState.Continue == false) AutoAttackState.Continue = true ;
     }
-    [Client(RequireOwnership = true)]
     private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false ;
     }
 
-    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
@@ -291,7 +288,6 @@ public class PlayerStateManger : NetworkBehaviour
         ActiveHitBox = HitBoxes.HitBox1;
         ActiveAttackCollider = HitBoxes.AttackCollider1 ;
     }
-    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
@@ -299,7 +295,6 @@ public class PlayerStateManger : NetworkBehaviour
 
         HitBoxes.HitBox1.gameObject.SetActive(true);
     }
-    [Client(RequireOwnership = true)]
     private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
@@ -308,25 +303,22 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
 
-    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
         _aimingRange = Statics.ThirdAbilityRange;
         ActiveHitBox = HitBoxes.HitBox3;
-        if (!_isAimingPressed) AutoAim();
+        //if (!_isAimingPressed) AutoAim();
         HitBoxes.HitBox3.gameObject.SetActive(true);
         ActiveAttackCollider = HitBoxes.AttackCollider3 ;
     }
-    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(ThirdAbilityState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
-                IsAutoAiming = false ;
+                //IsAutoAiming = false ;
         HitBoxes.HitBox3.gameObject.SetActive(true);
     }
-    [Client(RequireOwnership = true)]
     private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
@@ -335,25 +327,22 @@ public class PlayerStateManger : NetworkBehaviour
         HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
-    [Client(RequireOwnership = true)]
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
         _aimingRange = Statics.UltimateAbilityRange;
         ActiveHitBox = HitBoxes.HitBoxU;
-        if (!_isAimingPressed) AutoAim();
+        // if (!_isAimingPressed) AutoAim();
         HitBoxes.HitBoxU.gameObject.SetActive(true);
           ActiveAttackCollider = HitBoxes.AttackColliderU ;
     }
-    [Client(RequireOwnership = true)]
     private void OnUltimateInputPerformed(InputAction.CallbackContext context)
     {
         if (    CooldownSystem.IsOnCooldown(UltimateState.Id) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
         HitBoxes.HitBoxU.gameObject.SetActive(true);
-        IsAutoAiming = false ;
+        //IsAutoAiming = false ;
     }
-    [Client(RequireOwnership = true)]
     private void OnUltimateInputCanceled(InputAction.CallbackContext context)
     {
         if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
@@ -460,34 +449,34 @@ public class PlayerStateManger : NetworkBehaviour
         RotationSpeed = rotationSpeed;
     }
     
-    public float AutoAim()
-    {
-        _smallestDistance = _aimingRange;
-        TargetPos = null ;
+    // public float AutoAim()
+    // {
+    //     _smallestDistance = _aimingRange;
+    //     TargetPos = null ;
 
-        //extract this as a variable ?
-        Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
-        foreach (Collider enemy in _nearbyEnemies)
-        {
-            if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
-            {
-                _distance = Vector3.Distance(this.transform.position, target.transform.position);
-                if (_distance > _smallestDistance ) continue ;
-                _smallestDistance = _distance;
-                TargetPos = target.transform;
+    //     //extract this as a variable ?
+    //     Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
+    //     foreach (Collider enemy in _nearbyEnemies)
+    //     {
+    //         if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
+    //         {
+    //             _distance = Vector3.Distance(this.transform.position, target.transform.position);
+    //             if (_distance > _smallestDistance ) continue ;
+    //             _smallestDistance = _distance;
+    //             TargetPos = target.transform;
                 
-            }
-        }
+    //         }
+    //     }
 
-        if (TargetPos == null) return -1f ;
+    //     if (TargetPos == null) return -1f ;
         
-        IsAutoAiming = true ;
-        Debug.Log("Auto aimed to: " + TargetPos.name + " distance is: " + _smallestDistance);
-        HitBoxes.transform.LookAt(TargetPos);
-        if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetPos.position;
+    //     IsAutoAiming = true ;
+    //     Debug.Log("Auto aimed to: " + TargetPos.name + " distance is: " + _smallestDistance);
+    //     HitBoxes.transform.LookAt(TargetPos);
+    //     if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetPos.position;
 
-        return _smallestDistance ;
-    }
+    //     return _smallestDistance ;
+    // }
  
     public void SwitchState(BaseState state)
     {   

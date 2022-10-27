@@ -43,7 +43,9 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         {
             _player.NetworkAnimator.CrossFade(_secondAbilityHash, 0.1f, 0);
             _player.HitBoxes.Targets.Clear();
-            _player.ActiveAttackCollider.Collider.enabled = true ;
+
+            _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            _player.ActiveAttackCollider.Collider.enabled = true;
         }
     }
 

@@ -26,11 +26,11 @@ public class PlayerAttackCollider : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        // if any problem occurs  
-        // && _hitBoxes.Targets.Contains(other.GetComponent<EnemyBase>())
         
         if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy) ) 
             {
+                // if any problem occurs  
+                // && _hitBoxes.Targets.Contains(other.GetComponent<EnemyBase>())
                 _hitBoxes.Targets.Remove(damageableEnemy);
             }        
     }

@@ -35,7 +35,7 @@ MonoBehaviour:
   FirstAbilityTicks: 7
   SecondAbilityAbilityName: Slash
   SecondAbilityAnimationSpeed: 2
-  SecondAbilityCooldown: 2
+  SecondAbilityCooldown: 0.5
   SecondAbilityDamage: 20
   SecondAbilityRange: 5
   ThirdAbilityAbilityName: Dash

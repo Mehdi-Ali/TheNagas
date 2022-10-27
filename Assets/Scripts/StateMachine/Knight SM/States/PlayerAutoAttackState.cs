@@ -55,10 +55,10 @@ public class PlayerAutoAttackState : BaseState
     {
         if (_dashed) return ;
 
-        if (_player.IsMovementPressed && !_player.IsAutoAiming )
-        {
-            //_player.MoveAndRotate(_player.Statics.AutoAttackDashingMovementSpeed);
-        }
+        // if (_player.IsMovementPressed && !_player.IsAutoAiming )
+        // {
+        //     _player.MoveAndRotate(_player.Statics.AutoAttackDashingMovementSpeed);
+        // }
 
         if ( _distance > _player.Statics.AutoAttackStopDistance )
         {
@@ -78,7 +78,7 @@ public class PlayerAutoAttackState : BaseState
     {
         if (!_player.IsMovementPressed)
         {
-            _distance = _player.AutoAim();
+            //_distance = _player.AutoAim();
 
             _player.RotatePlayerToHitBox(_player.ActiveHitBox.transform.position);
 

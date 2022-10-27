@@ -20,6 +20,7 @@ public class PlayerHitBox : MonoBehaviour
         { 
             _hitBoxes.RotationConstraint.transform.localRotation  = Quaternion.Euler(Vector3.zero);
             _hitBoxes.RotationConstraint.transform.localPosition = Vector3.zero;
+            _hitBoxes.transform.localRotation  = Quaternion.Euler(Vector3.zero);
             _hitBoxes.transform.localPosition = Vector3.zero ;
         }
     }
