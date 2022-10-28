@@ -1,3 +1,4 @@
+using System;
 using FishNet.Component.Animating;
 using FishNet.Connection;
 using FishNet.Object;
@@ -161,8 +162,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void HandleAiming()
     {
         ReadAndSetAimingInput();
-        HandleAimingRotation();
-        if (ActiveHitBox.Movable) HandleAimingLocation();
+        HandleAimingRotationAndLocation();
     }
 
     private void ReadAndSetAimingInput()
@@ -176,18 +176,16 @@ public class PlayerStateManger : NetworkBehaviour
                             _currentAimingInput.y != 0 ;
     }
 
-    private void HandleAimingRotation()
+    private void HandleAimingRotationAndLocation()
     {
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
         HitBoxes.transform.rotation = Quaternion.Slerp(  HitBoxes.transform.rotation,
                                                         _currentAimingRotation,
                                                         100f );
-    }
 
-    private void HandleAimingLocation()
-    {   
-        HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
-    } 
+        if (ActiveHitBox.Movable) 
+            HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
+    }
 
     public void RotatePlayerToHitBox(Vector3 position)
     {
@@ -207,6 +205,7 @@ public class PlayerStateManger : NetworkBehaviour
     [ServerRpc(RunLocally = true)]
     private void StartRunningState()
     {
+        // TODO check if [ServerRpc(RunLocally = true)] only runs on server and owner
         if ( !IsOwner && !IsServer ) return ;
 
         IsMovementPressed = true ;
@@ -215,25 +214,41 @@ public class PlayerStateManger : NetworkBehaviour
 
     #endregion
 
-    #region 2nd Ability
-
-    private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
+    private void SetupOnInputStarted(string cooldownId, float aimingRange, PlayerHitBox activeHitBox)
     {
-        if (CooldownSystem.IsOnCooldown(SecondAbilityState.Id)) return;
-        _aimingRange = Statics.SecondAbilityRange;
-        ActiveHitBox = HitBoxes.HitBox2;
+        if (CooldownSystem.IsOnCooldown(cooldownId)) return;
+        _aimingRange = aimingRange;
+        ActiveHitBox = activeHitBox;
         //if (!_isAimingPressed) AutoAim();
-        HitBoxes.HitBox2.gameObject.SetActive(true);
+        ActiveHitBox.gameObject.SetActive(true);
     }
-
-    private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
+    
+    private void SetupOnInputPerformed(string cooldownId)
     {
-        if (    CooldownSystem.IsOnCooldown(SecondAbilityState.Id) ||
+        if (CooldownSystem.IsOnCooldown(cooldownId) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
         //IsAutoAiming = false ;
     }
 
+    #region 2nd Ability
+
+    private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
+    {
+        SetupOnInputStarted(SecondAbilityState.Id, Statics.SecondAbilityRange, HitBoxes.HitBox2);
+    }
+
+    private void OnSecondAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        SetupOnInputPerformed(SecondAbilityState.Id);
+    }
+
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
+    {
+        // add the arguments and set it up in a smart way so that we don't send a lot of data in rpc.
+        SetupOnInputPerformed(); 
+    }
+
+    private void SetupOnInputPerformed()
     {
         HitBoxes.HitBox2.gameObject.SetActive(true);
         RpcSecondAbility(ActiveHitBox.transform.position);

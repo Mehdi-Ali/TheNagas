@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHitBox : MonoBehaviour
 {
     PlayerHitBoxesAndColliders _hitBoxes;
-    [SerializeField] public bool Movable;
+    public bool Movable;
 
     private void Awake() 
     {
