@@ -230,6 +230,123 @@ public class PlayerStateManger : NetworkBehaviour
         //IsAutoAiming = false ;
     }
 
+    private void SetupOnInputPerformed(Abilities ability)
+    {
+        switch (ability)
+        {
+            case Abilities.First:
+                ActiveHitBox = HitBoxes.HitBox1 ;
+                break;
+                
+            case Abilities.Second:
+                ActiveHitBox = HitBoxes.HitBox2 ;
+                break;
+
+            case Abilities.Third:
+                ActiveHitBox = HitBoxes.HitBox3 ;
+                break;
+
+            case Abilities.Ultimate:
+                ActiveHitBox = HitBoxes.HitBoxU ;
+                break;
+        }
+
+        ActiveHitBox.gameObject.SetActive(true);
+        RpcSecondAbility(ability, ActiveHitBox.transform.position);
+    }
+
+    [ServerRpc]
+    private void RpcSecondAbility(Abilities ability, Vector3 target)
+    {
+        string cooldownId = null;
+         
+        switch (ability)
+        {
+            case Abilities.First:
+                cooldownId = FirstAbilityState.Id;
+                break;
+                
+            case Abilities.Second:
+                cooldownId = SecondAbilityState.Id;
+                break;
+
+            case Abilities.Third:
+                cooldownId = ThirdAbilityState.Id;
+                break;
+
+            case Abilities.Ultimate:
+                cooldownId = UltimateState.Id;
+                break;
+        }
+
+        RpcStartSecondAbility(Owner, ability, target, CooldownSystem.IsOnCooldown(cooldownId));
+    }
+
+    [TargetRpc(RunLocally = true)]
+    private void RpcStartSecondAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
+    {
+        if (!isOnCooldown)
+        {
+            BaseState abilityState = null;
+            switch (ability)
+            {
+                case Abilities.First:
+                    ActiveAttackCollider = HitBoxes.AttackCollider1;
+                    abilityState = FirstAbilityState;
+                    break;
+                    
+                case Abilities.Second:
+                    ActiveAttackCollider =  HitBoxes.AttackCollider2;
+                    abilityState = SecondAbilityState;
+                    break;
+
+                case Abilities.Third:
+                    ActiveAttackCollider =  HitBoxes.AttackCollider3;
+                    abilityState = ThirdAbilityState;
+                    break;
+
+                case Abilities.Ultimate:
+                    ActiveAttackCollider =  HitBoxes.AttackColliderU;
+                    abilityState = UltimateState;
+                    break;
+            } 
+
+            if (CurrentState != abilityState) SwitchState(abilityState);
+            RotatePlayerToHitBox(target);
+
+            if (IsOwner)
+                ActiveHitBox.gameObject.SetActive(false);
+        }
+    }
+    
+    #region 1st Ability
+    
+    private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
+    {
+        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
+        _aimingRange = Statics.FirstAbilityRange;
+        HitBoxes.HitBox1.gameObject.SetActive(true);
+        ActiveHitBox = HitBoxes.HitBox1;
+        ActiveAttackCollider = HitBoxes.AttackCollider1 ;
+    }
+
+    private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
+                !ReadyToSwitchState || IsCastingAnAbility ) return;
+
+        HitBoxes.HitBox1.gameObject.SetActive(true);
+    }
+    
+    private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
+    {
+        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
+        if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
+        HitBoxes.HitBox1.gameObject.SetActive(false);
+    }
+
+    #endregion
+
     #region 2nd Ability
 
     private void OnSecondAbilityInputStarted(InputAction.CallbackContext context)
@@ -244,36 +361,9 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        // add the arguments and set it up in a smart way so that we don't send a lot of data in rpc.
-        SetupOnInputPerformed(); 
+        SetupOnInputPerformed(Abilities.Second);
     }
 
-    private void SetupOnInputPerformed()
-    {
-        HitBoxes.HitBox2.gameObject.SetActive(true);
-        RpcSecondAbility(ActiveHitBox.transform.position);
-    }
-
-    [ServerRpc]
-    private void RpcSecondAbility(Vector3 target)
-    {
-        RpcStartSecondAbility(Owner, target, CooldownSystem.IsOnCooldown(SecondAbilityState.Id));
-    }
-
-    [TargetRpc(RunLocally = true)]
-    private void RpcStartSecondAbility(NetworkConnection conn, Vector3 target, bool isOnCooldown)
-    {
-        if (!isOnCooldown)
-        {
-            ActiveAttackCollider = HitBoxes.AttackCollider2 ;
-            if (CurrentState != SecondAbilityState) SwitchState(SecondAbilityState);
-            RotatePlayerToHitBox(target);
-        }
-
-        if (IsOwner) 
-            HitBoxes.HitBox2.gameObject.SetActive(false);
-    }
-    
     #endregion
 
     #region  NOT YET
@@ -294,29 +384,6 @@ public class PlayerStateManger : NetworkBehaviour
     {
         AutoAttackState.Continue = false ;
     }
-
-    private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
-        _aimingRange = Statics.FirstAbilityRange;
-        HitBoxes.HitBox1.gameObject.SetActive(true);
-        ActiveHitBox = HitBoxes.HitBox1;
-        ActiveAttackCollider = HitBoxes.AttackCollider1 ;
-    }
-    private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
-    {
-        if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
-                !ReadyToSwitchState || IsCastingAnAbility ) return;
-
-        HitBoxes.HitBox1.gameObject.SetActive(true);
-    }
-    private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
-        if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        HitBoxes.HitBox1.gameObject.SetActive(false);
-    }
-
 
     private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
     {

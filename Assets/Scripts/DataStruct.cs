@@ -1,5 +1,12 @@
 using UnityEngine;
 
+enum Abilities
+{
+    First,
+    Second,
+    Third,
+    Ultimate
+}
 
 public struct MoveData
 {
