@@ -53,13 +53,6 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
 
     public override void ExitState() {}
 
-    void AttackComplete()
-    {
-        _player.ReadyToSwitchState = true;
-        _player.IsCastingAnAbility = false ;
-        _player.SwitchState(_player.IdleState);
-    }
-
     [Server]
     void SecondAbilityStartEvent()
     {
@@ -70,6 +63,14 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
 
         _player.ActiveAttackCollider.Collider.enabled = false ;
     }
+    
+    void AttackComplete()
+    {
+        _player.ReadyToSwitchState = true;
+        _player.IsCastingAnAbility = false ;
+        _player.SwitchState(_player.IdleState);
+    }
+
 
 
 

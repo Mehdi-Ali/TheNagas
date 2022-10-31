@@ -230,8 +230,9 @@ public class PlayerStateManger : NetworkBehaviour
         //IsAutoAiming = false ;
     }
 
-    private void SetupOnInputPerformed(Abilities ability)
+    private void SetupOnInputCanceled(Abilities ability)
     {
+        // TODO the active HitBox is already set in the OnInputStart so maybe this block is useless.
         switch (ability)
         {
             case Abilities.First:
@@ -252,11 +253,11 @@ public class PlayerStateManger : NetworkBehaviour
         }
 
         ActiveHitBox.gameObject.SetActive(true);
-        RpcSecondAbility(ability, ActiveHitBox.transform.position);
+        RpcSetupOnInputCanceled(ability, ActiveHitBox.transform.position);
     }
 
     [ServerRpc]
-    private void RpcSecondAbility(Abilities ability, Vector3 target)
+    private void RpcSetupOnInputCanceled(Abilities ability, Vector3 target)
     {
         string cooldownId = null;
          
@@ -279,11 +280,11 @@ public class PlayerStateManger : NetworkBehaviour
                 break;
         }
 
-        RpcStartSecondAbility(Owner, ability, target, CooldownSystem.IsOnCooldown(cooldownId));
+        RpcDoAbility(Owner, ability, target, CooldownSystem.IsOnCooldown(cooldownId));
     }
 
     [TargetRpc(RunLocally = true)]
-    private void RpcStartSecondAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
+    private void RpcDoAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
     {
         if (!isOnCooldown)
         {
@@ -323,26 +324,17 @@ public class PlayerStateManger : NetworkBehaviour
     
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
     {
-        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return;
-        _aimingRange = Statics.FirstAbilityRange;
-        HitBoxes.HitBox1.gameObject.SetActive(true);
-        ActiveHitBox = HitBoxes.HitBox1;
-        ActiveAttackCollider = HitBoxes.AttackCollider1 ;
+        SetupOnInputStarted(FirstAbilityState.Id, Statics.FirstAbilityRange, HitBoxes.HitBox1);
     }
 
     private void OnFirstAbilityInputPerformed(InputAction.CallbackContext context)
     {
-        if (    CooldownSystem.IsOnCooldown(FirstAbilityState.Id) ||
-                !ReadyToSwitchState || IsCastingAnAbility ) return;
-
-        HitBoxes.HitBox1.gameObject.SetActive(true);
+        SetupOnInputPerformed(FirstAbilityState.Id);
     }
     
     private void OnFirstAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        if (CooldownSystem.IsOnCooldown(FirstAbilityState.Id)) return ;
-        if (CurrentState != FirstAbilityState) SwitchState(FirstAbilityState);
-        HitBoxes.HitBox1.gameObject.SetActive(false);
+        SetupOnInputCanceled(Abilities.First);
     }
 
     #endregion
@@ -361,7 +353,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnSecondAbilityInputCanceled(InputAction.CallbackContext context)
     {
-        SetupOnInputPerformed(Abilities.Second);
+        SetupOnInputCanceled(Abilities.Second);
     }
 
     #endregion
@@ -523,11 +515,12 @@ public class PlayerStateManger : NetworkBehaviour
         IsMovementPressed = isMovementPressed;
     }
 
-    public void SetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed)
+    public void SetMoveAndRotateSpeed(float movementSpeed, float rotationSpeed )
     {
         if ( !IsOwner && !IsServer ) return ;
 
         MovementSpeed = movementSpeed;
+        if (rotationSpeed == 0f) return ;
         RotationSpeed = rotationSpeed;
     }
     
