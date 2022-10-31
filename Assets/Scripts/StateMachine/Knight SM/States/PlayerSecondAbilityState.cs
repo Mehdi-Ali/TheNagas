@@ -60,15 +60,14 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         {
             enemy.TakeDamage(_player.Statics.SecondAbilityDamage);
         }
-
-        _player.ActiveAttackCollider.Collider.enabled = false ;
     }
-    
+
     void AttackComplete()
     {
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false ;
         _player.SwitchState(_player.IdleState);
+        _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 
 

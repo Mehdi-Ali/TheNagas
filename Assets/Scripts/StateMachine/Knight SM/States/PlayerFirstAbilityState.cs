@@ -53,8 +53,8 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         }
 
         // ! this part is diff
-        var statics = _player.Statics ;
-        _player.SetMoveAndRotateSpeed(statics.FirstAbilityMovementSpeed, 0f);
+        _player.NeedsMoveAndRotate = true;
+        _player.SetMoveAndRotateSpeed(_player.Statics.FirstAbilityMovementSpeed, 0f);
         
     }
 
@@ -80,7 +80,6 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         _tickTimer += (float)base.TimeManager.TickDelta;
         if (_tickTimer >= _tickPeriod)
         {
-            Debug.Log("F");
             foreach (EnemyBase enemy in _player.HitBoxes.Targets)
             {
                 enemy.TakeDamage(_player.Statics.FirstAbilityDamage);
@@ -97,6 +96,9 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
         _player.ActiveAttackCollider.Collider.enabled = false ;
+
+        // ! this part is diff
+        _player.NeedsMoveAndRotate = false;
 
     }
 }

@@ -47,6 +47,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     //Variables to handle Abilities.
     private AbilityData abilityData;
+    public Vector3 TargetPosition;
 
     //Variables to handle Rotation
     Vector3 _positionToLookAt;
@@ -63,6 +64,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool ReadyToSwitchState;
     public bool IsCastingAnAbility ;
     public bool IsMovementPressed ;
+    public bool NeedsMoveAndRotate;
     private bool _isAimingPressed ;
 
     //Auto Aiming vars
@@ -108,7 +110,8 @@ public class PlayerStateManger : NetworkBehaviour
         CurrentState.EnterState();
 
         ReadyToSwitchState = true;
-        IsCastingAnAbility = false; 
+        IsCastingAnAbility = false;
+        NeedsMoveAndRotate = false;
         _isAimingPressed = false;
 
         if(IsServer || Owner.IsLocalClient)
@@ -259,6 +262,8 @@ public class PlayerStateManger : NetworkBehaviour
     [ServerRpc]
     private void RpcSetupOnInputCanceled(Abilities ability, Vector3 target)
     {
+        TargetPosition = target ;
+
         string cooldownId = null;
          
         switch (ability)
@@ -358,6 +363,24 @@ public class PlayerStateManger : NetworkBehaviour
 
     #endregion
 
+    #region 3rd Ability
+
+    private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
+    {
+        SetupOnInputStarted(ThirdAbilityState.Id, Statics.ThirdAbilityRange, HitBoxes.HitBox3);
+    }
+    private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
+    {
+        SetupOnInputPerformed(ThirdAbilityState.Id);
+    }
+    private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
+    {
+        SetupOnInputCanceled(Abilities.Third);
+    }
+
+
+    #endregion
+
     #region  NOT YET
 
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
@@ -375,30 +398,6 @@ public class PlayerStateManger : NetworkBehaviour
     private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
     {
         AutoAttackState.Continue = false ;
-    }
-
-    private void OnThirdAbilityInputStarted(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
-        _aimingRange = Statics.ThirdAbilityRange;
-        ActiveHitBox = HitBoxes.HitBox3;
-        //if (!_isAimingPressed) AutoAim();
-        HitBoxes.HitBox3.gameObject.SetActive(true);
-        ActiveAttackCollider = HitBoxes.AttackCollider3 ;
-    }
-    private void OnThirdAbilityInputPerformed(InputAction.CallbackContext context)
-    {
-        if (    CooldownSystem.IsOnCooldown(ThirdAbilityState.Id) ||
-                !ReadyToSwitchState || IsCastingAnAbility) return;
-                //IsAutoAiming = false ;
-        HitBoxes.HitBox3.gameObject.SetActive(true);
-    }
-    private void OnThirdAbilityInputCanceled(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(ThirdAbilityState.Id)) return;
-        if (CurrentState != SecondAbilityState) SwitchState(ThirdAbilityState);
-        RotatePlayerToHitBox(ActiveHitBox.transform.position);
-        HitBoxes.HitBox3.gameObject.SetActive(false);
     }
 
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
@@ -440,7 +439,15 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void TimeManager_OnTick()
     {
-        if (CurrentState != IdleState && !IsCastingAnAbility && !IsMovementPressed ) SwitchState(IdleState);
+        if (!IsCastingAnAbility)
+        {
+            if(CurrentState != IdleState && !IsMovementPressed)
+                SwitchState(IdleState);
+
+            if (CurrentState != RunningState && IsMovementPressed )
+                SwitchState(RunningState);
+        }
+                
         CurrentState.OnTickState();
 
         if (IsOwner) ClientSideLogic();
@@ -470,7 +477,7 @@ public class PlayerStateManger : NetworkBehaviour
     [Replicate]
     private void MoveAndRotate(MoveData moveData, bool asServer, bool replaying = false)
     {
-        if (!IsMovementPressed) return;
+        if (!IsMovementPressed || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
 
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         CharacterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
@@ -488,7 +495,8 @@ public class PlayerStateManger : NetworkBehaviour
     [Reconcile]
     private void Reconciliate(ReconcileMoveData recData, bool asServer)
     {
-        if (!IsMovementPressed) return;
+        if (!IsMovementPressed || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
+
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;
     }

@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class PlayerIdleState : BaseState
 {
-    //A reference for the Player State Manger
+
     PlayerStateManger _player;
 
-    //Variables to store optimized Setter / getter parameter IDs
-    protected int _Idle;
+    protected int _IdleHash;
 
     public void Awake()
     {
@@ -15,7 +14,7 @@ public class PlayerIdleState : BaseState
         _player = GetComponent<PlayerStateManger>();
         
         //caching Hashes
-        _Idle = Animator.StringToHash("Idle");
+        _IdleHash = Animator.StringToHash("Idle");
 
     }
     
@@ -23,17 +22,11 @@ public class PlayerIdleState : BaseState
     public override void EnterState()
     {
         if(IsServer)
-            _player.NetworkAnimator.CrossFade(_Idle, 0.15f, 0);
+            _player.NetworkAnimator.CrossFade(_IdleHash, 0.15f, 0);
     }
 
-    public override void UpdateState()
-    {
+    public override void UpdateState(){}
 
-    }
-
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState(){}
 
 }
