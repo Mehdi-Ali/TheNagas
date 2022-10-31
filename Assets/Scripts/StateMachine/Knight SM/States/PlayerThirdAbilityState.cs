@@ -52,12 +52,15 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
             _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
             _player.ActiveAttackCollider.Collider.enabled = true ;
 
-            // ! this part is diff
-            _tLerp = 0.0f;
-            _tCoeff = _player.Statics.ThirdAbilityAnimationSpeed / _player.AnimationsLength.ThirdAbilityDuration ;
-            _start = transform.position;
-            _end = _player.TargetPosition;
+
+            _targetsToRemove.Clear();
         }
+        
+        // ! this part is diff
+        _tLerp = 0.0f;
+        _tCoeff = _player.Statics.ThirdAbilityAnimationSpeed / _player.AnimationsLength.ThirdAbilityDuration ;
+        _start = transform.position;
+        _end = _player.TargetPosition;
 
     }
 
@@ -66,12 +69,9 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     public override void OnTickState()
     {
         base.OnTickState();
-
-        if (IsServer)
-            ThirdAbilityStartEvent();
+        ThirdAbilityStartEvent();
     }
 
-    [Server]
     private void ThirdAbilityStartEvent()
     {
         _tLerp += (float)base.TimeManager.TickDelta * _tCoeff ;
@@ -80,12 +80,15 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
+            if (_targetsToRemove.Contains(enemy))
+                continue;
+            
             enemy.TakeDamage(_player.Statics.ThirdAbilityDamage);
 
             _targetsToRemove.Add(enemy);
             Debug.Log("F");
         }
-        
+
         _player.HitBoxes.Targets.ExceptWith(_targetsToRemove);
     }
 

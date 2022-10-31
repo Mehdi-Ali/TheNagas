@@ -262,7 +262,6 @@ public class PlayerStateManger : NetworkBehaviour
     [ServerRpc]
     private void RpcSetupOnInputCanceled(Abilities ability, Vector3 target)
     {
-        TargetPosition = target ;
 
         string cooldownId = null;
          
@@ -291,6 +290,8 @@ public class PlayerStateManger : NetworkBehaviour
     [TargetRpc(RunLocally = true)]
     private void RpcDoAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
     {
+        TargetPosition = target ;
+        
         if (!isOnCooldown)
         {
             BaseState abilityState = null;
