@@ -1,86 +1,83 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerUltimateState : BaseState, IHasCooldown
 {
-    //Variables...
+    PlayerStateManger _player;
+
+    public string Id => _player.Statics.UltimateAbilityAbilityName;
+    public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
+
+    int _ultimateHash;
+    int _ultimateMultiplierHash;
+
+
     bool _grounded ;
     float _tLerp ;
+    float _tCoeff ;
     Vector3 _end;
     Vector3 _start;
 
 
-    //Cashing the Player State Manager : Should do to all state scripts 
-    PlayerStateManger _player;
-
-    //Variables to store optimized Setter / getter parameter IDs
-    int _ultimateHash;
-    int _ultimateMultiplierHash;
-
-    // cooldown things
-    public string Id => _player.Statics.UltimateAbilityAbilityName;
-    public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
-
-
-    private void Awake()
+    public override void OnStartNetwork()
     {
-        //Caching The Player State Manger
-        _player = GetComponent<PlayerStateManger>();
+        base.OnStartNetwork();
 
-        //caching Hashes
+        _player = GetComponent<PlayerStateManger>();
+        
         _ultimateHash = Animator.StringToHash("Ultimate");
         _ultimateMultiplierHash = Animator.StringToHash("Ultimate_Multiplier");
 
+        if (!Owner.IsLocalClient) return ;
         _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUIU.Image);
-
     }
 
     public override void EnterState()
     {
-        //check cooldown
+
         _player.CooldownSystem.PutOnCooldown(this);
-
-        _grounded = false;
-        _tLerp = 0.0f ;
-        _start = transform.position ;
-        _end = _player.HitBoxes.transform.position ;
-
-
-        Invoke( nameof(AttackComplete),
-                (_player.AnimationsLength.UltimateDuration / _player.Statics.UltimateAbilityAnimationSpeed ));
-        
+        Invoke( nameof(AttackComplete),(_player.AnimationsLength.UltimateDuration / _player.Statics.UltimateAbilityAnimationSpeed ));
         _player.Animator.SetFloat(_ultimateMultiplierHash, _player.Statics.UltimateAbilityAnimationSpeed);
-        _player.NetworkAnimator.CrossFade(_ultimateHash, 0.1f, 0);
-
-
+        
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
-
-        _player.HitBoxes.Targets.Clear();
-        _player.ActiveAttackCollider.Collider.enabled = true ;
-    }
-
-    public override void UpdateState()
-    {
-  
-        if (_grounded) return;
-        _tLerp += Time.deltaTime * _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
-        transform.position = Vector3.Lerp( _start, _end, _tLerp );
-
-    }
-
-    public override void ExitState()
-    {
         
+        if (IsServer)
+        {
+            _player.NetworkAnimator.CrossFade(_ultimateHash, 0.1f, 0);
+        _player.HitBoxes.Targets.Clear();
+
+        _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        _player.ActiveAttackCollider.Collider.enabled = true ;
+
+        }
+
+        // ! this part is diff
+        _grounded = false;
+        _tLerp = 0.0f ;
+        _tCoeff = _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
+        _start = transform.position ;
+        _end = _player.TargetPosition ;
+
     }
 
-    void AttackComplete()
+    public override void UpdateState(){}
+    public override void OnTickState()
     {
-        _player.ReadyToSwitchState = true;
-        _player.IsCastingAnAbility = false;
-        _player.SwitchState(_player.IdleState);
+        base.OnTickState();
+        UltimateAbilityStartEvent();
     }
+
+    private void UltimateAbilityStartEvent()
+    {
+        if (_grounded) return;
+        _tLerp += (float)base.TimeManager.TickDelta * _tCoeff ;
+        transform.position = Vector3.Lerp( _start, _end, _tLerp );
+    }
+
+    public override void ExitState(){}
 
     void UltimateStartEvent()
     {
@@ -93,10 +90,14 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         {
             enemy.TakeDamage(_player.Statics.UltimateAbilityDamage);
         }
-
-        _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 
-
+    void AttackComplete()
+    {
+        _player.ReadyToSwitchState = true;
+        _player.IsCastingAnAbility = false;
+        _player.SwitchState(_player.IdleState);
+        _player.ActiveAttackCollider.Collider.enabled = false ; 
+    }
 
 }

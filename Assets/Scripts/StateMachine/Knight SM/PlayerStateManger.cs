@@ -291,7 +291,7 @@ public class PlayerStateManger : NetworkBehaviour
     private void RpcDoAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
     {
         TargetPosition = target ;
-        
+
         if (!isOnCooldown)
         {
             BaseState abilityState = null;
@@ -379,10 +379,25 @@ public class PlayerStateManger : NetworkBehaviour
         SetupOnInputCanceled(Abilities.Third);
     }
 
+    #endregion
+
+    #region Ultimate
+    private void OnUltimateInputStarted(InputAction.CallbackContext context)
+    {
+        SetupOnInputStarted(UltimateState.Id, Statics.UltimateAbilityRange, HitBoxes.HitBoxU);
+    }
+    private void OnUltimateInputPerformed(InputAction.CallbackContext context)
+    {
+        SetupOnInputPerformed(UltimateState.Id);
+    }
+    private void OnUltimateInputCanceled(InputAction.CallbackContext context)
+    {
+        SetupOnInputCanceled(Abilities.Ultimate);
+    }
 
     #endregion
 
-    #region  NOT YET
+    #region  AutoAttack
 
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
@@ -401,31 +416,8 @@ public class PlayerStateManger : NetworkBehaviour
         AutoAttackState.Continue = false ;
     }
 
-    private void OnUltimateInputStarted(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
-        _aimingRange = Statics.UltimateAbilityRange;
-        ActiveHitBox = HitBoxes.HitBoxU;
-        // if (!_isAimingPressed) AutoAim();
-        HitBoxes.HitBoxU.gameObject.SetActive(true);
-          ActiveAttackCollider = HitBoxes.AttackColliderU ;
-    }
-    private void OnUltimateInputPerformed(InputAction.CallbackContext context)
-    {
-        if (    CooldownSystem.IsOnCooldown(UltimateState.Id) ||
-                !ReadyToSwitchState || IsCastingAnAbility) return;
-        HitBoxes.HitBoxU.gameObject.SetActive(true);
-        //IsAutoAiming = false ;
-    }
-    private void OnUltimateInputCanceled(InputAction.CallbackContext context)
-    {
-        if (CooldownSystem.IsOnCooldown(UltimateState.Id)) return;
-        if (CurrentState != SecondAbilityState) SwitchState(UltimateState);
-        RotatePlayerToHitBox(ActiveHitBox.transform.position);
-        HitBoxes.HitBoxU.gameObject.SetActive(false);
-    }
-
     #endregion
+
 
     [Client(RequireOwnership = true)]
     public void Update()

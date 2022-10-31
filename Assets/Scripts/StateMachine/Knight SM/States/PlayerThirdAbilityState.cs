@@ -18,7 +18,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     float _tCoeff;
     Vector3 _end;
     Vector3 _start;
-    public HashSet<EnemyBase> _targetsToRemove = new HashSet<EnemyBase>();
+    public HashSet<EnemyBase> _damagedTargets = new HashSet<EnemyBase>();
 
 
     public override void OnStartNetwork()
@@ -52,10 +52,10 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
             _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
             _player.ActiveAttackCollider.Collider.enabled = true ;
 
-
-            _targetsToRemove.Clear();
+            // ! this part is diff
+            _damagedTargets.Clear();
         }
-        
+
         // ! this part is diff
         _tLerp = 0.0f;
         _tCoeff = _player.Statics.ThirdAbilityAnimationSpeed / _player.AnimationsLength.ThirdAbilityDuration ;
@@ -80,16 +80,16 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
-            if (_targetsToRemove.Contains(enemy))
+            if (_damagedTargets.Contains(enemy))
                 continue;
             
             enemy.TakeDamage(_player.Statics.ThirdAbilityDamage);
 
-            _targetsToRemove.Add(enemy);
-            Debug.Log("F");
+            _damagedTargets.Add(enemy);
+
         }
 
-        _player.HitBoxes.Targets.ExceptWith(_targetsToRemove);
+        _player.HitBoxes.Targets.ExceptWith(_damagedTargets);
     }
 
     public override void ExitState(){}
