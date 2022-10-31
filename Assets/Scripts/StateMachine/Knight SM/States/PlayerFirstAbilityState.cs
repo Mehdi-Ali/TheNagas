@@ -54,7 +54,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _player.NeedsMoveAndRotate = true;
-        _player.SetMoveAndRotateSpeed(_player.Statics.FirstAbilityMovementSpeed, 0f);
+        _player.SetMoveAndRotateSpeed(_player.Statics.FirstAbilityMovementSpeed, 0.0f);
         
     }
 

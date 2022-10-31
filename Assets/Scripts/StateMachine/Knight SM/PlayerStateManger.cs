@@ -222,19 +222,22 @@ public class PlayerStateManger : NetworkBehaviour
         AutoAttackState.Continue = false;
         _aimingRange = Statics.AutoAttackRange;
         ActiveHitBox = HitBoxes.HitBoxAA;
-        RpcSetupOnAutoAttackInputStarted();
+        RpcSetupOnAutoAttackInputStarted(ActiveHitBox.transform.position);
     }
 
     [ServerRpc(RunLocally = true)]
-    private void RpcSetupOnAutoAttackInputStarted()
+    private void RpcSetupOnAutoAttackInputStarted(Vector3 target)
     {
-        if (IsServer)
-            ActiveAttackCollider = HitBoxes.AttackColliderAA;
-
-        TargetPosition = ActiveHitBox.transform.position;
+        ActiveAttackCollider = HitBoxes.AttackColliderAA;
+        TargetPosition = target;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
     }
 
+    [ServerRpc(RunLocally = true)]
+    private void RpcSetContinueStatus(bool status)
+    {
+        AutoAttackState.Continue = status;
+    }
     private void SetupOnInputStarted(string cooldownId, float aimingRange, PlayerHitBox activeHitBox)
     {
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
@@ -400,6 +403,7 @@ public class PlayerStateManger : NetworkBehaviour
     #endregion
 
     #region Ultimate
+
     private void OnUltimateInputStarted(InputAction.CallbackContext context)
     {
         SetupOnInputStarted(UltimateState.Id, Statics.UltimateAbilityRange, HitBoxes.HitBoxU);
@@ -423,11 +427,11 @@ public class PlayerStateManger : NetworkBehaviour
     }
     private void OnAutoAttackInputPerformed(InputAction.CallbackContext context)
     {
-        if (AutoAttackState.Continue == false) AutoAttackState.Continue = true ;
+        RpcSetContinueStatus(true);
     }
     private void OnAutoAttackInputcanceled(InputAction.CallbackContext context)
     {
-        AutoAttackState.Continue = false ;
+        RpcSetContinueStatus(false);
     }
 
     #endregion
