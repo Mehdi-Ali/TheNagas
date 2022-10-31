@@ -217,6 +217,24 @@ public class PlayerStateManger : NetworkBehaviour
 
     #endregion
 
+    private void SetupOnAutoAttackInputStarted()
+    {
+        AutoAttackState.Continue = false;
+        _aimingRange = Statics.AutoAttackRange;
+        ActiveHitBox = HitBoxes.HitBoxAA;
+        RpcSetupOnAutoAttackInputStarted();
+    }
+
+    [ServerRpc(RunLocally = true)]
+    private void RpcSetupOnAutoAttackInputStarted()
+    {
+        if (IsServer)
+            ActiveAttackCollider = HitBoxes.AttackColliderAA;
+
+        TargetPosition = ActiveHitBox.transform.position;
+        if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
+    }
+
     private void SetupOnInputStarted(string cooldownId, float aimingRange, PlayerHitBox activeHitBox)
     {
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
@@ -225,7 +243,7 @@ public class PlayerStateManger : NetworkBehaviour
         //if (!_isAimingPressed) AutoAim();
         ActiveHitBox.gameObject.SetActive(true);
     }
-    
+
     private void SetupOnInputPerformed(string cooldownId)
     {
         if (CooldownSystem.IsOnCooldown(cooldownId) ||
@@ -401,11 +419,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnAutoAttackInputStarted(InputAction.CallbackContext context)
     {
-        AutoAttackState.Continue = false;
-        _aimingRange = Statics.AutoAttackRange;
-        ActiveHitBox = HitBoxes.HitBoxAA;
-        ActiveAttackCollider = HitBoxes.AttackColliderAA ;
-        if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
+        SetupOnAutoAttackInputStarted();
     }
     private void OnAutoAttackInputPerformed(InputAction.CallbackContext context)
     {
