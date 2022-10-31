@@ -67,8 +67,8 @@ public class PlayerStateManger : NetworkBehaviour
     public bool NeedsMoveAndRotate;
     private bool _isAimingPressed ;
 
-    //Auto Aiming vars
-    //public bool IsAutoAiming ;
+
+    public bool IsAutoAiming ;
     private float _smallestDistance;
     public Transform TargetPos;
     private float _distance;
@@ -539,34 +539,34 @@ public class PlayerStateManger : NetworkBehaviour
         RotationSpeed = rotationSpeed;
     }
     
-    // public float AutoAim()
-    // {
-    //     _smallestDistance = _aimingRange;
-    //     TargetPos = null ;
+    public float AutoAim()
+    {
+        _smallestDistance = _aimingRange;
+        TargetPos = null ;
 
-    //     //extract this as a variable ?
-    //     Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
-    //     foreach (Collider enemy in _nearbyEnemies)
-    //     {
-    //         if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
-    //         {
-    //             _distance = Vector3.Distance(this.transform.position, target.transform.position);
-    //             if (_distance > _smallestDistance ) continue ;
-    //             _smallestDistance = _distance;
-    //             TargetPos = target.transform;
+        //extract this as a variable ?
+        Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
+        foreach (Collider enemy in _nearbyEnemies)
+        {
+            if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
+            {
+                _distance = Vector3.Distance(this.transform.position, target.transform.position);
+                if (_distance > _smallestDistance ) continue ;
+                _smallestDistance = _distance;
+                TargetPos = target.transform;
                 
-    //         }
-    //     }
+            }
+        }
 
-    //     if (TargetPos == null) return -1f ;
+        if (TargetPos == null) return -1f ;
         
-    //     IsAutoAiming = true ;
-    //     Debug.Log("Auto aimed to: " + TargetPos.name + " distance is: " + _smallestDistance);
-    //     HitBoxes.transform.LookAt(TargetPos);
-    //     if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetPos.position;
+        IsAutoAiming = true ;
+        Debug.Log("Auto aimed to: " + TargetPos.name + " distance is: " + _smallestDistance);
+        HitBoxes.transform.LookAt(TargetPos);
+        if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetPos.position;
 
-    //     return _smallestDistance ;
-    // }
+        return _smallestDistance ;
+    }
  
     public void SwitchState(BaseState state)
     {   

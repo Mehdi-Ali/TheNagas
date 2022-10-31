@@ -557,7 +557,7 @@ MonoBehaviour:
   _animator: {fileID: 7324678761862502599}
   _smoothFloats: 1
   _synchronizeInterval: 0.1
-  _clientAuthoritative: 1
+  _clientAuthoritative: 0
   _sendToOwner: 0
 --- !u!114 &3779916510067581742
 MonoBehaviour:

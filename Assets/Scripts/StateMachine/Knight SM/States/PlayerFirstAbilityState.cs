@@ -58,14 +58,13 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         
     }
 
-    public override void UpdateState()
-    {
-        if (IsOwner)
-            _player.ReadAndSetMovementInput();
-    }
+    public override void UpdateState(){}
     public override void OnTickState()
     {
         base.OnTickState();
+
+        if (IsOwner)
+            _player.ReadAndSetMovementInput();
 
         if (IsServer)
             FirstAbilityStartEvent();
