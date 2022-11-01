@@ -6,16 +6,12 @@ public class PlayerIdleState : BaseState
 
     PlayerStateManger _player;
 
-    protected int _IdleHash;
+    int _IdleHash;
 
     public void Awake()
     {
-        //Caching The Player State Manger
         _player = GetComponent<PlayerStateManger>();
-        
-        //caching Hashes
         _IdleHash = Animator.StringToHash("Idle");
-
     }
     
     

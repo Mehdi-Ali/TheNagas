@@ -70,10 +70,4 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         _player.ActiveAttackCollider.Collider.enabled = false ;
     }
 
-
-
-
-
-
-
 }

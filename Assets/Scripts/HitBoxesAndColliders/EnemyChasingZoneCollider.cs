@@ -32,13 +32,9 @@ public class EnemyChasingZoneCollider : MonoBehaviour
         if (other.TryGetComponent<PlayerBase>(out PlayerBase targetToChase))
             {
                 _hitBoxes.TargetsToChase.Add(targetToChase);
-
-                if (_hitBoxes.TargetsToChase.Count == 1)
-                    _enemy.TargetPlayer = targetToChase;
-                else
-                    UpdatingTheTarget();
-
-                _enemy.StartChasing();
+                
+                if (_enemy.CurrentState != _enemy.ChasingState)
+                    _enemy.SwitchState(_enemy.ChasingState);
             }
     }
 
@@ -49,32 +45,9 @@ public class EnemyChasingZoneCollider : MonoBehaviour
         if (other.TryGetComponent<PlayerBase>(out PlayerBase targetToChase) ) 
             {
                 _hitBoxes.TargetsToChase.Remove(targetToChase);
-
-                if (_hitBoxes.TargetsToChase.Count == 0)
-                {
-                    _enemy.TargetPlayer = null;
-                    return;
-                }
-                
-                UpdatingTheTarget();
-                
-                _enemy.StartChasing();
             }        
     }
 
-    private void UpdatingTheTarget()
-    {
-        var smallestDistance = _collider.radius;
-
-        foreach(PlayerBase targetToChase in _hitBoxes.TargetsToChase)
-        {
-            var  _distance = Vector3.Distance(this.transform.position, targetToChase.transform.position);
-            if (_distance > smallestDistance ) continue ;
-
-            smallestDistance = _distance;
-            _enemy.TargetPlayer = targetToChase;
-        }
-    }
 
 
 }

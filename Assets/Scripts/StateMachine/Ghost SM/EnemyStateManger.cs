@@ -55,6 +55,9 @@ public class EnemyStateManger : NetworkBehaviour
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
+
+        if(!IsServer) return ;
+        
         SubscribeToTimeManager(true);
 
         CurrentState = IdleState;
@@ -83,18 +86,14 @@ public class EnemyStateManger : NetworkBehaviour
 
     public void Update()
     {
-        CurrentState.UpdateState();
+        if (IsServer)
+            CurrentState.UpdateState();
     }
 
     private void TimeManager_OnTick()
     {
-        CurrentState.OnTickState();
-    }
-
-    public void StartChasing()
-    {
-        if (TargetPlayer == null) return;
-        else if (ReadyToSwitchState) SwitchState(ChasingState);
+        if (IsServer)
+            CurrentState.OnTickState();
     }
 
     public void SwitchState(BaseState state)

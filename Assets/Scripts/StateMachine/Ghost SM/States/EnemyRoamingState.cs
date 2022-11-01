@@ -5,22 +5,15 @@ using UnityEngine;
 
 public class EnemyRoamingState : BaseState
 {    
-    //A reference for the Player State Manger
     EnemyStateManger _enemy;
 
-    //Variables to store optimized Setter / getter parameter IDs
     int _RunningHash;
 
-    // utilities 
     private Vector3 _roamingPos ;
 
     public void Awake()
     {
-
-        //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
-
-        //caching Hashes
         _RunningHash = Animator.StringToHash("Running");
 
         _roamingPos = transform.position ;
@@ -30,23 +23,25 @@ public class EnemyRoamingState : BaseState
     public override void EnterState()
     {
         _enemy.NetworkAnimator.CrossFade(_RunningHash, 0.15f, 0);
+
+        // TODO move to awake once the design is set.
         _enemy.NavAgent.speed = _enemy.Statics.RoamingSpeed ;
 
         _roamingPos = GetRandomPosition();
         _roamingPos.y = transform.position.y ;
-
-
         
+        _enemy.NavAgent.destination = _roamingPos ;
     }
 
-    public override void UpdateState()
+    public override void UpdateState(){}
+
+    public override void OnTickState()
     {
-        _enemy.NavAgent.destination = _roamingPos ;
+        base.OnTickState();
 
         if (Vector3.Distance(transform.position, _roamingPos) < 1.0f)
-        {
             StopRoaming();
-        }
+
     }
 
     public override void ExitState(){}

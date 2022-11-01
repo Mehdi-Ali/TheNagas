@@ -12,8 +12,8 @@ public class EnemyStaticsScriptableObject : ScriptableObject
 
     public float MaxHealth ;
     public float VisionRange ;
+    //public float DropAggroRange = VisionRange * 1.5f ;
     public float AttackRange ;
-    public float DropAggroRange ;
     public float MinRoamingPause ;
     public float MaxRoamingPause ;
     public float RoamingSpeed ;

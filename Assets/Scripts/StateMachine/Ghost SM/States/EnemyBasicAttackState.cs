@@ -2,79 +2,71 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using FishNet.Object;
+using FishNet.Connection;
 
 public class EnemyBasicAttackState : BaseState
 {    
     EnemyStateManger _enemy;
+    EnemyStaticsScriptableObject _statics;
 
-    // Cashing Instances
     private BasicAttackSpawner _spawner ;
 
-    //prefabs
     [SerializeField] private EnemyProjectile _projectilePrefab ;
 
-    private ObjectPool<EnemyProjectile> _pool ;
-
-
-    //Variables to store optimized Setter / getter parameter IDs
     int _basicAttackHash;
     int _basicAttackMultiplierHash;
 
-
-    // utilities 
+    private ObjectPool<EnemyProjectile> _pool ;
     private int _attackCounter ;
     private Vector3 _direction ;
     private Quaternion _lookRotation ;
     private EnemyProjectile _projectile ;
-
-    // utilities 
     private bool _doLookAt ;
 
 
     private void Awake()
     {
-        //Pooling
-        _pool = new ObjectPool<EnemyProjectile>(
-
-        () => {return Instantiate(_projectilePrefab);},
-
-        _projectile => {_projectile.gameObject.SetActive(true);},
-
-        _projectile => {_projectile.gameObject.SetActive(false);},
-
-        _projectile => {Destroy(_projectile.gameObject);},
-
-        false, 2,2 );
-    }
-
-    
-    public void Start()
-    {
-
         _enemy = GetComponent<EnemyStateManger>();
         _spawner = GetComponentInChildren<BasicAttackSpawner>();
+        _statics = _enemy.Statics;
 
-        //caching Hashes
         _basicAttackHash = Animator.StringToHash("BasicAttack");
         _basicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
 
-        //Init things
         _attackCounter = 0 ;
 
+        PoolingSetUp();
     }
+
+    private void PoolingSetUp()
+    {
+        _pool = new ObjectPool<EnemyProjectile>(
+
+        () => { return Instantiate(_projectilePrefab); },
+
+        _projectile => { _projectile.gameObject.SetActive(true); },
+
+        _projectile => { _projectile.gameObject.SetActive(false); },
+
+        _projectile => { Destroy(_projectile.gameObject); },
+
+        false, 2, 2);
+    }
+
     public override void EnterState()
     {
-        _enemy.Animator.SetFloat(_basicAttackMultiplierHash, _enemy.Statics.BasicAttackAnimationSpeed);
+        _enemy.Animator.SetFloat(_basicAttackMultiplierHash, _statics.BasicAttackAnimationSpeed);
 
         if (_attackCounter < 2)
         {
-            _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(true);
-            Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _enemy.Statics.BasicAttackAnimationSpeed );
+            RpcHitBoxDisplay(Owner, true);
+            Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _statics.BasicAttackAnimationSpeed);
 
             _enemy.NetworkAnimator.CrossFade(_basicAttackHash, 0.15f, 0);
-            _enemy.ReadyToSwitchState = false ;
+            _enemy.ReadyToSwitchState = false;
 
-            _attackCounter++ ;
+            _attackCounter++;
         }
         else if (_attackCounter == 2)
         {
@@ -83,21 +75,32 @@ public class EnemyBasicAttackState : BaseState
         }
 
         _doLookAt = true;
-
     }
 
-    public override void UpdateState()
+    [TargetRpc]
+    private void RpcHitBoxDisplay(NetworkConnection conn, bool status)
+    {
+        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(status);
+    }
+
+    public override void OnTickState()
+    {
+        base.OnTickState();
+        Rotate();
+    }
+
+    private void Rotate()
     {
         if (!_doLookAt) return;
+
         _direction = (_enemy.TargetPlayer.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.BasicAttackRotationSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _statics.BasicAttackRotationSpeed);
     }
 
-    public override void ExitState()
-    {
-        
-    }
+    public override void UpdateState(){}
+
+    public override void ExitState(){}
 
     void AttackComplete()
     {
@@ -109,21 +112,18 @@ public class EnemyBasicAttackState : BaseState
     {
         _doLookAt = false;        
 
-        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(false);
+        RpcHitBoxDisplay(Owner, false);
 
         _projectile = _pool.Get();
-
-
+        
         _projectile.transform.position = _spawner.transform.position; 
         _projectile.transform.rotation = _spawner.transform.rotation; 
-        _projectile.Damage = _enemy.Statics.BasicAttackDamage ;
-        _projectile.Speed = _enemy.Statics.BasicAttackProjectionSpeed ;
-        _projectile.Range = _enemy.Statics.AttackRange ;
+        _projectile.Damage = _statics.BasicAttackDamage ;
+        _projectile.Speed = _statics.BasicAttackProjectionSpeed ;
+        _projectile.Range = _statics.AttackRange ;
 
         _projectile.Init(CollidedAction);
 
-
-        //_enemy.HitBoxes.BasicCollider.Collider.enabled = false ; // we don't have any 
     }
 
     private void CollidedAction(EnemyProjectile _projectile)

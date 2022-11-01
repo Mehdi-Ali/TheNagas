@@ -6,30 +6,22 @@ public class EnemyIdleState : BaseState
 {
     EnemyStateManger _Enemy;
 
-    //Variables to store optimized Setter / getter parameter IDs
-    protected int _Idle;
+    int _IdleHash;
 
     public  void Awake()
     {
-        //Caching The Player State Manger
         _Enemy = GetComponent<EnemyStateManger>();
-        
-        //caching Hashes
-        _Idle = Animator.StringToHash("Idle");
-        
+        _IdleHash = Animator.StringToHash("Idle");
     }
+
     public override void EnterState()
     {
-        _Enemy.NetworkAnimator.CrossFade(_Idle, 0.15f, 0);
-
-        Invoke(nameof(GoRoam), Random.Range(_Enemy.Statics.MinRoamingPause , _Enemy.Statics.MaxRoamingPause));
-
+        _Enemy.NetworkAnimator.CrossFade(_IdleHash, 0.15f, 0);
+        var statics = _Enemy.Statics;
+        Invoke(nameof(GoRoam), Random.Range(statics.MinRoamingPause , statics.MaxRoamingPause));
     }
 
-    public override void UpdateState()
-    {
-
-    }
+    public override void UpdateState(){}
 
     public override void ExitState(){}
 
