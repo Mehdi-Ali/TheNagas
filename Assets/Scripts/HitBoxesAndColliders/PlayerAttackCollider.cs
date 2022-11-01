@@ -17,9 +17,9 @@ public class PlayerAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy))
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase target))
             {
-                _hitBoxes.Targets.Add(damageableEnemy);
+                _hitBoxes.Targets.Add(target);
             }
     }
 
@@ -27,11 +27,9 @@ public class PlayerAttackCollider : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         
-        if (other.TryGetComponent<EnemyBase>(out EnemyBase damageableEnemy) ) 
+        if (other.TryGetComponent<EnemyBase>(out EnemyBase target) ) 
             {
-                // if any problem occurs  
-                // && _hitBoxes.Targets.Contains(other.GetComponent<EnemyBase>())
-                _hitBoxes.Targets.Remove(damageableEnemy);
+                _hitBoxes.Targets.Remove(target);
             }        
     }
 

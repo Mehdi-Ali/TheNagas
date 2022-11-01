@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyIdleState : BaseState
 {
-    //A reference for the Player State Manger
     EnemyStateManger _Enemy;
 
     //Variables to store optimized Setter / getter parameter IDs
@@ -32,10 +31,7 @@ public class EnemyIdleState : BaseState
 
     }
 
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState(){}
 
     private void GoRoam()
     {

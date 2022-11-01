@@ -1,3 +1,4 @@
+using System;
 using FishNet.Component.Animating;
 using FishNet.Object;
 using UnityEngine;
@@ -5,16 +6,21 @@ using UnityEngine.AI ;
 
 public class EnemyStateManger : NetworkBehaviour
 {
+    #region Scriptable Objects
+
     [Header("Scriptable Objects")]
     [SerializeField]
     public EnemyStaticsScriptableObject Statics ;
 
     [Space(10)]
 
+    #endregion
+
+    #region Fields and Properties 
+
     //Initiating the states.
     public BaseState CurrentState;
     public EnemyIdleState IdleState ;
-    public EnemyRunningState RunningState ;
     public EnemyDeadState DeadState ;
     public EnemyRoamingState RoamingState ;
     public EnemyChasingState ChasingState ;
@@ -36,29 +42,36 @@ public class EnemyStateManger : NetworkBehaviour
     // TODO find object when the client is ON
     public PlayerStateManger Player ;
 
+    public PlayerBase TargetPlayer;
+
 
     //StateMachine Variables (logic and animation)
     public bool ReadyToSwitchState;
+    private bool _subscribed;
 
+    #endregion
+
+    #region Execution
 
     public void Awake()
     {
-        CashingEnemyInstances() ;
+        CashingEnemyInstances();
+    }
+
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+        SubscribeToTimeManager(true);
 
         CurrentState = IdleState;
         CurrentState.EnterState();
 
-        // we`ll see if we don't use it in Enemy we move it to Player
         ReadyToSwitchState = true;
-
-
-
     }
 
     private void CashingEnemyInstances()
     {
         IdleState = GetComponent<EnemyIdleState>();
-        RunningState = GetComponent<EnemyRunningState>();
         DeadState = GetComponent<EnemyDeadState>();
 
         Animator = GetComponent<Animator>();
@@ -79,6 +92,7 @@ public class EnemyStateManger : NetworkBehaviour
         CurrentState.UpdateState();
 
         //TODO turn the target into an array Targets and make this a for each loop
+        
         if (Player == null) {GettingTarget();}
         else if (ReadyToSwitchState &&
                  Vector3.Distance(transform.position, Player.transform.position) < Statics.VisionRange)
@@ -86,6 +100,11 @@ public class EnemyStateManger : NetworkBehaviour
             SwitchState(ChasingState);
         }
 
+    }
+
+    private void TimeManager_OnTick()
+    {
+        CurrentState.OnTickState();
     }
 
     public void GettingTarget()
@@ -106,4 +125,20 @@ public class EnemyStateManger : NetworkBehaviour
         }
 
     }
+
+    private void SubscribeToTimeManager(bool subscribe)
+    {
+        if (base.TimeManager == null) return;
+        if (subscribe == _subscribed) return;
+
+        _subscribed = subscribe;
+
+        if (subscribe)
+            base.TimeManager.OnTick += TimeManager_OnTick;
+
+        else
+            base.TimeManager.OnTick -= TimeManager_OnTick;
+    }
+
+    #endregion
 }

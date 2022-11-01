@@ -49,10 +49,7 @@ public class EnemyRoamingState : BaseState
         }
     }
 
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState(){}
 
     private void StopRoaming()
     {

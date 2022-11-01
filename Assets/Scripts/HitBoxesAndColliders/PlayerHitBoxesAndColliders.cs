@@ -1,9 +1,8 @@
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class PlayerHitBoxesAndColliders : NetworkBehaviour
+public class PlayerHitBoxesAndColliders : MonoBehaviour
 {
     #region Only Client Vars
     #if !UNITY_SERVER
@@ -33,11 +32,8 @@ public class PlayerHitBoxesAndColliders : NetworkBehaviour
     [SerializeField] public PlayerAttackCollider AttackCollider3 ;
     [SerializeField] public PlayerAttackCollider AttackColliderU ;
 
-    //Storing Variables
-    [SyncObject]
-    public readonly SyncHashSet<EnemyBase> Targets = new();
+    public HashSet<EnemyBase> Targets = new();
 
-    // TODO need to understand to decide how to separate this logic.
     private void Awake()
     {
         RotationConstraint = GetComponentInParent<RotationConstraint>();

@@ -20,8 +20,7 @@ public class PlayerStateManger : NetworkBehaviour
     #endregion
 
     #region Fields and Properties
-
-    //Initiating the states.    
+ 
     public BaseState CurrentState;
     public PlayerIdleState IdleState ;
     public PlayerRunningState RunningState ;

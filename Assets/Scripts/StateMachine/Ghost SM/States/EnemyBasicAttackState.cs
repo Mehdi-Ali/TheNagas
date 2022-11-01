@@ -5,7 +5,6 @@ using UnityEngine.Pool;
 
 public class EnemyBasicAttackState : BaseState
 {    
-    //A reference for the Player State Manger
     EnemyStateManger _enemy;
 
     // Cashing Instances
@@ -34,7 +33,7 @@ public class EnemyBasicAttackState : BaseState
 
     private void Awake()
     {
-        //Pooling ; Move to awake
+        //Pooling
         _pool = new ObjectPool<EnemyProjectile>(
 
         () => {return Instantiate(_projectilePrefab);},
@@ -52,7 +51,6 @@ public class EnemyBasicAttackState : BaseState
     public void Start()
     {
 
-        //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
         _spawner = GetComponentInChildren<BasicAttackSpawner>();
 
