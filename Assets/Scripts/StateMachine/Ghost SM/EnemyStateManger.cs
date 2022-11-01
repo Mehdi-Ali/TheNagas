@@ -36,16 +36,10 @@ public class EnemyStateManger : NetworkBehaviour
     public EnemyHitBoxesAndColliders HitBoxes ;
     public EnemyHitBox ActiveHitBox;
     public PlayerAttackCollider ActiveAttackCollider;
-    //get animator component here and get it in other instance from here
 
-
-    // TODO find object when the client is ON
-    public PlayerStateManger Player ;
 
     public PlayerBase TargetPlayer;
 
-
-    //StateMachine Variables (logic and animation)
     public bool ReadyToSwitchState;
     private bool _subscribed;
 
@@ -90,16 +84,6 @@ public class EnemyStateManger : NetworkBehaviour
     public void Update()
     {
         CurrentState.UpdateState();
-
-        //TODO turn the target into an array Targets and make this a for each loop
-        
-        if (Player == null) {GettingTarget();}
-        else if (ReadyToSwitchState &&
-                 Vector3.Distance(transform.position, Player.transform.position) < Statics.VisionRange)
-        {
-            SwitchState(ChasingState);
-        }
-
     }
 
     private void TimeManager_OnTick()
@@ -107,9 +91,10 @@ public class EnemyStateManger : NetworkBehaviour
         CurrentState.OnTickState();
     }
 
-    public void GettingTarget()
+    public void StartChasing()
     {
-        Player = FindObjectOfType<PlayerStateManger>();
+        if (TargetPlayer == null) return;
+        else if (ReadyToSwitchState) SwitchState(ChasingState);
     }
 
     public void SwitchState(BaseState state)
@@ -123,7 +108,6 @@ public class EnemyStateManger : NetworkBehaviour
             CurrentState = state;
             CurrentState.EnterState();
         }
-
     }
 
     private void SubscribeToTimeManager(bool subscribe)

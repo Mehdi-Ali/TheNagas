@@ -37,6 +37,8 @@ public class EnemyChasingZoneCollider : MonoBehaviour
                     _enemy.TargetPlayer = targetToChase;
                 else
                     UpdatingTheTarget();
+
+                _enemy.StartChasing();
             }
     }
 
@@ -55,6 +57,8 @@ public class EnemyChasingZoneCollider : MonoBehaviour
                 }
                 
                 UpdatingTheTarget();
+                
+                _enemy.StartChasing();
             }        
     }
 

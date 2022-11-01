@@ -43,7 +43,7 @@ public class EnemySuperAttackState : BaseState
     public override void UpdateState()
     {
         if (!_doLookAt) return;
-        _direction = (_enemy.Player.transform.position - this.transform.position).normalized;
+        _direction = (_enemy.TargetPlayer.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _enemy.Statics.SuperAttackRotationSpeed);
     }

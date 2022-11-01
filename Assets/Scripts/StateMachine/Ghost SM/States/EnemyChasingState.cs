@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyChasingState : BaseState
 {    
-    //A reference for the Player State Manger
     EnemyStateManger _enemy;
 
     //Variables to store optimized Setter / getter parameter IDs
@@ -16,7 +15,6 @@ public class EnemyChasingState : BaseState
     public void Awake()
     {
 
-        //Caching The Player State Manger
         _enemy = GetComponent<EnemyStateManger>();
 
         //caching Hashes
@@ -33,14 +31,14 @@ public class EnemyChasingState : BaseState
 
     public override void UpdateState()
     {
-        _enemy.NavAgent.destination = _enemy.Player.transform.position ;
+        _enemy.NavAgent.destination = _enemy.TargetPlayer.transform.position ;
 
-        if (Vector3.Distance(transform.position, _enemy.Player.transform.position)
+        if (Vector3.Distance(transform.position, _enemy.TargetPlayer.transform.position)
                                                      < _enemy.Statics.AttackRange)
         {
             SwitchState(_enemy.BasicAttackState);
         }
-        else if (Vector3.Distance(transform.position, _enemy.Player.transform.position)
+        else if (Vector3.Distance(transform.position, _enemy.TargetPlayer.transform.position)
                                                        > _enemy.Statics.DropAggroRange)
         {
             SwitchState(_enemy.IdleState);
