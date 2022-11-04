@@ -1,61 +1,68 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
-public class EnemyProjectile : MonoBehaviour // TODO make it a scriptable Object.
+public class EnemyProjectile : NetworkBehaviour 
 {
-    //SetUp
-    private Action<EnemyProjectile> _collidedAction ;
 
-    //Proporties 
     public float Damage ;
     public float Speed ;
     public float Range ;
 
-    // Utilities
-    private float _timeOut ;
 
-
-    public void Init(Action<EnemyProjectile> CollidedAction)
+    public override void OnStartServer()
     {
-        _collidedAction = CollidedAction ;
-        _timeOut = Range / Speed ;
-        StartCoroutine(Destroy());
-
+        base.OnStartServer();
+        SubscribeToTimeManager(true);
     }
 
-
-    void Update()
+    public IEnumerator OnSpawned()
     {
-        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+        var _timeOut = Range / Speed ;
+        yield return new WaitForSeconds(_timeOut);
+        Despawn(DespawnType.Pool);
     }
-    
+
+    private void TimeManager_OnTick()
+    {
+        transform.Translate(Vector3.forward * Speed * (float)TimeManager.TickDelta);
+    }
+
+    [Server]
     private void OnTriggerEnter(Collider collider)
     {
 
         if (collider.TryGetComponent<PlayerBase>(out PlayerBase playerBase))
         {
             playerBase.TakeDamage(Damage) ;
-            _collidedAction(this);      
+            Despawn(DespawnType.Pool);
         }
 
-        // it does nothing when it collides with an enemy and is destroyed when it touches anything else 
-        // else if (collider.TryGetComponent<EnemyBase>(out EnemyBase enemyBase)) 
+        // TODO Make the projectile Despawn if it collides with a static object.
+        // else if (collider.gameObject.isStatic)
         // {
-        //     return;
+        //     Despawn(DespawnType.Pool);
         // }
 
-        // else // if it's not static 
-        // {
-        //     _collidedAction(this);
-        // }
     }
 
-    IEnumerator Destroy()
+    public override void OnStopServer()
     {
-        yield return new WaitForSeconds(_timeOut);
-        _collidedAction(this);
+        base.OnStopServer();
+        SubscribeToTimeManager(false);
+        
+    }
+    private void SubscribeToTimeManager(bool subscribe)
+    {
+        if (base.TimeManager == null) return;
+
+        if (subscribe)
+            base.TimeManager.OnTick += TimeManager_OnTick;
+
+        else
+            base.TimeManager.OnTick -= TimeManager_OnTick;
     }
 
 }

@@ -7,15 +7,12 @@ public class Damageable : NetworkBehaviour
 {
     //Variables to cache Instances
     private EnemyStateManger _enemy ;
-    private Animator _animator;
     private HealthBar _healthBar ;
 
     // synched vars
     [SyncVar] private float _health ;
     private float _shield ;
 
-    //Variables to store optimized Setter / getter parameter IDs
-    int _DeadHash ;
 
     // utilities
     private float _maxHealth ;
@@ -29,10 +26,7 @@ public class Damageable : NetworkBehaviour
 
     public virtual void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _DeadHash = Animator.StringToHash("Dead");
         _enemy = GetComponent<EnemyStateManger>();
-
         _healthBar = GetComponentInChildren<HealthBar>();
 
         _maxHealth = _enemy.Statics.MaxHealth ;
@@ -40,11 +34,11 @@ public class Damageable : NetworkBehaviour
         _health = _maxHealth;
         _healthBar.SetMaxHealth(_maxHealth) ;
 
-        
-
-
     }
 
+    
+
+    [Server]
     public void TakeDamage(float damage)
     {
         _health = Mathf.Max(0.0f, _health - damage);
@@ -57,6 +51,7 @@ public class Damageable : NetworkBehaviour
 
     }
 
+    [Server]
     public virtual void Die()
     {
         OnDied?.Invoke();
@@ -66,6 +61,8 @@ public class Damageable : NetworkBehaviour
 
     }
 
+
+    [Server]
     public virtual void GetHeal(float heal)
     {
         if ( _health + heal >= _maxHealth) 
@@ -81,6 +78,7 @@ public class Damageable : NetworkBehaviour
         }
     }
 
+    [Server]
     public virtual void GetShield(float shield)
     {
 

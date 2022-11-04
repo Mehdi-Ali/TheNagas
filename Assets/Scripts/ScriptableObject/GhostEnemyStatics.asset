@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: Ghost
   MaxHealth: 250
-  VisionRange: 5
+  VisionRange: 7.5
   AttackRange: 4
-  DropAggroRange: 14
   MinRoamingPause: 3
   MaxRoamingPause: 6
   RoamingSpeed: 1.5

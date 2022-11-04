@@ -368,6 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e4840239bf171b4d9b4a19d5e08b14d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitBoxes: {fileID: 0}
   _collider: {fileID: 1627308583469895816}
 --- !u!1 &7197833741113760919
 GameObject:
@@ -492,7 +493,6 @@ GameObject:
   - component: {fileID: 1835414585024779192}
   - component: {fileID: 1522711315874546608}
   - component: {fileID: 2173564305596942674}
-  - component: {fileID: 2546039537808458831}
   - component: {fileID: 3242587505469904738}
   - component: {fileID: 6771701834436361113}
   - component: {fileID: 7234850922456280030}
@@ -680,7 +680,6 @@ MonoBehaviour:
   - {fileID: 3779916510067581742}
   - {fileID: 1522711315874546608}
   - {fileID: 2173564305596942674}
-  - {fileID: 2546039537808458831}
   - {fileID: 3242587505469904738}
   - {fileID: 6771701834436361113}
   - {fileID: 7234850922456280030}
@@ -693,7 +692,7 @@ MonoBehaviour:
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 7
+  <PrefabId>k__BackingField: 8
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 18369910026477970439
@@ -716,7 +715,6 @@ MonoBehaviour:
   Statics: {fileID: 11400000, guid: 0980d9dd133e7ef4a8f013bdebf7be56, type: 2}
   CurrentState: {fileID: 0}
   IdleState: {fileID: 0}
-  RunningState: {fileID: 0}
   DeadState: {fileID: 0}
   RoamingState: {fileID: 0}
   ChasingState: {fileID: 0}
@@ -729,7 +727,7 @@ MonoBehaviour:
   HitBoxes: {fileID: 0}
   ActiveHitBox: {fileID: 0}
   ActiveAttackCollider: {fileID: 0}
-  Player: {fileID: 0}
+  TargetPlayer: {fileID: 0}
   ReadyToSwitchState: 0
 --- !u!114 &2173564305596942674
 MonoBehaviour:
@@ -746,21 +744,6 @@ MonoBehaviour:
   _componentIndexCache: 3
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
---- !u!114 &2546039537808458831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267754348304856137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3879c2220cfd6854fa9000089ed0b0fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 4
-  _addedNetworkObject: {fileID: 1835414585024779192}
-  _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &3242587505469904738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5860a040c87dbe4bb20488843a741b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 5
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &6771701834436361113
@@ -788,7 +771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8f5981c91c2104eabcb6ce7e33d1b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 6
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &7234850922456280030
@@ -803,7 +786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d076ea97bffa049b12865f477be1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 7
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
   _projectilePrefab: {fileID: 3908521008515134742, guid: 6ee0b6eea75e69f459d2643c3682dba2,
@@ -820,7 +803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8a591e99705444b93b6f43ac1398a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 8
+  _componentIndexCache: 7
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &5789112543792799957
@@ -835,7 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6dd48ded5235c4d98b46b900e670ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 9
+  _componentIndexCache: 8
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &883959914585170906
@@ -850,7 +833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13d3681ee67cfb7439dd95718be3bdd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 10
+  _componentIndexCache: 9
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
 --- !u!114 &8966469563047282533

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 using FishNet.Object;
 using FishNet.Connection;
+using FishNet;
 
 public class EnemyBasicAttackState : BaseState
 {    
@@ -35,23 +36,6 @@ public class EnemyBasicAttackState : BaseState
         _basicAttackMultiplierHash = Animator.StringToHash("BasicAttack__Multiplier");
 
         _attackCounter = 0 ;
-
-        PoolingSetUp();
-    }
-
-    private void PoolingSetUp()
-    {
-        _pool = new ObjectPool<EnemyProjectile>(
-
-        () => { return Instantiate(_projectilePrefab); },
-
-        _projectile => { _projectile.gameObject.SetActive(true); },
-
-        _projectile => { _projectile.gameObject.SetActive(false); },
-
-        _projectile => { Destroy(_projectile.gameObject); },
-
-        false, 2, 2);
     }
 
     public override void EnterState()
@@ -60,7 +44,9 @@ public class EnemyBasicAttackState : BaseState
 
         if (_attackCounter < 2)
         {
-            RpcHitBoxDisplay(Owner, true);
+            RpcSetBasicHitBox();
+            _enemy.RpcHitBoxDisplay(true);
+
             Invoke(nameof(AttackComplete), _enemy.AnimationsLength.BasicAttack_Duration / _statics.BasicAttackAnimationSpeed);
 
             _enemy.NetworkAnimator.CrossFade(_basicAttackHash, 0.15f, 0);
@@ -77,10 +63,10 @@ public class EnemyBasicAttackState : BaseState
         _doLookAt = true;
     }
 
-    [TargetRpc]
-    private void RpcHitBoxDisplay(NetworkConnection conn, bool status)
+    [ObserversRpc]
+    private void RpcSetBasicHitBox()
     {
-        _enemy.HitBoxes.BasicHitBox.gameObject.SetActive(status);
+        _enemy.ActiveHitBox = _enemy.HitBoxes.BasicHitBox;
     }
 
     public override void OnTickState()
@@ -92,43 +78,47 @@ public class EnemyBasicAttackState : BaseState
     private void Rotate()
     {
         if (!_doLookAt) return;
-
         _direction = (_enemy.TargetPlayer.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * _statics.BasicAttackRotationSpeed);
+        var rotationSpeed = (float)TimeManager.TickDelta * _statics.BasicAttackRotationSpeed;
+        transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, rotationSpeed);
     }
 
     public override void UpdateState(){}
 
     public override void ExitState(){}
 
+    [Server]
+    void BasicAttackEvent()
+    {
+        _doLookAt = false;
+
+        _enemy.RpcHitBoxDisplay(false);
+
+        SpawningProjectile();
+
+    }
+
+    private void SpawningProjectile()
+    {
+        GameObject projectilePrefab = Instantiate(_projectilePrefab.gameObject);
+        ServerManager.Spawn(projectilePrefab.gameObject);
+
+        _projectile = projectilePrefab.GetComponent<EnemyProjectile>();
+
+        _projectile.transform.position = _spawner.transform.position;
+        _projectile.transform.rotation = _spawner.transform.rotation;
+        _projectile.Damage = _statics.BasicAttackDamage;
+        _projectile.Speed = _statics.BasicAttackProjectionSpeed;
+        _projectile.Range = _statics.AttackRange;
+
+        _projectile.StartCoroutine(_projectile.OnSpawned());
+    }
+
     void AttackComplete()
     {
         _enemy.ReadyToSwitchState = true ;
         _enemy.SwitchState(_enemy.IdleState);
-    }
-
-    void BasicAttackEvent()
-    {
-        _doLookAt = false;        
-
-        RpcHitBoxDisplay(Owner, false);
-
-        _projectile = _pool.Get();
-        
-        _projectile.transform.position = _spawner.transform.position; 
-        _projectile.transform.rotation = _spawner.transform.rotation; 
-        _projectile.Damage = _statics.BasicAttackDamage ;
-        _projectile.Speed = _statics.BasicAttackProjectionSpeed ;
-        _projectile.Range = _statics.AttackRange ;
-
-        _projectile.Init(CollidedAction);
-
-    }
-
-    private void CollidedAction(EnemyProjectile _projectile)
-    {
-        _pool.Release(_projectile);
     }
 
 }

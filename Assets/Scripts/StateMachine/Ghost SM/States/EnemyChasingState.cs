@@ -7,20 +7,15 @@ public class EnemyChasingState : BaseState
 {    
     private EnemyStateManger _enemy;
     private EnemyStaticsScriptableObject _statics;
-    private PlayerBase _targetPlayer;
 
     int _RunningHash;
-
-    Vector3 _targetPosition ;
 
     public void Awake()
     {
         _enemy = GetComponent<EnemyStateManger>();
         _statics = _enemy.Statics;
         _RunningHash = Animator.StringToHash("Running");
-        _targetPlayer = _enemy.TargetPlayer;
     }
-
 
     public override void EnterState()
     {
@@ -36,9 +31,9 @@ public class EnemyChasingState : BaseState
 
         if (!GettingTarget()) return;
 
-        _enemy.NavAgent.destination = _targetPlayer.transform.position ;
+        _enemy.NavAgent.destination = _enemy.TargetPlayer.transform.position ;
 
-        float distance = Vector3.Distance(transform.position, _targetPlayer.transform.position) ;
+        float distance = Vector3.Distance(transform.position, _enemy.TargetPlayer.transform.position) ;
 
         if (distance < _statics.AttackRange)
             SwitchState(_enemy.BasicAttackState);
@@ -48,23 +43,24 @@ public class EnemyChasingState : BaseState
     {
         float smallestDistance;
 
-        if (_targetPlayer != null)
-            smallestDistance = Vector3.Distance(transform.position, _targetPlayer.transform.position);
+        if (_enemy.TargetPlayer != null)
+            smallestDistance = Vector3.Distance(transform.position, _enemy.TargetPlayer.transform.position);
         else
             smallestDistance = _statics.VisionRange * 1.5f ;
 
         foreach(PlayerBase targetToChase in _enemy.HitBoxes.TargetsToChase)
         {
-            var  _distance = Vector3.Distance(transform.position, targetToChase.transform.position);
-            if (_distance > smallestDistance ) continue ;
+            var  distance = Vector3.Distance(transform.position, targetToChase.transform.position);
+            if (distance > smallestDistance ) continue ;
 
-            smallestDistance = _distance;
-            _targetPlayer = targetToChase;
+            smallestDistance = distance;
+            _enemy.TargetPlayer = targetToChase;
+
         }
 
         if (smallestDistance >= _statics.VisionRange * 1.5f)
         {
-            _targetPlayer = null;
+            _enemy.TargetPlayer = null;
             SwitchState(_enemy.IdleState);
             return false;
         }

@@ -35,7 +35,7 @@ public class EnemyStateManger : NetworkBehaviour
     public NavMeshAgent NavAgent;
     public EnemyHitBoxesAndColliders HitBoxes ;
     public EnemyHitBox ActiveHitBox;
-    public PlayerAttackCollider ActiveAttackCollider;
+    public EnemyAttackCollider ActiveAttackCollider;
 
 
     public PlayerBase TargetPlayer;
@@ -94,6 +94,22 @@ public class EnemyStateManger : NetworkBehaviour
     {
         if (IsServer)
             CurrentState.OnTickState();
+
+        if (TargetPlayer != null) SwitchState(ChasingState);
+
+    }
+
+    public override void OnStopNetwork()
+    {
+        base.OnStopNetwork();
+        SubscribeToTimeManager(false);
+    }
+
+    [ObserversRpc]
+    public void RpcHitBoxDisplay( bool status)
+    {
+        if (ActiveHitBox == null) return;
+        ActiveHitBox.gameObject.SetActive(status);
     }
 
     public void SwitchState(BaseState state)
