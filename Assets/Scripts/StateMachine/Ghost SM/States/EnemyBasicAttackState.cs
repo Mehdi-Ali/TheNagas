@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 using FishNet.Object;
-using FishNet.Connection;
-using FishNet;
-
 public class EnemyBasicAttackState : BaseState
 {    
     EnemyStateManger _enemy;
@@ -18,7 +12,6 @@ public class EnemyBasicAttackState : BaseState
     int _basicAttackHash;
     int _basicAttackMultiplierHash;
 
-    private ObjectPool<EnemyProjectile> _pool ;
     private int _attackCounter ;
     private Vector3 _direction ;
     private Quaternion _lookRotation ;
