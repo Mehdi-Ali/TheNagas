@@ -17,17 +17,21 @@ public class EnemyBase : NetworkBehaviour
     public event Action OnDamage ;
     public event Action OnHeal ;
 
+
     public virtual void Awake()
     {
         _enemy = GetComponent<EnemyStateManger>();
+        _healthBar = GetComponentInChildren<HealthBar>();
 
+    }
+
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
         _maxHealth = _enemy.Statics.MaxHealth ;
         _health = _maxHealth;
 
-        //if (!IsClient) return;
-        _healthBar = GetComponentInChildren<HealthBar>();
         _healthBar.SetMaxHealth(_maxHealth) ;
-
     }
 
     [Server]

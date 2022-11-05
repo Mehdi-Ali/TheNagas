@@ -5,83 +5,84 @@ using UnityEngine;
 
 public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player 
 {
-    //Variables to cache Instances
     private PlayerStateManger _player ;
-    private Animator _animator;
     private HealthBar _healthBar ;
 
-    // synched vars
     [SyncVar] private float _health ;
-    private float _shield ;
 
-
-    //Variables to store optimized Setter / getter parameter IDs
-    int _DeadHash ;
-
-    // utilities
-    private float _maxHealth ;
-    private Vector3 _position;
+    [SyncVar] private float _maxHealth ;
     
     
     //Events
-    public event Action OnDied ;
-    public event Action OnDamaged ; // dele
-
+    public event Action OnDie ;
+    public event Action OnDamage ;
+    public event Action OnHeal ;
 
 
     public virtual void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _DeadHash = Animator.StringToHash("Dead");
         _player = GetComponent<PlayerStateManger>();
-
         _healthBar = GetComponentInChildren<HealthBar>();
-        _position = this.transform.position;
-
-        _maxHealth = _player.Statics.MaxHealth ;
-
-        _health = _maxHealth;
-        _healthBar.SetMaxHealth(_maxHealth) ;
 
     }
 
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+
+        _maxHealth = _player.Statics.MaxHealth ;
+        _health = _maxHealth;
+
+        _healthBar.SetMaxHealth(_maxHealth) ;
+    }
+
+    [Server]
     public void TakeDamage(float damage)
     {
         _health = Mathf.Max(0.0f, _health - damage);
-        _healthBar.SetHealth(_health);
-        DamagePopUp.Create(_position , damage, Color.red);   
+
+        OnDamage?.Invoke();
+
+        RpcOnDamage(_health, damage);
 
         if (_health == 0) Die();
-     }
+    }
 
+    [ObserversRpc]
+    private void RpcOnDamage(float health, float damage)
+    {
+        _healthBar.SetHealth(health);
+        DamagePopUp.Create(transform.position, damage, Color.red);
+    }
+
+    [Server]
     public virtual void Die()
     {
-        OnDied?.Invoke();
+        OnDie?.Invoke();
         _player.SwitchState(_player.DeadState);
-        
+
+        RpcOnDie();
+    }
+
+    [ObserversRpc]
+    private void RpcOnDie()
+    {
         _healthBar.gameObject.SetActive(false);
     }
 
+    [Server]
     public virtual void GetHeal(float heal)
     {
-        if ( _health + heal >= _maxHealth) 
-        {
-            _shield = _maxHealth - _health + heal ;
-            _health = _maxHealth ;
-            GetShield(_shield) ;
-        }
+        _health = Mathf.Max(_health + heal, _maxHealth);
 
-        else
-        {
-            _health = _health + heal ;
-        }
+        RpcOnHeal(heal);
+
     }
 
-    public virtual void GetShield(float shield)
+    [ObserversRpc]
+    private void RpcOnHeal(float heal)
     {
-
-        // TODO implement later: make something like a real
-        // TODO health which is eq to = health + shield
+        DamagePopUp.Create(transform.position, heal, Color.green);
     }
 
 }

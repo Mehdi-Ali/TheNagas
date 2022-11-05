@@ -27,6 +27,8 @@ public class EnemySuperAttackState : BaseState
 
          RpcSetSuperHitBox();
         _enemy.RpcHitBoxDisplay(true);
+
+        _enemy.HitBoxes.Targets.Clear();
         _enemy.HitBoxes.SuperCollider.Collider.enabled = true;
 
         Invoke(nameof(AttackComplete), _enemy.AnimationsLength.SuperAttack_Duration / _enemy.Statics.SuperAttackAnimationSpeed );

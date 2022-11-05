@@ -23,6 +23,7 @@ public class PlayerDeadState : BaseState
     {
         _player.NetworkAnimator.CrossFade(_DeadHash, 0.15f, 0);
         _player.ReadyToSwitchState = false;
+        _player.IsCastingAnAbility = true;
 
     }
 
