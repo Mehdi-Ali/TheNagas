@@ -59,14 +59,15 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
     public virtual void Die()
     {
         OnDie?.Invoke();
-        _player.SwitchState(_player.DeadState);
-
         RpcOnDie();
     }
 
-    [ObserversRpc]
+    [ObserversRpc(RunLocally = true)]
     private void RpcOnDie()
     {
+        _player.SwitchState(_player.DeadState);
+        
+        if (!IsClient) return;
         _healthBar.gameObject.SetActive(false);
     }
 
