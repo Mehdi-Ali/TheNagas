@@ -8,6 +8,9 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
     private PlayerStateManger _player ;
     private HealthBar _healthBar ;
 
+    // instead we can put this script on an empty gameObject and put with it all the script that 
+    // works only when IsAlive == true and disable it when dead. 
+    [SyncVar] public bool IsAlive; 
     [SyncVar] private float _health ;
 
     [SyncVar] private float _maxHealth ;
@@ -32,6 +35,7 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
 
         _maxHealth = _player.Statics.MaxHealth ;
         _health = _maxHealth;
+        IsAlive = true ;
 
         _healthBar.SetMaxHealth(_maxHealth) ;
     }
@@ -59,6 +63,7 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
     public virtual void Die()
     {
         OnDie?.Invoke();
+        IsAlive = false ;
         RpcOnDie();
     }
 
@@ -77,7 +82,6 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
         _health = Mathf.Max(_health + heal, _maxHealth);
 
         RpcOnHeal(heal);
-
     }
 
     [ObserversRpc]

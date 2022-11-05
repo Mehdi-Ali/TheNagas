@@ -58,6 +58,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     {
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
+            if (!enemy.IsAlive) continue;
             enemy.TakeDamage(_player.Statics.SecondAbilityDamage);
         }
     }

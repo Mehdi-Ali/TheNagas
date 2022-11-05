@@ -19,6 +19,7 @@ public class PlayerAttackCollider : MonoBehaviour
     {
         if (other.TryGetComponent<EnemyBase>(out EnemyBase target))
             {
+                if (!target.IsAlive) return;
                 _hitBoxes.Targets.Add(target);
             }
     }

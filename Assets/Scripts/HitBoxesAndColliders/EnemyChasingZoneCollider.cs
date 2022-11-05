@@ -31,6 +31,7 @@ public class EnemyChasingZoneCollider : MonoBehaviour
     {
         if (other.TryGetComponent<PlayerBase>(out PlayerBase targetToChase))
             {
+                if (!targetToChase.IsAlive) return;
                 _hitBoxes.TargetsToChase.Add(targetToChase);
                 
                 if (_enemy.CurrentState != _enemy.ChasingState)

@@ -8,6 +8,7 @@ public class EnemyBase : NetworkBehaviour
     private EnemyStateManger _enemy ;
     private HealthBar _healthBar ;
 
+    [SyncVar] public bool IsAlive;
     [SyncVar] private float _health ;
 
     [SyncVar] private float _maxHealth ;
@@ -30,6 +31,7 @@ public class EnemyBase : NetworkBehaviour
         base.OnStartNetwork();
         _maxHealth = _enemy.Statics.MaxHealth ;
         _health = _maxHealth;
+        IsAlive = true ;
 
         _healthBar.SetMaxHealth(_maxHealth) ;
     }
@@ -62,10 +64,10 @@ public class EnemyBase : NetworkBehaviour
     public virtual void Die()
     {
         OnDie?.Invoke();
+        IsAlive = false ;
         _enemy.SwitchState(_enemy.DeadState);
 
         RpcOnDie();
-
     }
 
     [ObserversRpc]

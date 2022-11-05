@@ -487,6 +487,8 @@ public class PlayerStateManger : NetworkBehaviour
     [Replicate]
     private void MoveAndRotate(MoveData moveData, bool asServer, bool replaying = false)
     {
+        if (CurrentState == DeadState) return ;
+        
         if (!IsMovementPressed || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
 
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
@@ -499,7 +501,8 @@ public class PlayerStateManger : NetworkBehaviour
     private void Rotate(Vector3 move)
     {
         Quaternion targetRotation = Quaternion.LookRotation(move);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * (float)base.TimeManager.TickDelta);
+        float rotationSpeed = RotationSpeed * (float)base.TimeManager.TickDelta ;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed);
     }
 
     [Reconcile]
@@ -553,6 +556,7 @@ public class PlayerStateManger : NetworkBehaviour
         {
             if (enemy.TryGetComponent<EnemyBase>(out EnemyBase target) )
             {
+                if (!target.IsAlive) continue;
                 _distance = Vector3.Distance(this.transform.position, target.transform.position);
                 if (_distance > _smallestDistance ) continue ;
                 _smallestDistance = _distance;

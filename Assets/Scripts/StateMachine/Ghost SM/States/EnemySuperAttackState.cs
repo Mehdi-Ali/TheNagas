@@ -71,6 +71,7 @@ public class EnemySuperAttackState : BaseState
 
         foreach(PlayerBase player in _enemy.HitBoxes.Targets)
         {
+            if (!player.IsAlive) continue;
             player.TakeDamage(_enemy.Statics.SuperAttackDamage);
         }
 

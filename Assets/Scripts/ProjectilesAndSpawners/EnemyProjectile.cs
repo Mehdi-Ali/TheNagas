@@ -36,6 +36,7 @@ public class EnemyProjectile : NetworkBehaviour
 
         if (collider.TryGetComponent<PlayerBase>(out PlayerBase playerBase))
         {
+            if (!playerBase.IsAlive) return;
             playerBase.TakeDamage(Damage) ;
             Despawn(DespawnType.Pool);
         }

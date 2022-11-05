@@ -50,6 +50,7 @@ public class EnemyChasingState : BaseState
 
         foreach(PlayerBase targetToChase in _enemy.HitBoxes.TargetsToChase)
         {
+            if (!targetToChase.IsAlive) continue;
             var  distance = Vector3.Distance(transform.position, targetToChase.transform.position);
             if (distance > smallestDistance ) continue ;
 

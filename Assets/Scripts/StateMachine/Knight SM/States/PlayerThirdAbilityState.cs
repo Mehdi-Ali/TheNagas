@@ -80,6 +80,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         foreach(EnemyBase enemy in _player.HitBoxes.Targets)
         {
+            if (!enemy.IsAlive) continue;
             if (_damagedTargets.Contains(enemy))
                 continue;
             

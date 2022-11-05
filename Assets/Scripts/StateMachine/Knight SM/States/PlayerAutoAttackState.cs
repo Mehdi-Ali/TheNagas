@@ -196,6 +196,7 @@ public class PlayerAutoAttackState : BaseState
     {
         foreach (EnemyBase enemy in _player.HitBoxes.Targets)
         {
+            if (!enemy.IsAlive) continue;
             enemy.TakeDamage(damage);
         }
     }
