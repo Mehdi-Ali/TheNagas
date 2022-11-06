@@ -156,12 +156,12 @@ MonoBehaviour:
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
-  _disableOnDespawn: 0
+  _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 27
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 14762131302109388384
+  <AssetPathHash>k__BackingField: 12280997061562477699
   _sceneNetworkObjects:
   - {fileID: 9117857247562382210}
 --- !u!114 &9144896207351220584
