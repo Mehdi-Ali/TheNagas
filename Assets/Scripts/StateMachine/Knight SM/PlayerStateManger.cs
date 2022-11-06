@@ -69,7 +69,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     public bool IsAutoAiming ;
     private float _smallestDistance;
-    public Transform TargetPos;
+    public Transform TargetTransform;
     private float _distance;
 
     // Variables to handle Gravity
@@ -169,6 +169,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void ReadAndSetAimingInput()
     {
+        if (IsAutoAiming) return;
         _currentAimingInput = _playerControls.DefaultMap.Aim.ReadValue<Vector2>();
         _currentAimingAt.x = _currentAimingInput.x;
         _currentAimingAt.y = 0.0f;
@@ -189,10 +190,9 @@ public class PlayerStateManger : NetworkBehaviour
             HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     }
 
-    public void RotatePlayerToHitBox(Vector3 position)
+    public void RpcRotatePlayerToHitBox(Vector3 position)
     {
         transform.LookAt(position);
-        //IsAutoAiming = false ;
         if (IsOwner)
             HitBoxes.transform.localPosition = Vector3.zero ;
     }
@@ -242,7 +242,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
         _aimingRange = aimingRange;
         ActiveHitBox = activeHitBox;
-        //if (!_isAimingPressed) AutoAim();
+        if (!_isAimingPressed) AutoAim();
         ActiveHitBox.gameObject.SetActive(true);
     }
 
@@ -250,7 +250,9 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (CooldownSystem.IsOnCooldown(cooldownId) ||
                 !ReadyToSwitchState || IsCastingAnAbility) return;
-        //IsAutoAiming = false ;
+        IsAutoAiming = false ;
+        HitBoxes.transform.localEulerAngles = Vector3.zero;
+        HitBoxes.transform.localPosition = Vector3.zero ;
     }
 
     private void SetupOnInputCanceled(Abilities ability)
@@ -275,7 +277,6 @@ public class PlayerStateManger : NetworkBehaviour
                 break;
         }
 
-        ActiveHitBox.gameObject.SetActive(true);
         RpcSetupOnInputCanceled(ability, ActiveHitBox.transform.position);
     }
 
@@ -311,6 +312,9 @@ public class PlayerStateManger : NetworkBehaviour
     private void RpcDoAbility(NetworkConnection conn, Abilities ability, Vector3 target, bool isOnCooldown)
     {
         TargetPosition = target ;
+        
+        if (IsOwner)
+            ActiveHitBox.gameObject.SetActive(false);
 
         if (!isOnCooldown)
         {
@@ -339,10 +343,8 @@ public class PlayerStateManger : NetworkBehaviour
             } 
 
             if (CurrentState != abilityState) SwitchState(abilityState);
-            RotatePlayerToHitBox(target);
+            RpcRotatePlayerToHitBox(target);
 
-            if (IsOwner)
-                ActiveHitBox.gameObject.SetActive(false);
         }
     }
     
@@ -441,9 +443,10 @@ public class PlayerStateManger : NetworkBehaviour
     {
         CurrentState.UpdateState();
 
-        
-        if ( _isAimingPressed) HandleAiming();
-        //else if (!IsAutoAiming) HitBoxes.transform.localEulerAngles = Vector3.zero;
+        if ( _isAimingPressed)
+            HandleAiming();
+        else if (!IsAutoAiming)
+            HitBoxes.transform.localEulerAngles = Vector3.zero;
 
     }
 
@@ -545,12 +548,11 @@ public class PlayerStateManger : NetworkBehaviour
         RotationSpeed = rotationSpeed;
     }
     
-    public float AutoAim()
+    public void AutoAim()
     {
         _smallestDistance = _aimingRange;
-        TargetPos = null ;
+        TargetTransform = null ;
 
-        //extract this as a variable ?
         Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
         foreach (Collider enemy in _nearbyEnemies)
         {
@@ -560,19 +562,19 @@ public class PlayerStateManger : NetworkBehaviour
                 _distance = Vector3.Distance(this.transform.position, target.transform.position);
                 if (_distance > _smallestDistance ) continue ;
                 _smallestDistance = _distance;
-                TargetPos = target.transform;
+                TargetTransform = target.transform;
                 
             }
         }
 
-        if (TargetPos == null) return -1f ;
+        if (TargetTransform == null) return ;
         
-        IsAutoAiming = true ;
-        Debug.Log("Auto aimed to: " + TargetPos.name + " distance is: " + _smallestDistance);
-        HitBoxes.transform.LookAt(TargetPos);
-        if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetPos.position;
+        Debug.Log("Auto Aiming To " + TargetTransform );
 
-        return _smallestDistance ;
+        IsAutoAiming = true ;
+        HitBoxes.transform.LookAt(TargetTransform);
+        if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetTransform.position;
+
     }
  
     public void SwitchState(BaseState state)
