@@ -163,13 +163,13 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void HandleAiming()
     {
+        if (IsAutoAiming) return;
         ReadAndSetAimingInput();
         HandleAimingRotationAndLocation();
     }
 
     private void ReadAndSetAimingInput()
     {
-        if (IsAutoAiming) return;
         _currentAimingInput = _playerControls.DefaultMap.Aim.ReadValue<Vector2>();
         _currentAimingAt.x = _currentAimingInput.x;
         _currentAimingAt.y = 0.0f;
@@ -443,9 +443,13 @@ public class PlayerStateManger : NetworkBehaviour
     {
         CurrentState.UpdateState();
 
-        if ( _isAimingPressed)
+        if (IsAutoAiming)
+            AutoAim();
+
+        else if ( _isAimingPressed)
             HandleAiming();
-        else if (!IsAutoAiming)
+
+        else
             HitBoxes.transform.localEulerAngles = Vector3.zero;
 
     }
@@ -550,6 +554,7 @@ public class PlayerStateManger : NetworkBehaviour
     
     public void AutoAim()
     {
+        IsAutoAiming = true ;
         _smallestDistance = _aimingRange;
         TargetTransform = null ;
 
@@ -567,11 +572,8 @@ public class PlayerStateManger : NetworkBehaviour
             }
         }
 
-        if (TargetTransform == null) return ;
+        if (TargetTransform == null) return;
         
-        Debug.Log("Auto Aiming To " + TargetTransform );
-
-        IsAutoAiming = true ;
         HitBoxes.transform.LookAt(TargetTransform);
         if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetTransform.position;
 
