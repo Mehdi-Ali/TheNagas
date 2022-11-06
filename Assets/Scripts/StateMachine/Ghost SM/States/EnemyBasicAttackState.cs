@@ -70,16 +70,23 @@ public class EnemyBasicAttackState : BaseState
 
     private void Rotate()
     {
-        if (!_doLookAt) return;
+        if (!_doLookAt || _enemy.TargetPlayer == null ) return;
+
         _direction = (_enemy.TargetPlayer.transform.position - this.transform.position).normalized;
         _lookRotation = Quaternion.LookRotation(_direction);
+
         var rotationSpeed = (float)TimeManager.TickDelta * _statics.BasicAttackRotationSpeed;
+        
         transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, rotationSpeed);
     }
 
     public override void UpdateState(){}
 
-    public override void ExitState(){}
+    public override void ExitState()
+    {
+        if (_enemy.TargetPlayer != null && !_enemy.TargetPlayer.IsAlive)
+            _enemy.TargetPlayer = null;
+    }
 
     [Server]
     void BasicAttackEvent()
@@ -111,7 +118,15 @@ public class EnemyBasicAttackState : BaseState
     void AttackComplete()
     {
         _enemy.ReadyToSwitchState = true ;
-        _enemy.SwitchState(_enemy.IdleState);
+
+        if (!_enemy.TargetPlayer.IsAlive)
+        {
+            _enemy.TargetPlayer = null;
+            _enemy.SwitchState(_enemy.ChasingState);
+        }
+        
+        else 
+            _enemy.SwitchState(_enemy.IdleState);
     }
 
 }

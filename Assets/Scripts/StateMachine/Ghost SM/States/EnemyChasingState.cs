@@ -56,7 +56,6 @@ public class EnemyChasingState : BaseState
 
             smallestDistance = distance;
             _enemy.TargetPlayer = targetToChase;
-
         }
 
         if (smallestDistance >= _statics.VisionRange * 1.5f)
@@ -70,10 +69,7 @@ public class EnemyChasingState : BaseState
             return true;
     }
 
-    public override void ExitState()
-    {
-
-    }
+    public override void ExitState(){}
 
     private void SwitchState(BaseState state)
     {

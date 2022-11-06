@@ -95,7 +95,8 @@ public class EnemyStateManger : NetworkBehaviour
         if (IsServer)
             CurrentState.OnTickState();
 
-        if (TargetPlayer != null) SwitchState(ChasingState);
+        if (TargetPlayer != null )
+            SwitchState(ChasingState);
 
     }
 
