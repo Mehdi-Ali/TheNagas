@@ -52,8 +52,10 @@ public class PlayerAutoAttackState : BaseState
         Invoke(nameof(Dashed), _statics.AutoAttackDashingTime);
         _player.SetMoveAndRotateSpeed(_statics.AutoAttackDashingMovementSpeed, _statics.AutoAttackRotationSpeed);
 
-        //AutoAim();
-        // checkpoint 
+        if (!IsClient) return;
+
+        if (!_player.IsMovementPressed)
+            AutoAim();
 
     }
 
@@ -66,36 +68,38 @@ public class PlayerAutoAttackState : BaseState
 
         if (_player.IsMovementPressed && IsOwner )
         {
-            _player.ReadAndSetMovementInput();
+            _player.ReadMovementInputAndSetMoveData();
         }
 
-        // if ( _distance > _statics.AutoAttackStopDistance )
-        // {
-        //     // dash
-        //     _player.CharacterController.SimpleMove( _offset.normalized * _statics.AutoAttackDashingMovementSpeed);
-        //    //_player.RotatePlayer(_statics.AutoAttackRotationSpeed, _offset);
-
-        // }
+        if ( _distance < _statics.AutoAttackStopDistance ) return;
+            //_player.NeedsMoveAndRotate = false;
     }
 
-    public override void ExitState(){}
+    //[Client(RequireOwnership = true)]
+    private void AutoAim() //if doesn't work we move to OnTick
+    {
+        if (!_player.IsMovementPressed)
+        {
+            _distance = _player.AutoAim();
 
-    // private void AutoAim()
-    // {
-    //     if (!_player.IsMovementPressed)
-    //     {
-    //         //_distance = _player.AutoAim();
+            RpcRotatePlayerToHitBox(_player.ActiveHitBox.transform.position);
 
-    //         _player.RotatePlayerToHitBox(_player.ActiveHitBox.transform.position);
+            if (_distance > _player.Statics.AutoAttackStopDistance)
+            {
+                _offset = _player.AutoTargetTransform.position - transform.position;
+            }
+            _player.SetMoveData(_offset.x, _offset.z);
 
-    //         if (_distance > _statics.AutoAttackStopDistance)
-    //         {
-    //             _offset = _player.TargetPos.position - transform.position;
-    //         }
+        }
 
-    //     }
-    //     else _distance = -1f;
-    // }
+        else _distance = -1f;
+    }
+
+    [ServerRpc(RunLocally=true)]
+    private void RpcRotatePlayerToHitBox(Vector3 position)
+    {
+        _player.RotatePlayerToHitBox(position);
+    }
 
     void Dashed()
     {
@@ -113,8 +117,9 @@ public class PlayerAutoAttackState : BaseState
             if (IsServer)
                 _player.NetworkAnimator.CrossFade(_autoAttack2Hash, 0.0f, 0);
 
-            //AutoAim();
-        }
+            if (!_player.IsMovementPressed)
+                AutoAim();
+            }
         else
         {
             AttackComplete();   
@@ -132,8 +137,8 @@ public class PlayerAutoAttackState : BaseState
             if (IsServer)
                 _player.NetworkAnimator.CrossFade(_autoAttack3Hash, 0.0f, 0);
 
-            //AutoAim();
-
+            if (!_player.IsMovementPressed)
+                AutoAim();
         }
         else
         {
@@ -153,7 +158,8 @@ public class PlayerAutoAttackState : BaseState
             if (IsServer)
                 _player.NetworkAnimator.CrossFade(_autoAttack1Hash, 0.2f, 0);
 
-            //AutoAim();
+            if (!_player.IsMovementPressed)
+                AutoAim();
 
         }
         else
@@ -171,7 +177,10 @@ public class PlayerAutoAttackState : BaseState
         _player.ActiveAttackCollider.Collider.enabled = false ;
          
         _player.NeedsMoveAndRotate = false; 
+        _player.IsAutoAiming = false ;
     }
+
+    public override void ExitState(){}
 
     [Server]
     void AutoAttack1Event()

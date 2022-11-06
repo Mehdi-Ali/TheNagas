@@ -101,5 +101,6 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
         _player.ActiveAttackCollider.Collider.enabled = false ; 
+        _player.IsAutoAiming = false ;
     }
 }

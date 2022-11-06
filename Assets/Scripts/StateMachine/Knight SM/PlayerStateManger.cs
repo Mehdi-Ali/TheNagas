@@ -69,7 +69,7 @@ public class PlayerStateManger : NetworkBehaviour
 
     public bool IsAutoAiming ;
     private float _smallestDistance;
-    public Transform TargetTransform;
+    public Transform AutoTargetTransform;
     private float _distance;
 
     // Variables to handle Gravity
@@ -190,8 +190,9 @@ public class PlayerStateManger : NetworkBehaviour
             HitBoxes.transform.localPosition = _currentAimingAt * _aimingRange ;
     }
 
-    public void RpcRotatePlayerToHitBox(Vector3 position)
+    public void RotatePlayerToHitBox(Vector3 position)
     {
+        // maybe add a condition check to see of the rotation is valid  
         transform.LookAt(position);
         if (IsOwner)
             HitBoxes.transform.localPosition = Vector3.zero ;
@@ -227,6 +228,7 @@ public class PlayerStateManger : NetworkBehaviour
     [ServerRpc(RunLocally = true)]
     private void RpcSetupOnAutoAttackInputStarted(Vector3 target)
     {
+        AutoAttackState.Continue = false ;  
         ActiveAttackCollider = HitBoxes.AttackColliderAA;
         TargetPosition = target;
         if (CurrentState != AutoAttackState) SwitchState(AutoAttackState);
@@ -237,6 +239,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         AutoAttackState.Continue = status;
     }
+    
     private void SetupOnInputStarted(string cooldownId, float aimingRange, PlayerHitBox activeHitBox)
     {
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
@@ -343,7 +346,7 @@ public class PlayerStateManger : NetworkBehaviour
             } 
 
             if (CurrentState != abilityState) SwitchState(abilityState);
-            RpcRotatePlayerToHitBox(target);
+            RotatePlayerToHitBox(target);
 
         }
     }
@@ -521,7 +524,7 @@ public class PlayerStateManger : NetworkBehaviour
         transform.rotation = recData.Rotation;
     }
     
-    public void ReadAndSetMovementInput()
+    public void ReadMovementInputAndSetMoveData()
     {
         moveData = default;
 
@@ -530,10 +533,15 @@ public class PlayerStateManger : NetworkBehaviour
         float xAxis = movementInput.x;
         float zAxis = movementInput.y;
 
-        IsMovementPressed = xAxis != 0 || zAxis != 0 ;
+        IsMovementPressed = xAxis != 0 || zAxis != 0;
         ServerSetMovementStatus(IsMovementPressed);
 
         if (!IsMovementPressed) return;
+        SetMoveData(xAxis, zAxis);
+    }
+
+    public void SetMoveData(float xAxis, float zAxis)
+    {
         moveData = new MoveData(xAxis, zAxis);
     }
 
@@ -552,11 +560,16 @@ public class PlayerStateManger : NetworkBehaviour
         RotationSpeed = rotationSpeed;
     }
     
-    public void AutoAim()
+    //[Client(RequireOwnership = true)]
+    public float AutoAim()
     {
+        //if (IsServer) return -2f;
+
+        // add a condition that stops auto aiming once the ability choses the target pos?
+
         IsAutoAiming = true ;
         _smallestDistance = _aimingRange;
-        TargetTransform = null ;
+        AutoTargetTransform = null ;
 
         Collider[] _nearbyEnemies = Physics.OverlapSphere(this.transform.position, _aimingRange);
         foreach (Collider enemy in _nearbyEnemies)
@@ -567,15 +580,17 @@ public class PlayerStateManger : NetworkBehaviour
                 _distance = Vector3.Distance(this.transform.position, target.transform.position);
                 if (_distance > _smallestDistance ) continue ;
                 _smallestDistance = _distance;
-                TargetTransform = target.transform;
+                AutoTargetTransform = target.transform;
                 
             }
         }
 
-        if (TargetTransform == null) return;
+        if (AutoTargetTransform == null) return -1f ;
         
-        HitBoxes.transform.LookAt(TargetTransform);
-        if (ActiveHitBox.Movable) HitBoxes.transform.position = TargetTransform.position;
+        HitBoxes.transform.LookAt(AutoTargetTransform);
+        Debug.Log("Auto aimed to: " + AutoTargetTransform.name + " distance is: " + _smallestDistance);
+        if (ActiveHitBox.Movable) HitBoxes.transform.position = AutoTargetTransform.position;
+        return _smallestDistance;
 
     }
  

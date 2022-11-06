@@ -64,7 +64,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         base.OnTickState();
 
         if (IsOwner)
-            _player.ReadAndSetMovementInput();
+            _player.ReadMovementInputAndSetMoveData();
 
         if (IsServer)
             FirstAbilityStartEvent();
@@ -99,6 +99,6 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _player.NeedsMoveAndRotate = false;
-
+        _player.IsAutoAiming = false ;
     }
 }
