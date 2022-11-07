@@ -14,7 +14,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     int _ultimateMultiplierHash;
 
 
-    bool _grounded ;
+
     float _tLerp ;
     float _tCoeff ;
     Vector3 _end;
@@ -43,6 +43,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
+        _player.NeedsMoveAndRotate = true;
         
         if (IsServer)
         {
@@ -55,33 +56,25 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         }
 
         // ! this part is diff
-        _grounded = false;
         _tLerp = 0.0f ;
         _tCoeff = _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
         _start = transform.position ;
         _end = _player.TargetPosition ;
 
+        // new 
+
+        var speed = (_start - _end).magnitude * _tCoeff ;
+        var directionVector = (_end - _start).normalized;
+        _player.SetMoveAndRotateSpeed(speed, 0f);
+        _player.SetMoveData(directionVector.x, directionVector.z);
     }
 
     public override void UpdateState(){}
-    public override void OnTickState()
-    {
-        base.OnTickState();
-        UltimateAbilityStartEvent();
-    }
-
-    private void UltimateAbilityStartEvent()
-    {
-        if (_grounded) return;
-        _tLerp += (float)base.TimeManager.TickDelta * _tCoeff ;
-        transform.position = Vector3.Lerp( _start, _end, _tLerp );
-    }
-
     public override void ExitState(){}
 
     void UltimateStartEvent()
     {
-        _grounded = true ;
+        _player.NeedsMoveAndRotate = false;
     }
 
     void UltimateEndEvent()

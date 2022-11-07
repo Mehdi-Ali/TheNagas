@@ -565,7 +565,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         //if (IsServer) return -2f;
 
-        // add a condition that stops auto aiming once the ability choses the target pos?
+        // TODO add a condition that stops auto aiming once the ability choses the target pos?
 
         IsAutoAiming = true ;
         _smallestDistance = _aimingRange;
@@ -588,7 +588,6 @@ public class PlayerStateManger : NetworkBehaviour
         if (AutoTargetTransform == null) return -1f ;
         
         HitBoxes.transform.LookAt(AutoTargetTransform);
-        Debug.Log("Auto aimed to: " + AutoTargetTransform.name + " distance is: " + _smallestDistance);
         if (ActiveHitBox.Movable) HitBoxes.transform.position = AutoTargetTransform.position;
         return _smallestDistance;
 
