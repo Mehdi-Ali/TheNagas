@@ -13,14 +13,6 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     int _ultimateHash;
     int _ultimateMultiplierHash;
 
-
-
-    float _tLerp ;
-    float _tCoeff ;
-    Vector3 _end;
-    Vector3 _start;
-
-
     public override void OnStartNetwork()
     {
         base.OnStartNetwork();
@@ -36,10 +28,12 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
-
+        var animSpeed = _player.Statics.UltimateAbilityAnimationSpeed ;
+        var animDuration = _player.AnimationsLength.UltimateDuration;
+        
         _player.CooldownSystem.PutOnCooldown(this);
-        Invoke( nameof(AttackComplete),(_player.AnimationsLength.UltimateDuration / _player.Statics.UltimateAbilityAnimationSpeed ));
-        _player.Animator.SetFloat(_ultimateMultiplierHash, _player.Statics.UltimateAbilityAnimationSpeed);
+        Invoke( nameof(AttackComplete),( animDuration / animSpeed ));
+        _player.Animator.SetFloat(_ultimateMultiplierHash, animSpeed);
         
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
@@ -55,16 +49,15 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
         }
 
-        // ! this part is diff
-        _tLerp = 0.0f ;
-        _tCoeff = _player.Statics.UltimateAbilityAnimationSpeed / ( _player.AnimationsLength.UltimateDuration - ((41f - 28f) / 30f ));
-        _start = transform.position ;
-        _end = _player.TargetPosition ;
+        // ! this part is diff dashing specific.
 
-        // new 
+        var jumpTime = ( animDuration - ((41f - 28f) / 30f )) / animSpeed ;
+        var _start = transform.position ;
+        var _end = _player.TargetPosition ;
 
-        var speed = (_start - _end).magnitude * _tCoeff ;
+        var speed = (_start - _end).magnitude / jumpTime ;
         var directionVector = (_end - _start).normalized;
+
         _player.SetMoveAndRotateSpeed(speed, 0f);
         _player.SetMoveData(directionVector.x, directionVector.z);
     }

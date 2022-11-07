@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using FishNet.Object;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerThirdAbilityState : BaseState, IHasCooldown
 {
@@ -36,10 +33,13 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
     public override void EnterState()
     {
+        var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed ;
+        var animDuration = _player.AnimationsLength.ThirdAbilityDuration * 0.90f;
 
         _player.CooldownSystem.PutOnCooldown(this);
-        Invoke(nameof(AttackComplete), _player.AnimationsLength.ThirdAbilityDuration /_player.Statics.ThirdAbilityAnimationSpeed );
-        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, _player.Statics.ThirdAbilityAnimationSpeed);
+        Invoke(nameof(AttackSemiComplete), animDuration / animSpeed);
+        Invoke(nameof(AttackSemiComplete), animDuration / animSpeed);
+        _player.Animator.SetFloat(_thirdAbilityMultiplierHash, animSpeed);
 
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
@@ -58,7 +58,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _tLerp = 0.0f;
-        _tCoeff = _player.Statics.ThirdAbilityAnimationSpeed / _player.AnimationsLength.ThirdAbilityDuration ;
+        _tCoeff = animSpeed / animDuration;
         _start = transform.position;
         _end = _player.TargetPosition;
 
@@ -69,21 +69,21 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     public override void OnTickState()
     {
         base.OnTickState();
-        ThirdAbilityStartEvent();
+        DealDamage();
+        if (_player.NeedsMoveAndRotate) return;
+        FirstPartOfDashing();
+
     }
 
-    private void ThirdAbilityStartEvent()
+    private void DealDamage()
     {
-        _tLerp += (float)base.TimeManager.TickDelta * _tCoeff ;
 
-        transform.position = Vector3.Lerp(_start, _end, _tLerp);
-
-        foreach(EnemyBase enemy in _player.HitBoxes.Targets)
+        foreach (EnemyBase enemy in _player.HitBoxes.Targets)
         {
             if (!enemy.IsAlive) continue;
             if (_damagedTargets.Contains(enemy))
                 continue;
-            
+
             enemy.TakeDamage(_player.Statics.ThirdAbilityDamage);
 
             _damagedTargets.Add(enemy);
@@ -93,14 +93,36 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.HitBoxes.Targets.ExceptWith(_damagedTargets);
     }
 
+    private void FirstPartOfDashing()
+    {
+        _tLerp += (float)base.TimeManager.TickDelta * _tCoeff;
+
+        transform.position = Vector3.Lerp(_start, _end, _tLerp);
+    }
+
     public override void ExitState(){}
 
-    void AttackComplete()
+    void AttackSemiComplete()
+    {
+        var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed ;
+        var animDuration = _player.AnimationsLength.ThirdAbilityDuration * 0.1f;
+
+        _player.NeedsMoveAndRotate = true;
+
+        var directionVector = (_end - _start).normalized;
+        _player.SetMoveData(directionVector.x, directionVector.z);
+        
+
+        Invoke(nameof(AttackComplete), animDuration / animSpeed);
+    }
+
+    private void AttackComplete()
     {
         _player.ReadyToSwitchState = true;
         _player.IsCastingAnAbility = false;
         _player.SwitchState(_player.IdleState);
-        _player.ActiveAttackCollider.Collider.enabled = false ; 
-        _player.IsAutoAiming = false ;
+        _player.ActiveAttackCollider.Collider.enabled = false;
+        _player.IsAutoAiming = false;
+        _player.NeedsMoveAndRotate = false;
     }
 }

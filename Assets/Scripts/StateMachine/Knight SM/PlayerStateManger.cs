@@ -44,8 +44,6 @@ public class PlayerStateManger : NetworkBehaviour
     private MoveData moveData;
     public  float MovementSpeed ;
 
-    //Variables to handle Abilities.
-    private AbilityData abilityData;
     public Vector3 TargetPosition;
 
     //Variables to handle Rotation

@@ -31,15 +31,3 @@ public struct ReconcileMoveData
         Rotation = rotation;
     }
 }
-
-public struct AbilityData
-{
-    public float XAxis;
-    public float ZAxis;
-
-    public AbilityData(float xAxis, float zAxis)
-    {
-        XAxis = xAxis;
-        ZAxis = zAxis;
-    }
-}
