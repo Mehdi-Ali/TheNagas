@@ -115,7 +115,7 @@ public class PlayerStateManger : NetworkBehaviour
 
         if(IsServer || Owner.IsLocalClient)
             CharacterController.enabled = true ;
-            CharacterController.enableOverlapRecovery = true ;
+            //CharacterController.enableOverlapRecovery = true ;
 
         if (!Owner.IsLocalClient) return ;
         SubscriptionToPlayerControls();

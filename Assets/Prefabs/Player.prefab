@@ -697,9 +697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6313d081491953849aca5031579a16da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 15
-  _addedNetworkObject: {fileID: 5701580062507666206}
-  _networkObjectCache: {fileID: 5701580062507666206}
   HitBoxAA: {fileID: 6193614517490886469}
   HitBox1: {fileID: 7357285480015409602}
   HitBox2: {fileID: 3692613208259820304}
@@ -1094,14 +1091,13 @@ MonoBehaviour:
   - {fileID: 2787697755095461621}
   - {fileID: 5074517598174067970}
   - {fileID: 5526928881181755571}
-  - {fileID: 6761588083424209742}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 4
+  <PrefabId>k__BackingField: 3
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 7807759643866311769
@@ -1168,12 +1164,15 @@ MonoBehaviour:
   AnimationsLength: {fileID: 0}
   Animator: {fileID: 0}
   MovementSpeed: 0
+  TargetPosition: {x: 0, y: 0, z: 0}
   RotationSpeed: 0
   ReadyToSwitchState: 0
   IsCastingAnAbility: 0
   IsMovementPressed: 0
+  NeedsMoveAndRotate: 0
+  IsAimingPressed: 0
   IsAutoAiming: 0
-  TargetPos: {fileID: 0}
+  AutoTargetTransform: {fileID: 0}
   _gravity: {x: 0, y: -9.8, z: 0}
   CooldownUIManager: {fileID: 0}
   ActiveHitBox: {fileID: 0}
@@ -1222,6 +1221,7 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+  _statics: {fileID: 0}
   Continue: 0
 --- !u!114 &5803099296968801611
 MonoBehaviour:
@@ -1313,6 +1313,7 @@ MonoBehaviour:
   _componentIndexCache: 12
   _addedNetworkObject: {fileID: 5701580062507666206}
   _networkObjectCache: {fileID: 5701580062507666206}
+  IsAlive: 0
 --- !u!114 &5074517598174067970
 MonoBehaviour:
   m_ObjectHideFlags: 0

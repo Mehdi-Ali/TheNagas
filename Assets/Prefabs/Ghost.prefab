@@ -836,6 +836,7 @@ MonoBehaviour:
   _componentIndexCache: 9
   _addedNetworkObject: {fileID: 1835414585024779192}
   _networkObjectCache: {fileID: 1835414585024779192}
+  IsAlive: 0
 --- !u!114 &8966469563047282533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1690,6 +1691,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4679678395130051753, guid: cc3c8a5e44c523945a53ea184b874883,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6937860390107212724, guid: cc3c8a5e44c523945a53ea184b874883,
         type: 3}
