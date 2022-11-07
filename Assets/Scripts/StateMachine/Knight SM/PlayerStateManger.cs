@@ -64,7 +64,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool IsCastingAnAbility ;
     public bool IsMovementPressed ;
     public bool NeedsMoveAndRotate;
-    private bool _isAimingPressed ;
+    public bool IsAimingPressed ;
 
 
     public bool IsAutoAiming ;
@@ -111,7 +111,7 @@ public class PlayerStateManger : NetworkBehaviour
         ReadyToSwitchState = true;
         IsCastingAnAbility = false;
         NeedsMoveAndRotate = false;
-        _isAimingPressed = false;
+        IsAimingPressed = false;
 
         if(IsServer || Owner.IsLocalClient)
             CharacterController.enabled = true ;
@@ -175,7 +175,7 @@ public class PlayerStateManger : NetworkBehaviour
         _currentAimingAt.y = 0.0f;
         _currentAimingAt.z = _currentAimingInput.y;
 
-        _isAimingPressed =  _currentAimingInput.x != 0 ||
+        IsAimingPressed =  _currentAimingInput.x != 0 ||
                             _currentAimingInput.y != 0 ;
     }
 
@@ -245,7 +245,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
         _aimingRange = aimingRange;
         ActiveHitBox = activeHitBox;
-        if (!_isAimingPressed) AutoAim();
+        if (!IsAimingPressed) AutoAim();
         ActiveHitBox.gameObject.SetActive(true);
     }
 
@@ -449,7 +449,7 @@ public class PlayerStateManger : NetworkBehaviour
         if (IsAutoAiming)
             AutoAim();
 
-        else if ( _isAimingPressed)
+        else if ( IsAimingPressed)
             HandleAiming();
 
         else
@@ -499,7 +499,7 @@ public class PlayerStateManger : NetworkBehaviour
     {
         if (CurrentState == DeadState) return ;
         
-        if (!IsMovementPressed || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
+        if ((!IsMovementPressed && !NeedsMoveAndRotate) || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
 
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         CharacterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
@@ -518,7 +518,7 @@ public class PlayerStateManger : NetworkBehaviour
     [Reconcile]
     private void Reconciliate(ReconcileMoveData recData, bool asServer)
     {
-        if (!IsMovementPressed || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
+        if ((!IsMovementPressed && !NeedsMoveAndRotate) || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
 
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;

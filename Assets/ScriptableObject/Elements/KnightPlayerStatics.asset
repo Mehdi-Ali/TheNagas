@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: KnightPlayerStatics
   m_EditorClassIdentifier: 
   MonsterName: Knight
-  MaxHealth: 2500
+  MaxHealth: 250
   MovementSpeed: 5
   RotationSpeed: 15
   AutoAttackAbilityName: Slashes
   AutoAttackAnimationSpeed: 1.5
-  AutoAttackDashingMovementSpeed: 10
+  AutoAttackDashingMovementSpeed: 7.5
   AutoAttackDashingTime: 0.2
-  AutoAttackStopDistance: 0.85
+  AutoAttackStopDistance: 1
   AutoAttackRotationSpeed: 10
   AutoAttackDamage1: 10
   AutoAttackDamage2: 5
