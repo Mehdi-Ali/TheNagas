@@ -26,14 +26,22 @@ public class EnemyBase : NetworkBehaviour
 
     }
 
-    public override void OnStartNetwork()
+    public override void OnStartServer()
     {
-        base.OnStartNetwork();
+        base.OnStartServer();
         _maxHealth = _enemy.Statics.MaxHealth ;
         _health = _maxHealth;
         IsAlive = true ;
+        Debug.Log("OnStartServer");
+    }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
         _healthBar.SetMaxHealth(_maxHealth) ;
+        _healthBar.SetHealth(_health);
+
+        Debug.Log("OnStartClient");
     }
 
     [Server]
