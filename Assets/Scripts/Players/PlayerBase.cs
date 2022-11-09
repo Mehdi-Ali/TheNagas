@@ -16,7 +16,8 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
     [SyncVar] private float _maxHealth ;
     
     
-    //Events
+    // TODO check FishNet Broadcast may be they are the Networking standard for events
+    // TODO make the OnDamage and OnHeal events take a float type in cas it s needed like for the dmg pope up
     public event Action OnDie ;
     public event Action OnDamage ;
     public event Action OnHeal ;
@@ -35,7 +36,6 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
         _maxHealth = _player.Statics.MaxHealth ;
         _health = _maxHealth;
         IsAlive = true ;
-        Debug.Log("OnStartServer");
     }
 
     public override void OnStartClient()
@@ -43,8 +43,6 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
         base.OnStartClient();
         _healthBar.SetMaxHealth(_maxHealth) ;
         _healthBar.SetHealth(_health);
-
-        Debug.Log("OnStartClient");
     }
 
     [Server]
@@ -77,10 +75,11 @@ public class PlayerBase : NetworkBehaviour // make a damageable Enemy and player
     [ObserversRpc(RunLocally = true)]
     private void RpcOnDie()
     {
-        _player.SwitchState(_player.DeadState);
+        if (IsServer && IsOwner)
+            _player.SwitchState(_player.DeadState);
         
-        if (!IsClient) return;
-        _healthBar.gameObject.SetActive(false);
+        if (IsClient)
+            _healthBar.gameObject.SetActive(false);
     }
 
     [Server]
