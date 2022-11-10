@@ -65,7 +65,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool NeedsMoveAndRotate;
     public bool IsAimingPressed ;
 
-
+    public bool IsOverlapRecovering;
     public bool IsAutoAiming ;
     private float _smallestDistance;
     public Transform AutoTargetTransform;
@@ -164,7 +164,9 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void OnAimingInput(InputAction.CallbackContext context)
     {
-        if (ActiveHitBox == null ) return;
+        if (ActiveHitBox == null)
+            return;
+
         HandleAiming();
     }
 
@@ -188,6 +190,9 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void HandleAimingRotationAndLocation()
     {
+        if (IsCastingAnAbility)
+            return;
+
         _currentAimingRotation = Quaternion.LookRotation(_currentAimingAt);
         HitBoxes.transform.rotation = Quaternion.Slerp(  HitBoxes.transform.rotation,
                                                         _currentAimingRotation,
@@ -490,8 +495,8 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void SharedLogic()
     {
-        if (!CharacterController.isGrounded)
-            CharacterController.Move(_gravity * (float)base.TimeManager.TickDelta);
+        if (!CharacterController.isGrounded || IsOverlapRecovering)
+            CharacterController.Move(new Vector3(0.0f , -100f , 0.0f));
     }
 
     private void ServerSideLogic()

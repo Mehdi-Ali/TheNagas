@@ -66,6 +66,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         Physics.IgnoreLayerCollision(6, 7);
+        _player.IsOverlapRecovering = true; 
     }
 
     public override void UpdateState(){}
@@ -110,5 +111,6 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.ActiveAttackCollider.Collider.enabled = false;
         _player.IsAutoAiming = false;
         _player.NeedsMoveAndRotate = false;
+        _player.IsOverlapRecovering = false;
     }
 }
