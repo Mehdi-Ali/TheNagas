@@ -42,23 +42,23 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         if (IsServer)
         {
             _player.NetworkAnimator.CrossFade(_ultimateHash, 0.1f, 0);
-        _player.HitBoxes.Targets.Clear();
+            _player.HitBoxes.Targets.Clear();
 
-        _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        _player.ActiveAttackCollider.Collider.enabled = true ;
+            _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            _player.ActiveAttackCollider.Collider.enabled = true ;
 
         }
 
         // ! this part is diff dashing specific.
 
         var jumpTime = ( animDuration - ((41f - 28f) / 30f )) / animSpeed ;
-        var _start = transform.position ;
-        var _end = _player.TargetPosition ;
+        var start = transform.position ;
+        var end = _player.TargetPosition ;
 
-        var speed = (_start - _end).magnitude / jumpTime ;
-        var directionVector = (_end - _start).normalized;
+        var speed = (start - end).magnitude / jumpTime ;
+        var directionVector = (end - start).normalized;
 
-        _player.SetMoveAndRotateSpeed(speed, 0f);
+        _player.SetMoveAndRotateSpeed(speed, 0.0f);
         _player.SetMoveData(directionVector.x, directionVector.z);
     }
 

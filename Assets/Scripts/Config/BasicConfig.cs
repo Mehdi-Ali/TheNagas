@@ -6,8 +6,9 @@ public class BasicConfig : MonoBehaviour
 {
     [SerializeField] private int FPS ;
 
-    void Awake()
+    void start()
     {
+        QualitySettings.vSyncCount = 0 ;
         Application.targetFrameRate = FPS ;
     }
 

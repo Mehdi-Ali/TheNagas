@@ -500,7 +500,7 @@ GameObject:
   - component: {fileID: 5789112543792799957}
   - component: {fileID: 883959914585170906}
   - component: {fileID: 8966469563047282533}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5,6 +5,7 @@ using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class PlayerStateManger : NetworkBehaviour
 {
@@ -112,12 +113,17 @@ public class PlayerStateManger : NetworkBehaviour
         IsAimingPressed = false;
 
         if(IsServer || Owner.IsLocalClient)
+        {
             CharacterController.enabled = true ;
-            //CharacterController.enableOverlapRecovery = true ;
+            CharacterController.enableOverlapRecovery = true ;
+        }
 
-        if (!Owner.IsLocalClient) return ;
+        if (!Owner.IsLocalClient)
+            return ;
+
         SubscriptionToPlayerControls();
         _playerControls.DefaultMap.Enable();
+        EnhancedTouchSupport.Enable();
     }
 
     public override void OnStopNetwork()
@@ -125,8 +131,11 @@ public class PlayerStateManger : NetworkBehaviour
         base.OnStopNetwork();
         SubscribeToTimeManager(false);
 
-        if (Owner.IsLocalClient)
-            _playerControls.DefaultMap.Disable();
+        if (!Owner.IsLocalClient)
+            return;
+            
+        _playerControls.DefaultMap.Disable();
+        EnhancedTouchSupport.Disable();
     }
 
     private void CashingPlayerInstances()
@@ -554,8 +563,12 @@ public class PlayerStateManger : NetworkBehaviour
         if ( !IsOwner && !IsServer ) return ;
 
         MovementSpeed = movementSpeed;
-        if (rotationSpeed == 0f) return ;
-        RotationSpeed = rotationSpeed;
+
+        if (rotationSpeed != 0f)
+            RotationSpeed = rotationSpeed;
+        
+        else
+            RotationSpeed = Statics.RotationSpeed;
     }
     
     //[Client(RequireOwnership = true)]

@@ -11,10 +11,6 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     int _thirdAbilityHash;
     int _thirdAbilityMultiplierHash ;
 
-    float _tLerp;
-    float _tCoeff;
-    Vector3 _end;
-    Vector3 _start;
     public HashSet<EnemyBase> _damagedTargets = new HashSet<EnemyBase>();
 
 
@@ -34,15 +30,16 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
     public override void EnterState()
     {
         var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed ;
-        var animDuration = _player.AnimationsLength.ThirdAbilityDuration * 0.90f;
+        var animDuration = _player.AnimationsLength.ThirdAbilityDuration;
 
         _player.CooldownSystem.PutOnCooldown(this);
-        Invoke(nameof(AttackSemiComplete), animDuration / animSpeed);
-        Invoke(nameof(AttackSemiComplete), animDuration / animSpeed);
+        Invoke(nameof(AttackComplete), animDuration / animSpeed);
         _player.Animator.SetFloat(_thirdAbilityMultiplierHash, animSpeed);
 
         _player.ReadyToSwitchState = false;
         _player.IsCastingAnAbility = true;
+        _player.NeedsMoveAndRotate = true;
+
 
         if (IsServer)
         {   
@@ -57,11 +54,18 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         }
 
         // ! this part is diff
-        _tLerp = 0.0f;
-        _tCoeff = animSpeed / animDuration;
-        _start = transform.position;
-        _end = _player.TargetPosition;
+        var jumpTime = animDuration / animSpeed;
+        var start = transform.position ;
+        var end = _player.TargetPosition ;
 
+        var speed = (start - end).magnitude / jumpTime;
+        var directionVector = (end - start).normalized;
+
+        _player.SetMoveAndRotateSpeed(speed, 0f);
+        _player.SetMoveData(directionVector.x, directionVector.z);
+
+        // ! this part is diff
+        Physics.IgnoreLayerCollision(6, 7);
     }
 
     public override void UpdateState(){}
@@ -71,8 +75,6 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         base.OnTickState();
         DealDamage();
         if (_player.NeedsMoveAndRotate) return;
-        FirstPartOfDashing();
-
     }
 
     private void DealDamage()
@@ -93,28 +95,12 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.HitBoxes.Targets.ExceptWith(_damagedTargets);
     }
 
-    private void FirstPartOfDashing()
+    private void ThirdAbilityEndEvent()
     {
-        _tLerp += (float)base.TimeManager.TickDelta * _tCoeff;
-
-        transform.position = Vector3.Lerp(_start, _end, _tLerp);
+        Physics.IgnoreLayerCollision(6, 7, false);
     }
 
     public override void ExitState(){}
-
-    void AttackSemiComplete()
-    {
-        var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed ;
-        var animDuration = _player.AnimationsLength.ThirdAbilityDuration * 0.1f;
-
-        _player.NeedsMoveAndRotate = true;
-
-        var directionVector = (_end - _start).normalized;
-        _player.SetMoveData(directionVector.x, directionVector.z);
-        
-
-        Invoke(nameof(AttackComplete), animDuration / animSpeed);
-    }
 
     private void AttackComplete()
     {
