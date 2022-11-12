@@ -5,7 +5,6 @@ using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 public class PlayerStateManger : NetworkBehaviour
 {
@@ -123,7 +122,6 @@ public class PlayerStateManger : NetworkBehaviour
 
         SubscriptionToPlayerControls();
         _playerControls.DefaultMap.Enable();
-        EnhancedTouchSupport.Enable();
     }
 
     public override void OnStopNetwork()
@@ -135,7 +133,6 @@ public class PlayerStateManger : NetworkBehaviour
             return;
             
         _playerControls.DefaultMap.Disable();
-        EnhancedTouchSupport.Disable();
     }
 
     private void CashingPlayerInstances()

@@ -66,7 +66,8 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         Physics.IgnoreLayerCollision(6, 7);
-        _player.IsOverlapRecovering = true; 
+        _player.IsOverlapRecovering = true;
+        // TODO test if IsGrounded when the player is recovering from overlapping to delete this bool
     }
 
     public override void UpdateState(){}

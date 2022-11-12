@@ -5,10 +5,11 @@ using UnityEngine;
 public class BasicConfig : MonoBehaviour
 {
     [SerializeField] private int FPS ;
+    [SerializeField] private int FPvSync ;
 
     void start()
     {
-        QualitySettings.vSyncCount = 0 ;
+        QualitySettings.vSyncCount = FPvSync ;
         Application.targetFrameRate = FPS ;
     }
 
