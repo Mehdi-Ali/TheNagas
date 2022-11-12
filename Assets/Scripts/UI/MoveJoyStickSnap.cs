@@ -6,7 +6,8 @@ using UnityEngine.InputSystem.EnhancedTouch;
 public class MoveJoyStickSnap : MonoBehaviour
 {
     private RectTransform _joyStick;
-    [SerializeField] private RectTransform _cancelAbility;
+    [SerializeField]public RectTransform CancelAbilityRectTrans;
+    public PlayerStateManger Player;
     private Vector2 _sizeOffset ;
     private Vector2 _screenDim;
     private float _xLimit;
@@ -73,22 +74,16 @@ public class MoveJoyStickSnap : MonoBehaviour
         // ----
 
 
-        var cancelX = _cancelAbility.position.x ;
-        var cancelY = _cancelAbility.position.y ;
+        var cancelX = CancelAbilityRectTrans.position.x ;
+        var cancelY = CancelAbilityRectTrans.position.y ;
 
-        var CancelSizeOffset = _cancelAbility.sizeDelta;
+        var CancelSizeOffset = CancelAbilityRectTrans.sizeDelta;
 
         var cancelXX = cancelX - CancelSizeOffset.x ; // small
         var cancelYY = cancelY + CancelSizeOffset.y ; //big
 
         if (xAxis < cancelX && xAxis > cancelXX && yAxis < cancelYY && yAxis > cancelY)
-            Debug.Log("Cancel");
-        //Debug.Log("click " + screenPosition);
-
-        // Debug.Log("x " + cancelX);
-        // Debug.Log("xx " + cancelXX);
-        // Debug.Log("y " + cancelY);
-        // Debug.Log("yy " + cancelYY);
+            Player.CancelAbility();
 
     }
 }

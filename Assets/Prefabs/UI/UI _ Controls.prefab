@@ -287,7 +287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3318328361605625875
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1134,7 +1134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b892b88c46c9e07429f035f57894e6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cancelAbility: {fileID: 3318328361605625875}
+  CancelAbilityRectTrans: {fileID: 3318328361605625875}
 --- !u!1 &6636509939912478149
 GameObject:
   m_ObjectHideFlags: 0

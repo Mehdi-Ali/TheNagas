@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System;
 using FishNet.Component.Animating;
 using FishNet.Connection;
@@ -5,6 +6,7 @@ using FishNet.Object;
 using FishNet.Object.Prediction;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerStateManger : NetworkBehaviour
 {
@@ -40,6 +42,8 @@ public class PlayerStateManger : NetworkBehaviour
     public PlayerAnimationsLength AnimationsLength; 
     public Animator Animator;
 
+    //
+
     //Variables to handle movement.
     private MoveData moveData;
     public  float MovementSpeed ;
@@ -63,6 +67,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool IsMovementPressed ;
     public bool NeedsMoveAndRotate;
     public bool IsAimingPressed ;
+    private bool _abilityCanceled ;
 
     public bool IsOverlapRecovering;
     public bool IsAutoAiming ;
@@ -85,6 +90,8 @@ public class PlayerStateManger : NetworkBehaviour
     private Player_Controls _playerControls;
     public CooldownUIManager CooldownUIManager;
     public PlayerHitBox ActiveHitBox;
+    private RectTransform _cancelAbility;
+    private MoveJoyStickSnap _moveJoyStickSnap;
 
     #endif
     #endregion
@@ -110,6 +117,7 @@ public class PlayerStateManger : NetworkBehaviour
         IsCastingAnAbility = false;
         NeedsMoveAndRotate = false;
         IsAimingPressed = false;
+        _abilityCanceled = false;
 
         if(IsServer || Owner.IsLocalClient)
         {
@@ -156,6 +164,10 @@ public class PlayerStateManger : NetworkBehaviour
         CooldownUIManager = FindObjectOfType<CooldownUIManager>();
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();
+
+        _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
+        _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
+        _moveJoyStickSnap.Player = this ;
 
     }
 
@@ -226,6 +238,8 @@ public class PlayerStateManger : NetworkBehaviour
 
     #endregion
 
+    #region AutoAttack
+
     private void SetupOnAutoAttackInputStarted()
     {
         AutoAttackState.Continue = false;
@@ -249,6 +263,9 @@ public class PlayerStateManger : NetworkBehaviour
         AutoAttackState.Continue = status;
     }
     
+    #endregion
+
+    #region Abilities
     private void SetupOnInputStarted(string cooldownId, float aimingRange, PlayerHitBox activeHitBox)
     {
         if (CooldownSystem.IsOnCooldown(cooldownId)) return;
@@ -256,6 +273,7 @@ public class PlayerStateManger : NetworkBehaviour
         ActiveHitBox = activeHitBox;
         if (!IsAimingPressed) AutoAim();
         ActiveHitBox.gameObject.SetActive(true);
+        _cancelAbility.gameObject.SetActive(true);
     }
 
     private void SetupOnInputPerformed(string cooldownId)
@@ -269,24 +287,13 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void SetupOnInputCanceled(Abilities ability)
     {
-        // TODO the active HitBox is already set in the OnInputStart so maybe this block is useless.
-        switch (ability)
+        ActiveHitBox.gameObject.SetActive(false);
+        _cancelAbility.gameObject.SetActive(false);
+
+        if (_abilityCanceled)
         {
-            case Abilities.First:
-                ActiveHitBox = HitBoxes.HitBox1 ;
-                break;
-                
-            case Abilities.Second:
-                ActiveHitBox = HitBoxes.HitBox2 ;
-                break;
-
-            case Abilities.Third:
-                ActiveHitBox = HitBoxes.HitBox3 ;
-                break;
-
-            case Abilities.Ultimate:
-                ActiveHitBox = HitBoxes.HitBoxU ;
-                break;
+            _abilityCanceled = false ;
+            return;
         }
 
         RpcSetupOnInputCanceled(ability, ActiveHitBox.transform.position);
@@ -325,9 +332,6 @@ public class PlayerStateManger : NetworkBehaviour
     {
         TargetPosition = target ;
         
-        if (IsOwner)
-            ActiveHitBox.gameObject.SetActive(false);
-
         if (!isOnCooldown)
         {
             BaseState abilityState = null;
@@ -360,6 +364,13 @@ public class PlayerStateManger : NetworkBehaviour
         }
     }
     
+    public void CancelAbility()
+    {
+        _abilityCanceled = true ;
+    }
+
+    #endregion
+
     #region 1st Ability
     
     private void OnFirstAbilityInputStarted(InputAction.CallbackContext context)
