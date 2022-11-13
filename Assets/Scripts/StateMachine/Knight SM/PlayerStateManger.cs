@@ -88,7 +88,7 @@ public class PlayerStateManger : NetworkBehaviour
     #if !UNITY_SERVER
 
     private Player_Controls _playerControls;
-    public CooldownUIManager CooldownUIManager;
+    public ControlUIManager CooldownUIManager;
     public PlayerHitBox ActiveHitBox;
     private RectTransform _cancelAbility;
     private MoveJoyStickSnap _moveJoyStickSnap;
@@ -130,6 +130,8 @@ public class PlayerStateManger : NetworkBehaviour
 
         SubscriptionToPlayerControls();
         _playerControls.DefaultMap.Enable();
+
+        _moveJoyStickSnap.OnStartNetwork();
     }
 
     public override void OnStopNetwork()
@@ -141,6 +143,9 @@ public class PlayerStateManger : NetworkBehaviour
             return;
             
         _playerControls.DefaultMap.Disable();
+
+        _moveJoyStickSnap.OnStopNetwork();
+
     }
 
     private void CashingPlayerInstances()
@@ -161,13 +166,17 @@ public class PlayerStateManger : NetworkBehaviour
         CharacterController = GetComponent<CharacterController>();
         HitBoxes = GetComponentInChildren<PlayerHitBoxesAndColliders>();
         CooldownSystem = GetComponent<CooldownSystem>();
-        CooldownUIManager = FindObjectOfType<CooldownUIManager>();
+        CooldownUIManager = FindObjectOfType<ControlUIManager>();
+        CooldownUIManager.player = this ; 
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();
 
         _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
         _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
-        _moveJoyStickSnap.Player = this ;
+        _moveJoyStickSnap.Player = this  ;
+        // TODO : Verify
+        // is think this is a better way then to get it with GetComponent
+        // from other scripts.
 
     }
 

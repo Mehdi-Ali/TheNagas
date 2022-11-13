@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class CooldownUI : MonoBehaviour
 {
-    private CooldownUIManager _cooldownUIManager;
+    private ControlUIManager _cooldownUIManager;
     public Image Image ;
 
 
     private void Awake() 
     {
-        _cooldownUIManager = GetComponentInParent<CooldownUIManager>() ;
+        _cooldownUIManager = GetComponentInParent<ControlUIManager>() ;
         Image = GetComponent<Image>() ;
     }
 }

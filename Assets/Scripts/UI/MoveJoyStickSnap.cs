@@ -1,13 +1,23 @@
+using System.Net.Mime;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
-
+using UnityEngine.UI;
+using UnityEngine.InputSystem.OnScreen;
 
 public class MoveJoyStickSnap : MonoBehaviour
 {
+    /*
+    TODO: 
+    the name of the script should be changed To TouchFunctionHandler, or even better separate
+    the class to AbilityCancel and JoyStickSnap and a TouchManager Class that handle both of
+    the classes and make it scalable to add other touche function...  
+    */   
+
     private RectTransform _joyStick;
     [SerializeField]public RectTransform CancelAbilityRectTrans;
     public PlayerStateManger Player;
+    private Image _image ;
     private Vector2 _sizeOffset ;
     private Vector2 _screenDim;
     private float _xLimit;
@@ -15,30 +25,42 @@ public class MoveJoyStickSnap : MonoBehaviour
     private float _xPos;
     private float _yPos;
 
+
+    private float _cancelX;
+    private float _cancelY;
+    private Vector2 _CancelSizeOffset;
+    private float _cancelXX;
+    private float _cancelYY;
+
     void Awake()
     {
         _joyStick = GetComponent<RectTransform>();
         _sizeOffset = _joyStick.sizeDelta / 2f;
         _screenDim = new Vector2(Screen.width, Screen.height);
+        _image = GetComponentInChildren<Image>();
 
         _xLimit = 0.35f * _screenDim.x;
         _yLimit = 0.75f * _screenDim.y;
 
         _xPos = 0.15f * _screenDim.x;
         _yPos = 0.18f * _screenDim.y;
+
+        _cancelX = CancelAbilityRectTrans.position.x;
+        _cancelY = CancelAbilityRectTrans.position.y;
+        _CancelSizeOffset = CancelAbilityRectTrans.sizeDelta;
+        _cancelXX = _cancelX - _CancelSizeOffset.x;
+        _cancelYY = _cancelY + _CancelSizeOffset.y;
     }
     
-    void OnEnable()
+    public void OnStartNetwork()
     {
         EnhancedTouchSupport.Enable();
         TouchSimulation.Enable();
         UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerDown += FingerDown;
         UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerUp += FingerUp;
-
     }
 
-
-    void OnDisable()
+    public void OnStopNetwork()
     {
         EnhancedTouchSupport.Disable();
         TouchSimulation.Disable();
@@ -46,11 +68,17 @@ public class MoveJoyStickSnap : MonoBehaviour
         UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerUp -= FingerUp;
     }
 
-    void FingerDown(Finger finger)
+    private static void GetScreenPosition(Finger finger, out float xAxis, out float yAxis)
     {
         var screenPosition = finger.screenPosition;
-        var xAxis = screenPosition.x;
-        var yAxis = screenPosition.y;
+        xAxis = screenPosition.x;
+        yAxis = screenPosition.y;
+    }
+
+    void FingerDown(Finger finger)
+    {
+        float xAxis, yAxis;
+        GetScreenPosition(finger, out xAxis, out yAxis);
 
         if (xAxis < 10f || xAxis > _xLimit || yAxis < 10f || yAxis > _yLimit)
             return;
@@ -59,31 +87,22 @@ public class MoveJoyStickSnap : MonoBehaviour
         var yPos = yAxis - _sizeOffset.y;
 
         _joyStick.position = new Vector3(xPos, yPos, 0f);
+
+        if (_image != null)
+            _image.enabled = true ;
     }
     
     private void FingerUp(Finger finger)
     {
-        var screenPosition = finger.screenPosition;
-        var xAxis = screenPosition.x;
-        var yAxis = screenPosition.y;
+        float xAxis, yAxis;
+        GetScreenPosition(finger, out xAxis, out yAxis);
 
-        if (xAxis < _xLimit && yAxis < _yLimit)
-            _joyStick.position = new Vector3(_xPos, _yPos, 0f);
+        if (_image != null && xAxis < (_xLimit * 1.5f) && yAxis < _yLimit)
+            _image.enabled = false ;;
 
-
-        // ----
-
-
-        var cancelX = CancelAbilityRectTrans.position.x ;
-        var cancelY = CancelAbilityRectTrans.position.y ;
-
-        var CancelSizeOffset = CancelAbilityRectTrans.sizeDelta;
-
-        var cancelXX = cancelX - CancelSizeOffset.x ; // small
-        var cancelYY = cancelY + CancelSizeOffset.y ; //big
-
-        if (xAxis < cancelX && xAxis > cancelXX && yAxis < cancelYY && yAxis > cancelY)
+        if (xAxis < _cancelX && xAxis > _cancelXX && yAxis < _cancelYY && yAxis > _cancelY)
             Player.CancelAbility();
 
     }
+
 }

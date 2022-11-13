@@ -7049,7 +7049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: -1
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -12973,6 +12973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 'UI : Controls'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3786836008649622291, guid: 6440d083d27de224f87d93ea957e899d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3786836008649622295, guid: 6440d083d27de224f87d93ea957e899d,
         type: 3}
