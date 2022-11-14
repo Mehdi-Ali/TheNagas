@@ -64,3 +64,8 @@ The Multiplayer networking is handled with Fish-Networking solution, it is a Ser
     - Click and drag to aim the ability Skillshot.
     - If the ability is taped, the aiming is automatic to the nearest enemy.
     - If dragged to the cancel button the ability is candled.
+    
+---------Builds---------
+
+* Android - apk : https://drive.google.com/file/d/14IFcZAbJ9TChD0Rw1efT8EBl3PZMD1nR/view?usp=share_link
+* IOS - ipa : https://drive.google.com/file/d/1QAQNOzF8J3o9m6suOUddLICCmysasYEQ/view?usp=share_link
