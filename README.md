@@ -50,17 +50,17 @@ Enemies roams around randomly and pauses in place from time to time, the vision 
   - Supper Attack: Dashes into the nearest player slowing and damaging players hit.
   
 ---------Game Design---------
+
 Every aspect of game design is made as scriptable objects for a better and easier experience when setting the game design parameters (like camera, playable characters and enemies' statics (such as ranges, speed, damage and cooldown...)...)
 
 ---------Networking---------
+
 The Multiplayer networking is handled with Fish-Networking solution, it is a Server authoritative logic with a client-side prediction, and more secure and better syncing in case of lag.
 
 ---------Gameplay---------
+
   * Movement: Standard left side screen movement: Invisible Gamepad that turns visible and snaps to the player touché position.
   * Aiming:
     - Click and drag to aim the ability Skillshot.
     - If the ability is taped, the aiming is automatic to the nearest enemy.
     - If dragged to the cancel button the ability is candled.
-
-
-

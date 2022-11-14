@@ -22,7 +22,7 @@ public class CameraFollowController : MonoBehaviour
         if (!ClientConnected) return ;
 
         _cameraPosition = _cameraTarget.transform.position ;
-        // TODO oce this parameters are set and done we get them only once in the start method.
+        // TODO once this parameters are set and done we get them only once in the start method.
         Vector3 offset = _cameraSettings.Offset ;
         Vector3 rotation = _cameraSettings.Rotation ;
 
