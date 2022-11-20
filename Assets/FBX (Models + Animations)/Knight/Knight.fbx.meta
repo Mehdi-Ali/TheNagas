@@ -35,22 +35,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Black_Mat
-    second: {fileID: 2100000, guid: b5bfcb63d28ba384b9ae91d45c48b7c9, type: 2}
+    second: {fileID: 2100000, guid: bb88f424760552d44893eb9048a4d69b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Knight_Mat
-    second: {fileID: 2100000, guid: 1fa180becfcec1e47aba298b694b818d, type: 2}
+    second: {fileID: 2100000, guid: 178295d12df9f5b42b6f7edcad90d2e4, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Red_Mat
-    second: {fileID: 2100000, guid: 89cafe7043d97bf4e87e2619a5df9c35, type: 2}
+    second: {fileID: 2100000, guid: aeba64610a98c0842975805d79c4ae0f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Sword_Metale
-    second: {fileID: 2100000, guid: 7bb4a159bfc88f24fbd0509f00ea2aee, type: 2}
+    second: {fileID: 2100000, guid: 671447653fe56214783207e2df0b1a03, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
