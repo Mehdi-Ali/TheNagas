@@ -1,5 +1,6 @@
 using FishNet.Object;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerAutoAttackState : BaseState
 {
@@ -16,6 +17,13 @@ public class PlayerAutoAttackState : BaseState
     public bool Continue;
     private float _distance ;
     private Vector3 _offset ;
+
+    [SerializeField]
+    private  VisualEffect _vfx1;
+    [SerializeField]
+    private  VisualEffect _vfx2;
+    [SerializeField]
+    private  VisualEffect _vfx3;
 
     public override void OnStartNetwork()
     {
@@ -226,6 +234,20 @@ public class PlayerAutoAttackState : BaseState
         }
     }
 
-
+    [Client]
+    void AutoAttack1VFX()
+    {
+        _vfx1.Play();
+    }
+    [Client]
+    void AutoAttack2VFX()
+    {
+        _vfx2.Play();
+    }
+    [Client]
+    void AutoAttack3VFX()
+    {
+        _vfx3.Play();
+    }
 }
 

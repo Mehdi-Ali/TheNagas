@@ -35,7 +35,7 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _meshRenders = GetComponentsInChildren<SkinnedMeshRenderer>();
-        _originalMats = new Material[20];
+        _originalMats = new Material[_meshRenders.Length];
     }
 
     public override void EnterState()
