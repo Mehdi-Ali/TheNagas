@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using FishNet.Object;
+using UnityEngine.VFX;
 
 public class PlayerSecondAbilityState : BaseState, IHasCooldown
 {
@@ -12,7 +13,10 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
     public float CooldownDuration => _player.Statics.SecondAbilityCooldown;
 
     int _secondAbilityHash;
-    int _secondAbilityMultiplierHash ;
+    int _secondAbilityMultiplierHash;
+
+    [SerializeField]
+    private  VisualEffect _vfx;
 
     public override void OnStartNetwork()
     {
@@ -61,6 +65,13 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
             if (!enemy.IsAlive) continue;
             enemy.TakeDamage(_player.Statics.SecondAbilityDamage);
         }
+    }
+
+    // it is called from the event in the animation so all clients will get the call 
+    [Client]
+    void SecondAbilityVFX()
+    {
+        _vfx.Play();
     }
 
     void AttackComplete()
