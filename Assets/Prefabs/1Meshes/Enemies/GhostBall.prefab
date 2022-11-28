@@ -186,9 +186,9 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 87895480027171635}
   _networkObjectCache: {fileID: 87895480027171635}
-  Damage: 0
-  Speed: 0
-  Range: 0
+  Damage: 15
+  Speed: 10
+  Range: 4
 --- !u!135 &76918032304916230
 SphereCollider:
   m_ObjectHideFlags: 0
