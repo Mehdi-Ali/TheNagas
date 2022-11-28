@@ -100,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 2467794270654783775, guid: c42695bef8d9e454a8df0749ab6e06b6,
         type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Value
-      value: -100
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2467794270654783775, guid: c42695bef8d9e454a8df0749ab6e06b6,
         type: 3}

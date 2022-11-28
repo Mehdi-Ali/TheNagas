@@ -10,6 +10,7 @@ public class EnemyProjectile : NetworkBehaviour
     public float Damage ;
     public float Speed ;
     public float Range ;
+    private float _timeOut ;
 
 
     public override void OnStartServer()
@@ -20,7 +21,7 @@ public class EnemyProjectile : NetworkBehaviour
 
     public IEnumerator OnSpawned()
     {
-        var _timeOut = Range / Speed ;
+        _timeOut = Range / Speed ;
         yield return new WaitForSeconds(_timeOut);
         Despawn(DespawnType.Pool);
     }
@@ -28,6 +29,7 @@ public class EnemyProjectile : NetworkBehaviour
     private void TimeManager_OnTick()
     {
         transform.Translate(Vector3.forward * Speed * (float)TimeManager.TickDelta);
+        transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, _timeOut);
     }
 
     [Server]

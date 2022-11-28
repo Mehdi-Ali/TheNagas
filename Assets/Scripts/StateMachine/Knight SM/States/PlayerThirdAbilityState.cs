@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerThirdAbilityState : BaseState, IHasCooldown
 {
@@ -19,7 +21,9 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
     [SerializeField]
     private SkinnedMeshRenderer[] _meshRenders;
-
+    
+    [SerializeField]
+    private  VisualEffect _vfx;
 
     public override void OnStartNetwork()
     {
@@ -81,7 +85,14 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         // TODO test if IsGrounded when the player is recovering from overlapping to delete this bool
 
         // ! this part is diff
+        StartVFX();
+    }
+
+    private void StartVFX()
+    {
         ChangingMat();
+        _vfx.gameObject.SetActive(enabled);
+        _vfx.Play();
     }
 
     private void ChangingMat()
@@ -139,7 +150,15 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.NeedsMoveAndRotate = false;
         _player.IsOverlapRecovering = false;
 
+        // ! this part is diff
+        EndVFX();
+
+    }
+
+    private void EndVFX()
+    {
         UnChangingMat();
+        Invoke(nameof(DisableVfx), 0.4f);
     }
 
     private void UnChangingMat()
@@ -150,5 +169,11 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
             meshRender.material = _originalMats[i];
             i++;
         }
+    }
+
+    private void DisableVfx()
+    {
+        _vfx.Stop();
+        _vfx.gameObject.SetActive(false) ;
     }
 }
