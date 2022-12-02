@@ -65,8 +65,12 @@ The Multiplayer networking is handled with Fish-Networking solution, it is a Ser
     - If the ability is taped, the aiming is automatic to the nearest enemy.
     - If dragged to the cancel button the ability is candled.
   * Gameplay Footage: https://www.artstation.com/artwork/B3b8rr
-    
+  
+---------Visuals---------
+
+Work in progress using Unity Shader Graph, Visual Graph, and particle system. (Different branch then main)
+
 ---------Builds---------
 
-* Android - apk : https://drive.google.com/file/d/14IFcZAbJ9TChD0Rw1efT8EBl3PZMD1nR/view?usp=share_link
+* Android - apk : https://drive.google.com/file/d/1_nMmMjYdm3oWeAJPzziNGoZzRoKQgfqo/view?usp=share_link
 * IOS - ipa : https://drive.google.com/file/d/1QAQNOzF8J3o9m6suOUddLICCmysasYEQ/view?usp=share_link
