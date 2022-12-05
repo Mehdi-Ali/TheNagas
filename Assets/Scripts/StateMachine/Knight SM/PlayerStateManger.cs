@@ -66,6 +66,7 @@ public class PlayerStateManger : NetworkBehaviour
     public bool IsCastingAnAbility ;
     public bool IsMovementPressed ;
     public bool NeedsMoveAndRotate;
+    public bool NeedsRotate;
     public bool IsAimingPressed ;
     private bool _abilityCanceled ;
 
@@ -116,6 +117,7 @@ public class PlayerStateManger : NetworkBehaviour
         ReadyToSwitchState = true;
         IsCastingAnAbility = false;
         NeedsMoveAndRotate = false;
+        NeedsRotate = true;
         IsAimingPressed = false;
         _abilityCanceled = false;
 
@@ -533,7 +535,8 @@ public class PlayerStateManger : NetworkBehaviour
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         CharacterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
 
-        Rotate(move);
+        if (NeedsRotate)
+            Rotate(move);
 
     }
 

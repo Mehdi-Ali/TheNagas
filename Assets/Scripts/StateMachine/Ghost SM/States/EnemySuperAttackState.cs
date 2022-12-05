@@ -13,6 +13,15 @@ public class EnemySuperAttackState : BaseState
     private Quaternion _lookRotation ;
     private bool _doLookAt ;
 
+    [SerializeField]
+    private  GameObject _vFX;
+    [SerializeField]
+    private float _vFXLifeTime;
+    
+    // TODO
+    // move it to statics or ecstatic statics... 
+    // Or make an Interface called mesh VFX that has a lifeTime property.
+
     private void Awake() 
     {
         _enemy = GetComponent<EnemyStateManger>();
@@ -79,8 +88,24 @@ public class EnemySuperAttackState : BaseState
         }
 
         _enemy.HitBoxes.SuperCollider.Collider.enabled = false ;
+
+        RpcSuperAttackVFX();
+        
     }
 
+    [ObserversRpc]
+    private void RpcSuperAttackVFX()
+    {
+        _vFX.gameObject.SetActive(true);
+
+        Invoke(nameof(RpcStopSuperAttackVFX), _vFXLifeTime);
+    }
+
+    [ObserversRpc]
+    private void RpcStopSuperAttackVFX()
+    {
+        _vFX.gameObject.SetActive(false);
+    }
     void AttackComplete()
     {
         _enemy.ReadyToSwitchState = true ;
@@ -94,4 +119,6 @@ public class EnemySuperAttackState : BaseState
         else
             _enemy.SwitchState(_enemy.IdleState);
     }
+
+
 }

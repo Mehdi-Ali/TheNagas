@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerThirdAbilityState : BaseState, IHasCooldown
 {
@@ -13,6 +15,15 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
     public HashSet<EnemyBase> _damagedTargets = new HashSet<EnemyBase>();
 
+    [SerializeField]
+    private Material _dashingGlowMat ;
+    private Material[] _originalMats ;
+
+    [SerializeField]
+    private SkinnedMeshRenderer[] _meshRenders;
+    
+    [SerializeField]
+    private  VisualEffect _vfx;
 
     public override void OnStartNetwork()
     {
@@ -25,11 +36,15 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         if (!Owner.IsLocalClient) return ;
         _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI3.Image);
+
+        // ! this part is diff
+        _meshRenders = GetComponentsInChildren<SkinnedMeshRenderer>();
+        _originalMats = new Material[_meshRenders.Length];
     }
 
     public override void EnterState()
     {
-        var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed ;
+        var animSpeed = _player.Statics.ThirdAbilityAnimationSpeed;
         var animDuration = _player.AnimationsLength.ThirdAbilityDuration;
 
         _player.CooldownSystem.PutOnCooldown(this);
@@ -42,12 +57,12 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
 
         if (IsServer)
-        {   
-            _player.NetworkAnimator.CrossFade(_thirdAbilityHash,0.1f, 0);   
+        {
+            _player.NetworkAnimator.CrossFade(_thirdAbilityHash, 0.1f, 0);
             _player.HitBoxes.Targets.Clear();
 
             _player.HitBoxes.transform.localRotation = Quaternion.Euler(Vector3.zero);
-            _player.ActiveAttackCollider.Collider.enabled = true ;
+            _player.ActiveAttackCollider.Collider.enabled = true;
 
             // ! this part is diff
             _damagedTargets.Clear();
@@ -55,8 +70,8 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         var jumpTime = animDuration / animSpeed;
-        var start = transform.position ;
-        var end = _player.TargetPosition ;
+        var start = transform.position;
+        var end = _player.TargetPosition;
 
         var speed = (start - end).magnitude / jumpTime;
         var directionVector = (end - start).normalized;
@@ -68,6 +83,27 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         Physics.IgnoreLayerCollision(6, 7);
         _player.IsOverlapRecovering = true;
         // TODO test if IsGrounded when the player is recovering from overlapping to delete this bool
+
+        // ! this part is diff
+        StartVFX();
+    }
+
+    private void StartVFX()
+    {
+        ChangingMat();
+        _vfx.gameObject.SetActive(enabled);
+        _vfx.Play();
+    }
+
+    private void ChangingMat()
+    {
+        int i = 0 ;
+        foreach (SkinnedMeshRenderer meshRender in _meshRenders)
+        {
+            _originalMats[i] = meshRender.material;
+            meshRender.material = _dashingGlowMat;
+            i++;
+        }
     }
 
     public override void UpdateState(){}
@@ -113,5 +149,31 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _player.IsAutoAiming = false;
         _player.NeedsMoveAndRotate = false;
         _player.IsOverlapRecovering = false;
+
+        // ! this part is diff
+        EndVFX();
+
+    }
+
+    private void EndVFX()
+    {
+        UnChangingMat();
+        Invoke(nameof(DisableVfx), 0.4f);
+    }
+
+    private void UnChangingMat()
+    {
+        var i = 0;
+        foreach (SkinnedMeshRenderer meshRender in _meshRenders)
+        {
+            meshRender.material = _originalMats[i];
+            i++;
+        }
+    }
+
+    private void DisableVfx()
+    {
+        _vfx.Stop();
+        _vfx.gameObject.SetActive(false) ;
     }
 }

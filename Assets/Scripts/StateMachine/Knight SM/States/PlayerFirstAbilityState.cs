@@ -1,6 +1,7 @@
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class PlayerFirstAbilityState : BaseState, IHasCooldown
 {
@@ -11,7 +12,9 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
     int _firstAbilityHash;
     int _firstAbilityMultiplierHash ;
-
+    
+    [SerializeField]
+    private  VisualEffect _vfx;
     float _tickTimer ;
     float _tickPeriod ;
 
@@ -54,6 +57,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _player.NeedsMoveAndRotate = true;
+        _player.NeedsRotate = false ;
         _player.SetMoveAndRotateSpeed(_player.Statics.FirstAbilityMovementSpeed, 0.0f);
         
     }
@@ -89,7 +93,19 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         }
     }
 
+    [Client]
+    void FirstAbilityVFX()
+    {
+        _vfx.Play();
+    }
 
+    [Client]
+    void FirstAbilityVFXStop()
+    {
+       // _vfx.Stop();
+        _vfx.SendEvent("OnStop");
+        //Debug.Log("Stop");
+    }
     void AttackComplete()
     {
         _player.ReadyToSwitchState = true;
@@ -99,6 +115,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
         // ! this part is diff
         _player.NeedsMoveAndRotate = false;
+        _player.NeedsRotate = true ;
         _player.IsAutoAiming = false ;
     }
 }

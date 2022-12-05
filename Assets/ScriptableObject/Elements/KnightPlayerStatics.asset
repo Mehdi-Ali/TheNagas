@@ -35,12 +35,12 @@ MonoBehaviour:
   FirstAbilityTicks: 7
   SecondAbilityAbilityName: Slash
   SecondAbilityAnimationSpeed: 2
-  SecondAbilityCooldown: 2
+  SecondAbilityCooldown: 1
   SecondAbilityDamage: 30
   SecondAbilityRange: 5
   ThirdAbilityAbilityName: Dash
   ThirdAbilityAnimationSpeed: 2
-  ThirdAbilityCooldown: 2
+  ThirdAbilityCooldown: 1
   ThirdAbilityDamage: 20
   ThirdAbilityRange: 5
   UltimateAbilityAbilityName: Dank
