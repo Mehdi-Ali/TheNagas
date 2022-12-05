@@ -23,7 +23,9 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     private SkinnedMeshRenderer[] _meshRenders;
     
     [SerializeField]
-    private  VisualEffect _vfx;
+    private  VisualEffect _vFX;
+    [SerializeField]
+    private  VisualEffect _vFX2;
 
     [SerializeField]
     private float _vFXLifeTime;
@@ -93,8 +95,8 @@ public class PlayerUltimateState : BaseState, IHasCooldown
     private void StartVFX()
     {
         ChangingMat();
-        _vfx.gameObject.SetActive(enabled);
-        _vfx.Play();
+        _vFX.gameObject.SetActive(enabled);
+        _vFX.Play();
     }
 
         private void ChangingMat()
@@ -148,8 +150,8 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     private void DisableVfx()
     {
-        _vfx.Stop();
-        _vfx.gameObject.SetActive(false) ;
+        _vFX.Stop();
+        _vFX.gameObject.SetActive(false) ;
     }
 
     // TODO make VFX function only get called in observers
@@ -167,6 +169,12 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         _spriteHolder.SetActive(false);
     }
 
+    void UltimateVFX()
+    {
+        _vFX2.Play();
+
+    }
+
     void AttackComplete()
     {
         _player.ReadyToSwitchState = true;
@@ -174,6 +182,8 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         _player.SwitchState(_player.IdleState);
         _player.ActiveAttackCollider.Collider.enabled = false ; 
         _player.IsAutoAiming = false ;
+
+        _vFX2.Stop();
     }
 
 }
