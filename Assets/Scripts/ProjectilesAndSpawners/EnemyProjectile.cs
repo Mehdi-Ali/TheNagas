@@ -31,7 +31,7 @@ public class EnemyProjectile : NetworkBehaviour
     private void TimeManager_OnTick()
     {
         transform.Translate(Vector3.forward * Speed * (float)TimeManager.TickDelta);
-        transform.localScale = Vector3.Lerp(_uniVect, Vector3.zero, _timeOut);
+        //transform.localScale = Vector3.Lerp(_uniVect, Vector3.zero, _timeOut);
     }
 
     [Server]
