@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class PlayerUltimateState : BaseState, IHasCooldown
 {
@@ -12,6 +14,20 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     int _ultimateHash;
     int _ultimateMultiplierHash;
+
+    [SerializeField]
+    private Material _dashingGlowMat ;
+    private Material[] _originalMats ;
+
+    [SerializeField]
+    private SkinnedMeshRenderer[] _meshRenders;
+    
+    [SerializeField]
+    private  VisualEffect _vfx;
+
+    [SerializeField]
+    private float _vFXLifeTime;
+    private GameObject _spriteHolder;
 
     public override void OnStartNetwork()
     {
@@ -24,6 +40,14 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
         if (!Owner.IsLocalClient) return ;
         _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUIU.Image);
+
+
+        // ! this part is diff
+
+        _meshRenders = GetComponentsInChildren<SkinnedMeshRenderer>();
+        _originalMats = new Material[_meshRenders.Length];
+
+        _spriteHolder = SingletonSpriteManager.Instance.KnightUltCracks;
     }
 
     public override void EnterState()
@@ -60,6 +84,28 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
         _player.SetMoveAndRotateSpeed(speed, 0.0f);
         _player.SetMoveData(directionVector.x, directionVector.z);
+
+        // ! this part is diff
+        StartVFX();
+
+    }
+
+    private void StartVFX()
+    {
+        ChangingMat();
+        _vfx.gameObject.SetActive(enabled);
+        _vfx.Play();
+    }
+
+        private void ChangingMat()
+    {
+        int i = 0 ;
+        foreach (SkinnedMeshRenderer meshRender in _meshRenders)
+        {
+            _originalMats[i] = meshRender.material;
+            meshRender.material = _dashingGlowMat;
+            i++;
+        }
     }
 
     public override void UpdateState(){}
@@ -77,6 +123,48 @@ public class PlayerUltimateState : BaseState, IHasCooldown
             if (!enemy.IsAlive) continue;
             enemy.TakeDamage(_player.Statics.UltimateAbilityDamage);
         }
+
+        // ! this part is diff
+        // TODO Separate VFX to Anticipation and VFX.
+        RpcStartVFX();
+        EndVFX();
+    }
+
+    private void EndVFX()
+    {
+        UnChangingMat();
+        Invoke(nameof(DisableVfx), 0.4f);
+    }
+
+    private void UnChangingMat()
+    {
+        var i = 0;
+        foreach (SkinnedMeshRenderer meshRender in _meshRenders)
+        {
+            meshRender.material = _originalMats[i];
+            i++;
+        }
+    }
+
+    private void DisableVfx()
+    {
+        _vfx.Stop();
+        _vfx.gameObject.SetActive(false) ;
+    }
+
+    // TODO make VFX function only get called in observers
+    [ObserversRpc]
+    private void RpcStartVFX()
+    {
+        _spriteHolder.transform.position = this.transform.position;
+        _spriteHolder.SetActive(true);
+        Invoke(nameof(RpcStopVFX), _vFXLifeTime);
+    }
+
+    [ObserversRpc]
+    private void RpcStopVFX()
+    {
+        _spriteHolder.SetActive(false);
     }
 
     void AttackComplete()
