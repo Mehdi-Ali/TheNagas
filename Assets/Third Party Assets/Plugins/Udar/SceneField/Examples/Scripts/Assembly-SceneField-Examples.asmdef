@@ -1,0 +1,16 @@
+{
+    "name": "Assembly-SceneField-Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:53703901cd099f2448abb43172e1cc86"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
