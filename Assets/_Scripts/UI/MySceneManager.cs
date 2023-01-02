@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MySceneManager : MonoBehaviour
+public sealed class MySceneManager : MonoBehaviour
 {
     public static MySceneManager Instance { get; private set; }
 
