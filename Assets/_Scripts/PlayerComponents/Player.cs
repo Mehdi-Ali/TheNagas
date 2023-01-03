@@ -1,4 +1,5 @@
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
@@ -6,9 +7,7 @@ public class Player : NetworkBehaviour
     
     public static Player Instance {get; private set;}
 
-    // try remove the field: should be okay.
-    [field: SerializeField]
-    public int Score
+    [field: SyncVar] public int PlayerName
     {
         get;
 
@@ -16,7 +15,21 @@ public class Player : NetworkBehaviour
         private set;
     }
 
-    [SerializeField] bool KEEPCHANGINGSCORE;
+    // try remove the field: should be okay.
+    [field: SerializeField] [field: SyncVar] public int Score
+    {
+        get;
+
+        [ServerRpc]
+        private set;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+
+        GameManager.Instance.Players.Add(this);
+    }
 
     public override void OnStartClient()
     {
@@ -30,12 +43,10 @@ public class Player : NetworkBehaviour
         ViewsManager.Instance.Initialize();
     }
 
-    void Update()
+    public override void OnStopServer()
     {
-        if (!IsOwner)
-            return;
-        
-        if (KEEPCHANGINGSCORE)
-            Score = Random.Range(0, 1024);
+        base.OnStopServer();
+
+        GameManager.Instance.Players.Remove(this);
     }
 }

@@ -17,7 +17,13 @@ public class GamePlayView : View
     public override void Initialize()
     {
         _DisconnectButton.onClick.AddListener(() =>
-            InstanceFinder.ClientManager.StopConnection());
+        {
+            if (InstanceFinder.IsServer)
+                InstanceFinder.ServerManager.StopConnection(true);
+
+            else if (InstanceFinder.IsClient)
+                InstanceFinder.ClientManager.StopConnection();
+        });
 
         base.Initialize();
     }
@@ -32,6 +38,6 @@ public class GamePlayView : View
         // should be updated on change rather in updates.
         _scoreText.text = $"Score: {Player.Instance.Score}";
 
-        _playersCountText.text = $"Players Connected: {InstanceFinder.ServerManager.Clients.Count}.";
+        _playersCountText.text = $"Players Connected: {GameManager.Instance.Players.Count}.";
     }
 }
