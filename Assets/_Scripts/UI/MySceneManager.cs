@@ -26,6 +26,7 @@ public sealed class MySceneManager : MonoBehaviour
 
     private void Awake()
     {
+        // ! Destroy Latest
         if (Instance != null && Instance != this)
             Destroy(this.gameObject);
             
@@ -33,6 +34,7 @@ public sealed class MySceneManager : MonoBehaviour
             Instance = this;
 
         DontDestroyOnLoad(this.gameObject);
+        
         _isLoading = false;
         _loadingCanvas.SetActive(_isLoading);
 

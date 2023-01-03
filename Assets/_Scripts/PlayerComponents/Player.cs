@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
+    
+    public static Player Instance {get; private set;}
+
     // try remove the field: should be okay.
     [field: SerializeField]
     public int Score
@@ -21,6 +24,8 @@ public class Player : NetworkBehaviour
 
         if (!IsOwner)
             return;
+
+        Instance = this;
 
         ViewsManager.Instance.Initialize();
     }

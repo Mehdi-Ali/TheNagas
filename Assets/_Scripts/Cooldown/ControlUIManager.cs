@@ -12,9 +12,4 @@ public class ControlUIManager : MonoBehaviour
     [SerializeField] public CooldownUI CooldownUI3;
 
     [SerializeField] public CooldownUI CooldownUIU;
-
-    void Awake()
-    {
-        
-    }
 }

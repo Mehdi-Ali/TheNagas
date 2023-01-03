@@ -970,7 +970,7 @@ GameObject:
   - component: {fileID: 717229255}
   - component: {fileID: 717229254}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ViewCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2209,7 +2209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1485481300
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3059,22 +3059,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NetworkManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5169903622375223377, guid: 9f844493e8d4a6f4d95ced59ff46c4e4,
-        type: 3}
-      propertyPath: _playerPrefab
-      value: 
-      objectReference: {fileID: 4527446471668314340, guid: e1eb7f75e66866d429990ac537d07529,
-        type: 3}
-    - target: {fileID: 7738659072564646873, guid: 9f844493e8d4a6f4d95ced59ff46c4e4,
-        type: 3}
-      propertyPath: _onlineScene
-      value: Assets/_Scenes/EmptyScene.unity
-      objectReference: {fileID: 0}
-    - target: {fileID: 7738659072564646873, guid: 9f844493e8d4a6f4d95ced59ff46c4e4,
-        type: 3}
-      propertyPath: _offlineScene
-      value: Assets/_Scenes/LandingPage.unity
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f844493e8d4a6f4d95ced59ff46c4e4, type: 3}

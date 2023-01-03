@@ -8,7 +8,7 @@ public class OptionsView : View
     public override void Initialize()
     {
         _backButton.onClick.AddListener(() =>
-            ViewsManager.Instance.Show<MultiplayerView>());
+            ViewsManager.Instance.Show<LandingView>());
         
         // Should make a method in the view manager that goes back to the previous view
 

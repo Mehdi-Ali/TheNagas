@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public sealed class ViewsManager : MonoBehaviour
@@ -11,11 +12,13 @@ public sealed class ViewsManager : MonoBehaviour
 
     private void Awake()
     {
+        // ! Destroy Oldest
         if (Instance != null && Instance != this)
-            Destroy(this.gameObject);
+            Destroy(Instance.gameObject);
 
-        else
-            Instance = this;
+        Instance = this;
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
@@ -26,7 +29,7 @@ public sealed class ViewsManager : MonoBehaviour
 
     public void Initialize()
     {
-        _views = Resources.FindObjectsOfTypeAll<View>();
+        _views = FindObjectsOfType<View>(true);
 
         foreach (var view in _views)
         {
@@ -37,8 +40,8 @@ public sealed class ViewsManager : MonoBehaviour
         _defaultView?.Show();
     }
 
-    // add an argument that enables to just lower the opacity of the active view
-    // instead of hiding it completely.
+    // Should make a method in the view manager that goes back to the previous view
+
     public void Show<TView>(object args = null) where TView : View
     {
         foreach (var view in _views)
@@ -49,7 +52,16 @@ public sealed class ViewsManager : MonoBehaviour
             else 
                 view.Hide();
         }
+
+        // this is usefully if we want to leave the latest view in the background
+        // the newest view to show should have a black background with 0.5 alpha.
+        if (args is bool leaveBackGround && leaveBackGround)
+        {
+            foreach (var view in _views)
+            {
+                if (view is TView)
+                    view.Show(args);
+            }
+        }
     }
-
-
 }

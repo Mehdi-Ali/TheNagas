@@ -10,9 +10,7 @@ public class MessageView : View
     public override void Initialize()
     {
         _backButton.onClick.AddListener(() =>
-            ViewsManager.Instance.Show<MultiplayerView>());
-
-        // Should make a method in the view manager that goes back to the previous view
+            ViewsManager.Instance.Show<LandingView>());
 
         base.Initialize();
     }

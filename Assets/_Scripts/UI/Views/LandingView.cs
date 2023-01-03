@@ -2,7 +2,7 @@ using FishNet;
 using UnityEngine;
 using UnityEngine.UI;
 
-public sealed class MultiplayerView : View
+public sealed class LandingView : View
 {
     [SerializeField] private Button _hostButton;
     [SerializeField] private Button _connectButton;
