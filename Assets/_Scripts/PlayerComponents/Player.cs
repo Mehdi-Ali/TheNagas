@@ -1,11 +1,12 @@
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class Player : NetworkBehaviour
 {
     
-    public static Player Instance {get; private set;}
+    public static Player LocalPlayer {get; private set;}
 
     [field: SyncVar] public int PlayerName
     {
@@ -24,6 +25,11 @@ public class Player : NetworkBehaviour
         private set;
     }
 
+    [SyncVar] public Character ControlledCharacter;
+    public bool AAAA;
+
+
+
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -38,7 +44,7 @@ public class Player : NetworkBehaviour
         if (!IsOwner)
             return;
 
-        Instance = this;
+        LocalPlayer = this;
 
         ViewsManager.Instance.Initialize();
     }
@@ -48,5 +54,20 @@ public class Player : NetworkBehaviour
         base.OnStopServer();
 
         GameManager.Instance.Players.Remove(this);
+    }
+
+
+    [ServerRpc]
+    public void ServerSpawnCharacter()
+    {
+        if (ControlledCharacter != null)
+            return;
+
+        var characterPrefab = Addressables.LoadAssetAsync<GameObject>("KnightCharacter").WaitForCompletion();
+
+        var characterInstance = Instantiate(characterPrefab);
+
+        Spawn(characterInstance, Owner);
+
     }
 }

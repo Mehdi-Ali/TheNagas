@@ -36,7 +36,7 @@ public class GamePlayView : View
         _infoText.text = $"Is Server = {InstanceFinder.IsServer}, Is Client = {InstanceFinder.IsClient}."; 
         
         // should be updated on change rather in updates.
-        _scoreText.text = $"Score: {Player.Instance.Score}";
+        _scoreText.text = $"Score: {Player.LocalPlayer.Score}";
 
         _playersCountText.text = $"Players Connected: {GameManager.Instance.Players.Count}.";
     }

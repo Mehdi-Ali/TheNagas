@@ -1,6 +1,9 @@
+using System.Net.Sockets;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using UnityEngine;
+using FishNet.Connection;
+
 
 public sealed class GameManager : NetworkBehaviour
 {
@@ -14,11 +17,5 @@ public sealed class GameManager : NetworkBehaviour
         Instance = this;
     }
 
-    private void Update()
-    {
-        if (!IsServer)
-            return;
 
-        
-    }
 }

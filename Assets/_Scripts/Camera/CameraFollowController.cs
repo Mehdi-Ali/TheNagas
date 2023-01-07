@@ -9,7 +9,7 @@ public class CameraFollowController : MonoBehaviour
     // Camera projection : Field of View = 60 ; Axis = Vertical
     
     [Space(10)]
-
+    // TODO check where the _cameraTarget is set.
     public CameraTarget _cameraTarget;
 
     Vector3 controllerPosition;
