@@ -52,7 +52,7 @@ MonoBehaviour:
   _runInBackground: 1
   _dontDestroyOnLoad: 1
   _objectPool: {fileID: 0}
-  _persistence: 1
+  _persistence: 0
   _logging: {fileID: 0}
   _spawnablePrefabs: {fileID: 11400000, guid: a7576d5cb4a65c64fb163bf1a3e240cb, type: 2}
 --- !u!114 &7738659072564646873
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startInOffline: 0
   _offlineScene: Assets/_Scenes/LandingPage.unity
-  _onlineScene: Assets/_Scenes/Stage01Level01.unity
+  _onlineScene: Assets/_Scenes/Lobby.unity
   _replaceScenes: 0
 --- !u!114 &5169903622375223377
 MonoBehaviour:

@@ -38,6 +38,6 @@ public class GamePlayView : View
         // should be updated on change rather in updates.
         _scoreText.text = $"Score: {Player.LocalPlayer.Score}";
 
-        _playersCountText.text = $"Players Connected: {GameManager.Instance.Players.Count}.";
+        _playersCountText.text = $"Players Connected: {StageManager.Instance.StagePlayers.Count}.";
     }
 }

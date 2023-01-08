@@ -34,12 +34,20 @@ public class PlayerThirdAbilityState : BaseState, IHasCooldown
         _thirdAbilityHash = Animator.StringToHash("ThirdAbility");
         _thirdAbilityMultiplierHash = Animator.StringToHash("ThirdAbility_Multiplier");
 
-        if (!Owner.IsLocalClient) return ;
-        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI3.Image);
 
         // ! this part is diff
         _meshRenders = GetComponentsInChildren<SkinnedMeshRenderer>();
         _originalMats = new Material[_meshRenders.Length];
+
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!IsOwner)
+            return;
+
+        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI3.Image);
     }
 
     public override void EnterState()

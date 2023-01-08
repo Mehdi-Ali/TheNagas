@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour
     
     public static Player LocalPlayer {get; private set;}
 
-    [field: SyncVar] public int PlayerName
+    [field: SyncVar] public string PlayerNickName
     {
         get;
 
@@ -25,15 +25,12 @@ public class Player : NetworkBehaviour
         private set;
     }
 
+    private string _characterChosen;
     [SyncVar] public Character ControlledCharacter;
-    public bool AAAA;
-
-
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-
         GameManager.Instance.Players.Add(this);
     }
 
@@ -45,14 +42,13 @@ public class Player : NetworkBehaviour
             return;
 
         LocalPlayer = this;
-
+        PlayerNickName = SceneDataTransferManager.Instance.PlayerNickName;
         ViewsManager.Instance.Initialize();
     }
 
     public override void OnStopServer()
     {
         base.OnStopServer();
-
         GameManager.Instance.Players.Remove(this);
     }
 
@@ -60,14 +56,24 @@ public class Player : NetworkBehaviour
     [ServerRpc]
     public void ServerSpawnCharacter()
     {
+        // TODO set this when the player chose a character
+        _characterChosen = "KnightCharacter";
+
         if (ControlledCharacter != null)
             return;
 
-        var characterPrefab = Addressables.LoadAssetAsync<GameObject>("KnightCharacter").WaitForCompletion();
+        var characterPrefab = Addressables.LoadAssetAsync<GameObject>(_characterChosen).WaitForCompletion();
 
         var characterInstance = Instantiate(characterPrefab);
 
         Spawn(characterInstance, Owner);
 
+    }
+
+    [ServerRpc]
+    public void ServerDesSpawnCharacter()
+    {
+        if (ControlledCharacter != null && ControlledCharacter.IsSpawned)
+            ControlledCharacter.Despawn();
     }
 }

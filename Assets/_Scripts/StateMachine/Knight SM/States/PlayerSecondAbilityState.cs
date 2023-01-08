@@ -27,10 +27,16 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         _secondAbilityHash = Animator.StringToHash("SecondAbility");
         _secondAbilityMultiplierHash = Animator.StringToHash("SecondAbility_Multiplier");
 
-        if (!Owner.IsLocalClient) return ;
-        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUI2.Image);
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!IsOwner)
+            return;
+
+        _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI2.Image);
+    }
 
     public override void EnterState()
     {

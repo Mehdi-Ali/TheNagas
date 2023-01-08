@@ -127,12 +127,30 @@ public class PlayerStateManger : NetworkBehaviour
             CharacterController.enableOverlapRecovery = true ;
         }
 
-        if (!Owner.IsLocalClient)
-            return ;
+    }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!IsOwner)
+            return;
+
+
+        // yes by accessing 
+        //Player.LocalPlayer in the MoveJoyStickSnap
+        // TODO : Verify
+        // is think this is a better way then to get it with GetComponent
+        // from other scripts.
+
+        CooldownUIManager = FindObjectOfType<ControlUIManager>();
+        CooldownUIManager.player = this;
+
+        _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
+        _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
+        _moveJoyStickSnap.Player = this;
+        
         SubscriptionToPlayerControls();
         _playerControls.DefaultMap.Enable();
-
         _moveJoyStickSnap.OnStartNetwork();
     }
 
@@ -144,8 +162,17 @@ public class PlayerStateManger : NetworkBehaviour
         if (!Owner.IsLocalClient)
             return;
             
-        _playerControls.DefaultMap.Disable();
 
+
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        if (!IsOwner)
+            return;
+
+        _playerControls.DefaultMap.Disable();
         _moveJoyStickSnap.OnStopNetwork();
 
     }
@@ -168,18 +195,8 @@ public class PlayerStateManger : NetworkBehaviour
         CharacterController = GetComponent<CharacterController>();
         HitBoxes = GetComponentInChildren<PlayerHitBoxesAndColliders>();
         CooldownSystem = GetComponent<CooldownSystem>();
-        CooldownUIManager = FindObjectOfType<ControlUIManager>();
-        CooldownUIManager.player = this ; 
 
         AnimationsLength = GetComponent<PlayerAnimationsLength>();
-
-        _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
-        _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
-        _moveJoyStickSnap.Player = this  ;
-        // TODO : Verify
-        // is think this is a better way then to get it with GetComponent
-        // from other scripts.
-
     }
 
     private void OnAimingInput(InputAction.CallbackContext context)

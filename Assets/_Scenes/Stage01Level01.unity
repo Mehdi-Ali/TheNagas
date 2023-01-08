@@ -1355,6 +1355,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5712125668472627849, guid: 8f5c71144e49633459d8425f6d0a0f6a,
         type: 3}
+      propertyPath: _networkBehaviours.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712125668472627849, guid: 8f5c71144e49633459d8425f6d0a0f6a,
+        type: 3}
       propertyPath: _sceneNetworkObjects.Array.size
       value: 18
       objectReference: {fileID: 0}
@@ -1446,7 +1451,7 @@ PrefabInstance:
     - target: {fileID: 7511711663702400818, guid: 8f5c71144e49633459d8425f6d0a0f6a,
         type: 3}
       propertyPath: m_Name
-      value: GameManager
+      value: StageManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f5c71144e49633459d8425f6d0a0f6a, type: 3}
@@ -7141,7 +7146,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _defaultView
       value: 
-      objectReference: {fileID: 5608034962728260928}
+      objectReference: {fileID: 3786836008825179683}
     - target: {fileID: 664051310079653426, guid: 8d216205effcdf44eb3680f28ace02d8,
         type: 3}
       propertyPath: _autoInitialize
@@ -12554,6 +12559,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6440d083d27de224f87d93ea957e899d, type: 3}
+--- !u!114 &3786836008825179683 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7755336982246753233, guid: 6440d083d27de224f87d93ea957e899d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3786836008825179682}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efff9857471c87c4c95e356d46dd5213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4562185985111259152
 PrefabInstance:
   m_ObjectHideFlags: 0

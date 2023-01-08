@@ -40,8 +40,6 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         _ultimateHash = Animator.StringToHash("Ultimate");
         _ultimateMultiplierHash = Animator.StringToHash("Ultimate_Multiplier");
 
-        if (!Owner.IsLocalClient) return ;
-        _player.CooldownSystem.ImageDictionary.Add(Id,_player.CooldownUIManager.CooldownUIU.Image);
 
 
         // ! this part is diff
@@ -50,6 +48,17 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         _originalMats = new Material[_meshRenders.Length];
 
         _spriteHolder = SingletonSpriteManager.Instance.KnightUltCracks;
+
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        if (!IsOwner)
+            return;
+
+        _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUIU.Image);
+
     }
 
     public override void EnterState()
