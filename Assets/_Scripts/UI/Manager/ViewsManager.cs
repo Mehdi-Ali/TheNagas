@@ -7,6 +7,7 @@ public sealed class ViewsManager : MonoBehaviour
 
     [SerializeField] private bool _autoInitialize;
     [SerializeField] private View _defaultView;
+    [SerializeField] private View _currentView;
 
     [SerializeField] private View[] _views;
 
@@ -37,6 +38,7 @@ public sealed class ViewsManager : MonoBehaviour
             view.Hide();
         }
 
+        _currentView = _defaultView;
         _defaultView?.Show();
     }
 
@@ -47,7 +49,10 @@ public sealed class ViewsManager : MonoBehaviour
         foreach (var view in _views)
         {
             if (view is TView)
+            {
+                _currentView = view ;
                 view.Show(args); 
+            }
 
             else 
                 view.Hide();
@@ -63,5 +68,10 @@ public sealed class ViewsManager : MonoBehaviour
                     view.Show(args);
             }
         }
+    }
+
+    public void UpdateCurrentView()
+    {
+        _currentView?.UpdateView();
     }
 }

@@ -18,4 +18,6 @@ public abstract class View : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public virtual void UpdateView() {}
 }

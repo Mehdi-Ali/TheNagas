@@ -5,7 +5,8 @@ using UnityEngine.AddressableAssets;
 
 public class Player : NetworkBehaviour
 {
-    
+    // TODO Separate the logic to Player, LobbyPlayer, GamePlayer...
+
     public static Player LocalPlayer {get; private set;}
 
     [field: SyncVar] public string PlayerNickName
@@ -25,6 +26,15 @@ public class Player : NetworkBehaviour
         private set;
     }
 
+
+    [SyncVar(OnChange = nameof(OnIsReadyChanged))]
+    public bool IsReady;
+    private void OnIsReadyChanged(bool prev, bool next, bool asServer)
+    {
+        GameManager.Instance.UpdateCanStartStatus();
+    }
+
+
     private string _characterChosen;
     [SyncVar] public Character ControlledCharacter;
 
@@ -42,8 +52,16 @@ public class Player : NetworkBehaviour
             return;
 
         LocalPlayer = this;
-        PlayerNickName = SceneDataTransferManager.Instance.PlayerNickName;
+        ServerSetPlayerName(SceneDataTransferManager.Instance.PlayerNickName);
         ViewsManager.Instance.Initialize();
+        Debug.Log(PlayerNickName);
+    }
+
+    // ! may be unnecessary because the set of name is already serverRpc 
+    [ServerRpc]
+    private void ServerSetPlayerName(string nickname)
+    {
+        PlayerNickName = nickname;
     }
 
     public override void OnStopServer()
@@ -51,6 +69,7 @@ public class Player : NetworkBehaviour
         base.OnStopServer();
         GameManager.Instance.Players.Remove(this);
     }
+
 
 
     [ServerRpc]

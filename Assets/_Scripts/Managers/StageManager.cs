@@ -18,6 +18,7 @@ public sealed class StageManager : NetworkBehaviour
         StartTheStage();
     }
 
+    [Server]
     public void StartTheStage()
     {
         foreach(var player in StagePlayers)
@@ -26,6 +27,7 @@ public sealed class StageManager : NetworkBehaviour
         }
     }
 
+    [Server]
     public void EndTheStage()
     {
         foreach (var player in StagePlayers)
