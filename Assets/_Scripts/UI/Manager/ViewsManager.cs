@@ -7,7 +7,7 @@ public sealed class ViewsManager : MonoBehaviour
 
     [SerializeField] private bool _autoInitialize;
     [SerializeField] private View _defaultView;
-    [SerializeField] private View _currentView;
+    private View _currentView;
 
     [SerializeField] private View[] _views;
 

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: -3789428440864917015}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: -3789428440864917015}
 --- !u!114 &-3789428440864917015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,11 +62,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 8324797507562308380}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
-  _isGlobal: 0
+  _isGlobal: 1
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: -1

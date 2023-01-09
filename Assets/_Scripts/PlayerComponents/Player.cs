@@ -9,7 +9,9 @@ public class Player : NetworkBehaviour
 
     public static Player LocalPlayer {get; private set;}
 
-    [field: SyncVar] public string PlayerNickName
+    [field: SerializeField]
+    [field: SyncVar]
+    public string PlayerNickName
     {
         get;
 
@@ -17,8 +19,9 @@ public class Player : NetworkBehaviour
         private set;
     }
 
-    // try remove the field: should be okay.
-    [field: SerializeField] [field: SyncVar] public int Score
+    [field: SerializeField]
+    [field: SyncVar]
+     public int Score
     {
         get;
 
@@ -26,21 +29,28 @@ public class Player : NetworkBehaviour
         private set;
     }
 
-
-    [SyncVar(OnChange = nameof(OnIsReadyChanged))]
-    public bool IsReady;
-    private void OnIsReadyChanged(bool prev, bool next, bool asServer)
+    [field: SerializeField] [field: SyncVar]
+    public bool IsReady
     {
-        GameManager.Instance.UpdateCanStartStatus();
+        get;
+
+        [ServerRpc]
+        private set;
     }
 
-
-    private string _characterChosen;
+    private string _characterChosenPath;
     [SyncVar] public Character ControlledCharacter;
 
     public override void OnStartServer()
     {
         base.OnStartServer();
+
+        if (GameManager.Instance.Players.Count >= 4 )
+        {
+            Debug.Log("The Lobby is already full");
+            return;
+        }
+        
         GameManager.Instance.Players.Add(this);
     }
 
@@ -52,16 +62,15 @@ public class Player : NetworkBehaviour
             return;
 
         LocalPlayer = this;
-        ServerSetPlayerName(SceneDataTransferManager.Instance.PlayerNickName);
         ViewsManager.Instance.Initialize();
-        Debug.Log(PlayerNickName);
-    }
+        
+        SetNickname(SceneDataTransferManager.Instance.PlayerNickName);
 
-    // ! may be unnecessary because the set of name is already serverRpc 
-    [ServerRpc]
-    private void ServerSetPlayerName(string nickname)
-    {
-        PlayerNickName = nickname;
+        if (GameManager.Instance.Players.Count == 1)
+            SetIsReadyStatus(true);     
+        else
+            SetIsReadyStatus(false);   
+            
     }
 
     public override void OnStopServer()
@@ -70,18 +79,16 @@ public class Player : NetworkBehaviour
         GameManager.Instance.Players.Remove(this);
     }
 
-
-
     [ServerRpc]
     public void ServerSpawnCharacter()
     {
         // TODO set this when the player chose a character
-        _characterChosen = "KnightCharacter";
+        _characterChosenPath = "KnightCharacter";
 
         if (ControlledCharacter != null)
             return;
 
-        var characterPrefab = Addressables.LoadAssetAsync<GameObject>(_characterChosen).WaitForCompletion();
+        var characterPrefab = Addressables.LoadAssetAsync<GameObject>(_characterChosenPath).WaitForCompletion();
 
         var characterInstance = Instantiate(characterPrefab);
 
@@ -95,4 +102,21 @@ public class Player : NetworkBehaviour
         if (ControlledCharacter != null && ControlledCharacter.IsSpawned)
             ControlledCharacter.Despawn();
     }
+
+    public void SetNickname(string nickName)
+    {
+        PlayerNickName = nickName;
+
+        GameManager.Instance.ServerUpdateUI();
+    }
+
+    public void SetIsReadyStatus(bool isReady)
+    {
+        IsReady = isReady;
+
+        GameManager.Instance.ServerUpdateCanStartStatus();
+        GameManager.Instance.ServerUpdateUI();
+
+    }
+
 }

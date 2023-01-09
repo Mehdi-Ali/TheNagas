@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FishNet;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class LobbyView : View
 {
-    [SerializeField] private TextMeshProUGUI[] _playerNames = new TextMeshProUGUI[4];
+    [SerializeField] private List<TextMeshProUGUI> _playerNames = new();
 
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _readyToggleButton;
@@ -26,36 +27,37 @@ public class LobbyView : View
             _startButton.gameObject.SetActive(false);
         }
 
-        SetUINicknames();
-        
-        UpdateView();
         base.Initialize();
-    }
-
-    private void ReadyToggleButton()
-    {
-        Player.LocalPlayer.IsReady = !Player.LocalPlayer.IsReady ;
-        // TODO changing the name color to green and red according to ready state
-    }
-
-    private void StartButton()
-    {
-        GameManager.Instance.StartStage();
-    }
-
-    private void SetUINicknames()
-    {
-        for (int i = 0; i < GameManager.Instance.Players.Count; i++)
-        {
-            _playerNames[i].text = GameManager.Instance.Players[i].PlayerNickName;
-        }
     }
 
     public override void UpdateView()
     {
         base.UpdateView();
+
+        UpdateNicknames();
+        
         UpdateColors();
+
         _startButton.interactable = GameManager.Instance.CanStart;
+    }
+
+    private void ReadyToggleButton()
+    {
+        Player.LocalPlayer.SetIsReadyStatus(!Player.LocalPlayer.IsReady);
+    }
+
+    private void StartButton()
+    {
+        GameManager.Instance.ServerStartStage();
+    }
+
+    private void UpdateNicknames()
+    {
+        for (int i = 0; i < GameManager.Instance.Players.Count; i++)
+        {
+            _playerNames[i].text = GameManager.Instance.Players[i].PlayerNickName;
+        }
+        
     }
 
     private void UpdateColors()
@@ -65,4 +67,5 @@ public class LobbyView : View
             _playerNames[i].color = GameManager.Instance.Players[i].IsReady ? Color.green : Color.red ;
         }
     }
+
 }

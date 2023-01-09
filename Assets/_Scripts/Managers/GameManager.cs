@@ -11,15 +11,17 @@ public sealed class GameManager : NetworkBehaviour
     [SyncObject]
     public readonly SyncList<Player> Players = new();
 
+    [field: SyncVar]
     public bool CanStart { get; private set;}
 
 
     private void Awake()
     {
         Instance = this;
+        CanStart = false;
     }
 
-    public void StartStage()
+    public void ServerStartStage()
     {
         if (IsServer && CanStart)
             Debug.Log("Starting Stage....");
@@ -28,15 +30,10 @@ public sealed class GameManager : NetworkBehaviour
 
     }
 
-    public void UpdateCanStartStatus()
+    [ServerRpc(RequireOwnership = false)]
+    public void ServerUpdateCanStartStatus()
     {
         CanStart = true;
-
-        if (Players.Count == 1)
-        {
-            UpdateUI();
-            return;
-        }
 
         foreach (var player in Players)
         {
@@ -46,14 +43,28 @@ public sealed class GameManager : NetworkBehaviour
             CanStart = false;
             break;
         }
-
-        UpdateUI();
     }
 
-    private void UpdateUI()
+    [ServerRpc(RequireOwnership = false)]
+    public void ServerUpdateUI()
     {
-        if (IsClient)
-            ViewsManager.Instance.UpdateCurrentView();
+        ObserverUpdateUI();
+        Debug.Log("ServerUpdated.");
+
     }
+
+    [ObserversRpc(RunLocally = true)]
+    public void ObserverUpdateUI()
+    {
+        ViewsManager.Instance.UpdateCurrentView();
+        Debug.Log("ObserversUpdated.");
+    }
+
+    // public void Update()
+    // {
+    //     // TODO find a solution for this 
+    //     //if (IsServer)
+    //         ObserverUpdateUI();
+    // }
     
 }

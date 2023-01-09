@@ -3723,6 +3723,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7738659072564646873, guid: 9f844493e8d4a6f4d95ced59ff46c4e4,
+        type: 3}
+      propertyPath: _offlineScene
+      value: Assets/_Scenes/_LandingPage.unity
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f844493e8d4a6f4d95ced59ff46c4e4, type: 3}
 --- !u!1001 &8337617838370737354
