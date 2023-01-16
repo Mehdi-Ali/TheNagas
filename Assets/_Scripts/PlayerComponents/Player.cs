@@ -107,16 +107,15 @@ public class Player : NetworkBehaviour
     {
         PlayerNickName = nickName;
 
-        GameManager.Instance.ServerUpdateUI();
+        StartCoroutine(GameManager.Instance.AskServerUpdateUI());
     }
 
     public void SetIsReadyStatus(bool isReady)
     {
-        IsReady = isReady;
+        this.IsReady = isReady;
 
         GameManager.Instance.ServerUpdateCanStartStatus();
-        GameManager.Instance.ServerUpdateUI();
-
+        StartCoroutine(GameManager.Instance.AskServerUpdateUI());
     }
 
 }
