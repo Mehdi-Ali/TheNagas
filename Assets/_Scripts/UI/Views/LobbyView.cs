@@ -55,7 +55,7 @@ public class LobbyView : View
     {
         for (int i = 0; i < GameManager.Instance.Players.Count; i++)
         {
-            _playerNames[i].text = GameManager.Instance.Players[i].PlayerNickName;
+            _playerNames[i].text = GameManager.Instance.PlayersNickNames[i];
         }
         
     }
@@ -64,7 +64,7 @@ public class LobbyView : View
     {
         for (int i = 0; i < GameManager.Instance.Players.Count; i++)
         {
-            _playerNames[i].color = GameManager.Instance.Players[i].IsReady ? Color.green : Color.red ;
+            _playerNames[i].color = GameManager.Instance.PlayersReadyState[i] ? Color.green : Color.red ;
         }
     }
 

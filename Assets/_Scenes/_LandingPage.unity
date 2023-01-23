@@ -3723,11 +3723,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7738659072564646873, guid: 9f844493e8d4a6f4d95ced59ff46c4e4,
-        type: 3}
-      propertyPath: _offlineScene
-      value: Assets/_Scenes/_LandingPage.unity
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f844493e8d4a6f4d95ced59ff46c4e4, type: 3}
 --- !u!1001 &8337617838370737354
@@ -3750,12 +3745,12 @@ PrefabInstance:
     - target: {fileID: 6315813450786878412, guid: 33ff1065c5065f749b87c0529bfd9ea1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 960
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6315813450786878412, guid: 33ff1065c5065f749b87c0529bfd9ea1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 540
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6315813450786878412, guid: 33ff1065c5065f749b87c0529bfd9ea1,
         type: 3}
@@ -3796,11 +3791,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8702153057014310071, guid: 33ff1065c5065f749b87c0529bfd9ea1,
-        type: 3}
-      propertyPath: PlayerNickName
-      value: sdsadsd
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33ff1065c5065f749b87c0529bfd9ea1, type: 3}

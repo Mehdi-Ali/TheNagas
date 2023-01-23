@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startInOffline: 0
-  _offlineScene: Assets/_Scenes/LandingPage.unity
+  _offlineScene: Assets/_Scenes/_LandingPage.unity
   _onlineScene: Assets/_Scenes/Lobby.unity
   _replaceScenes: 0
 --- !u!114 &5169903622375223377

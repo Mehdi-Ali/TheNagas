@@ -1,4 +1,5 @@
 using System;
+using FishNet;
 using UnityEngine;
 
 public sealed class ViewsManager : MonoBehaviour
@@ -7,7 +8,7 @@ public sealed class ViewsManager : MonoBehaviour
 
     [SerializeField] private bool _autoInitialize;
     [SerializeField] private View _defaultView;
-    private View _currentView;
+    public View CurrentView;
 
     [SerializeField] private View[] _views;
 
@@ -38,7 +39,7 @@ public sealed class ViewsManager : MonoBehaviour
             view.Hide();
         }
 
-        _currentView = _defaultView;
+        CurrentView = _defaultView;
         _defaultView?.Show();
     }
 
@@ -50,7 +51,7 @@ public sealed class ViewsManager : MonoBehaviour
         {
             if (view is TView)
             {
-                _currentView = view ;
+                CurrentView = view ;
                 view.Show(args); 
             }
 
@@ -72,6 +73,7 @@ public sealed class ViewsManager : MonoBehaviour
 
     public void UpdateCurrentView()
     {
-        _currentView?.UpdateView();
+        if (!InstanceFinder.IsOffline)
+            CurrentView?.UpdateView();
     }
 }

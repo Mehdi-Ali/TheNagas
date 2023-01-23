@@ -10,12 +10,12 @@ public class Player : NetworkBehaviour
     public static Player LocalPlayer {get; private set;}
 
     [field: SerializeField]
-    [field: SyncVar]
+    [field: SyncVar(ReadPermissions = ReadPermission.Observers)]
     public string PlayerNickName
     {
         get;
 
-        [ServerRpc]
+        [ServerRpc(RunLocally = true)]
         private set;
     }
 
@@ -34,7 +34,7 @@ public class Player : NetworkBehaviour
     {
         get;
 
-        [ServerRpc]
+        [ServerRpc(RunLocally = true)]
         private set;
     }
 
@@ -63,11 +63,14 @@ public class Player : NetworkBehaviour
 
         LocalPlayer = this;
         ViewsManager.Instance.Initialize();
-        
+
         SetNickname(SceneDataTransferManager.Instance.PlayerNickName);
 
-        if (GameManager.Instance.Players.Count == 1)
-            SetIsReadyStatus(true);     
+        if (!GameManager.Instance.LeaderAssigned)
+        {
+            SetIsReadyStatus(true);
+            GameManager.Instance.LeaderAssigned = true;
+        }
         else
             SetIsReadyStatus(false);   
             
@@ -106,8 +109,7 @@ public class Player : NetworkBehaviour
     public void SetNickname(string nickName)
     {
         PlayerNickName = nickName;
-
-        StartCoroutine(GameManager.Instance.AskServerUpdateUI());
+        GameManager.Instance.ServerUpdateUI();
     }
 
     public void SetIsReadyStatus(bool isReady)
@@ -115,7 +117,6 @@ public class Player : NetworkBehaviour
         this.IsReady = isReady;
 
         GameManager.Instance.ServerUpdateCanStartStatus();
-        StartCoroutine(GameManager.Instance.AskServerUpdateUI());
+        GameManager.Instance.ServerUpdateUI();
     }
-
 }
