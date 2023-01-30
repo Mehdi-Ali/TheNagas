@@ -12,18 +12,31 @@ public sealed class StageManager : NetworkBehaviour
     [SyncObject]
     public readonly SyncList<Player> StagePlayers = new();
 
-    private void Awake()
+    public int Level;
+
+    public void Awake()
     {
         Instance = this;
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        StagePlayers.AddRange(GameManager.Instance.Players);
         StartTheStage();
     }
 
     [Server]
     public void StartTheStage()
     {
-        foreach(var player in StagePlayers)
+        Invoke(nameof(SpawningCharacters), 1.0f);
+    }
+
+    private void SpawningCharacters()
+    {
+        foreach (var player in StagePlayers)
         {
-            player.ServerSpawnCharacter();
+            player.SpawnCharacter();
         }
     }
 
@@ -32,7 +45,7 @@ public sealed class StageManager : NetworkBehaviour
     {
         foreach (var player in StagePlayers)
         {
-            player.ServerDesSpawnCharacter();
+            player.DesspawnCharacter();
         }
     }
 

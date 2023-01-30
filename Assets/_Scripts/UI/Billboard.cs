@@ -9,9 +9,10 @@ public class Billboard : MonoBehaviour
     void LateUpdate()
     {
         if (_cameraTransform == null)
-        _cameraTransform = Camera.main.transform ;
+            _cameraTransform = Camera.main.transform ;
+
         if (_cameraTransform == null)
-        return;
+            return;
 
         transform.LookAt(transform.position + _cameraTransform.forward);
     }

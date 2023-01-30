@@ -4,6 +4,9 @@ using FishNet.Object.Synchronizing;
 using UnityEngine;
 using FishNet.Connection;
 using System.Collections.Generic;
+using FishNet.Managing.Scened;
+using System.Linq;
+using System;
 
 public sealed class GameManager : NetworkBehaviour
 {
@@ -13,6 +16,7 @@ public sealed class GameManager : NetworkBehaviour
     public readonly SyncList<Player> Players = new();
     public string[] PlayersNickNames;
     public bool[] PlayersReadyState;
+    public string NextSceneToLoad;
 
     [field: SyncVar]
     public bool CanStart { get; private set;}
@@ -31,6 +35,8 @@ public sealed class GameManager : NetworkBehaviour
     {
         Instance = this;
         CanStart = false;
+        NextSceneToLoad = "Stage01Level01" ;
+
     }
 
     public override void OnStartServer()
@@ -47,15 +53,8 @@ public sealed class GameManager : NetworkBehaviour
         PlayersReadyState = new bool[4];
     }
 
-    public void ServerStartStage()
-    {
-        if (IsServer && CanStart)
-            Debug.Log("Starting Stage....");
-        
-        // TODO change scene to stage01level01
-
-    }
-
+    #region UI
+    
     [ServerRpc(RequireOwnership = false)]
     public void ServerUpdateCanStartStatus()
     {
@@ -102,5 +101,41 @@ public sealed class GameManager : NetworkBehaviour
         PlayersNickNames[index] = nickName;
         PlayersReadyState[index] = isReady;
     }
+    
+    #endregion
+
+
+    #region SceneManager
+
+    public void ServerStartStage()
+    {
+        // if (IsServer && CanStart)
+        //     ScenesManager.Instance.GlobalLoad(NextSceneToLoad);
+
+         if (!IsServer || !CanStart)
+            return;
+
+
+        SceneLoadData sld = new(NextSceneToLoad)
+        {
+            MovedNetworkObjects = GetPlayersArray(Players),
+            ReplaceScenes = ReplaceOption.All
+        };
+        base.SceneManager.LoadGlobalScenes(sld);
+    }
+
+    private NetworkObject[] GetPlayersArray(SyncList<Player> players)
+    {
+        NetworkObject[] netObj = new NetworkObject[players.Count] ;
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            netObj[i] = players[i].NetworkObject;
+        }
+
+        return netObj;
+    }
+
+    #endregion
     
 }

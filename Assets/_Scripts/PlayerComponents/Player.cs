@@ -82,8 +82,8 @@ public class Player : NetworkBehaviour
         GameManager.Instance.Players.Remove(this);
     }
 
-    [ServerRpc]
-    public void ServerSpawnCharacter()
+    [Server]
+    public void SpawnCharacter()
     {
         // TODO set this when the player chose a character
         _characterChosenPath = "KnightCharacter";
@@ -99,8 +99,8 @@ public class Player : NetworkBehaviour
 
     }
 
-    [ServerRpc]
-    public void ServerDesSpawnCharacter()
+    [Server]
+    public void DesspawnCharacter()
     {
         if (ControlledCharacter != null && ControlledCharacter.IsSpawned)
             ControlledCharacter.Despawn();
