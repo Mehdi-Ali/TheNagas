@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class PlayerStateManger : NetworkBehaviour
 {
+    public Character ControlledCharacter;
 
     #region Scriptable Objects
 
@@ -179,6 +180,8 @@ public class PlayerStateManger : NetworkBehaviour
 
     private void CashingPlayerInstances()
     {
+        ControlledCharacter = GetComponentInParent<Character>();
+
         IdleState = GetComponent<PlayerIdleState>();
         RunningState = GetComponent<PlayerRunningState>();
         DeadState = GetComponent<PlayerDeadState>();

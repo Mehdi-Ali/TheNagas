@@ -58,6 +58,7 @@
         "Inputcanceled",
         "Mathf",
         "rigidboddies",
+        "Stagemanager",
         "Udar"
     ]
 }

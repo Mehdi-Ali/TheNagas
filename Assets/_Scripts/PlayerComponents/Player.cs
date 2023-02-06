@@ -19,16 +19,6 @@ public class Player : NetworkBehaviour
         private set;
     }
 
-    [field: SerializeField]
-    [field: SyncVar]
-     public int Score
-    {
-        get;
-
-        [ServerRpc]
-        private set;
-    }
-
     [field: SerializeField] [field: SyncVar]
     public bool IsReady
     {

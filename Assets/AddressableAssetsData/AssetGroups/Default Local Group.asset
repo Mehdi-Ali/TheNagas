@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: KnightCharacter
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 8f5c71144e49633459d8425f6d0a0f6a
+    m_Address: StageManager
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 9996ba60e55062348aba89c3b632305a, type: 2}
   m_SchemaSet:

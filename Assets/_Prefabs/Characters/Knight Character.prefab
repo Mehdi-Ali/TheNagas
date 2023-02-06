@@ -67,13 +67,14 @@ MonoBehaviour:
   _networkBehaviours:
   - {fileID: 3840917253912776798}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
+  <ChildNetworkObjects>k__BackingField:
+  - {fileID: 6788482444027811966}
   _isNetworked: 1
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: -1
-  _scenePathHash: 1879944931
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 5524055778824741457
   _sceneNetworkObjects:
@@ -153,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
         type: 3}
       propertyPath: _scenePathHash
-      value: 1879944931
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
         type: 3}
@@ -167,12 +168,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
         type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
+        type: 3}
       propertyPath: _sceneNetworkObjects.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
         type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 1400016360177628257}
+    - target: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
+        type: 3}
+      propertyPath: <ParentNetworkObject>k__BackingField
       value: 
       objectReference: {fileID: 1400016360177628257}
     - target: {fileID: 8479496936149924893, guid: e8fd121055dc77d42b87d9ee788a50c1,
@@ -188,3 +199,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1231061644960387936}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6788482444027811966 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5701580062507666206, guid: e8fd121055dc77d42b87d9ee788a50c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1231061644960387936}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using FishNet.Managing.Scened;
 using System.Linq;
 using System;
+using UnityEngine.AddressableAssets;
 
 public sealed class GameManager : NetworkBehaviour
 {
@@ -101,27 +102,24 @@ public sealed class GameManager : NetworkBehaviour
         PlayersNickNames[index] = nickName;
         PlayersReadyState[index] = isReady;
     }
-    
     #endregion
-
 
     #region SceneManager
 
     public void ServerStartStage()
     {
-        // if (IsServer && CanStart)
-        //     ScenesManager.Instance.GlobalLoad(NextSceneToLoad);
-
          if (!IsServer || !CanStart)
             return;
-
 
         SceneLoadData sld = new(NextSceneToLoad)
         {
             MovedNetworkObjects = GetPlayersArray(Players),
             ReplaceScenes = ReplaceOption.All
         };
-        base.SceneManager.LoadGlobalScenes(sld);
+
+        SceneManager.LoadGlobalScenes(sld);
+
+        SpawnStageManager();
     }
 
     private NetworkObject[] GetPlayersArray(SyncList<Player> players)
@@ -132,10 +130,19 @@ public sealed class GameManager : NetworkBehaviour
         {
             netObj[i] = players[i].NetworkObject;
         }
-
+        
         return netObj;
     }
 
+
+    private void SpawnStageManager()
+    {
+        var smPath = "StageManager";
+        var smPrefab = Addressables.LoadAssetAsync<GameObject>(smPath).WaitForCompletion();
+        var smInstance = Instantiate(smPrefab);
+        Spawn(smInstance);
+    }
+    
     #endregion
     
 }

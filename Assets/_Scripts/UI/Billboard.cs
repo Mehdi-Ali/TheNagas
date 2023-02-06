@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet;
+using FishNet.Managing.Scened;
+using System;
 
 public class Billboard : MonoBehaviour
 {
-    Transform _cameraTransform ;
+    private Transform _cameraTransform ;
+    private bool isInGameplay;
+
 
     void LateUpdate()
     {
@@ -16,4 +21,29 @@ public class Billboard : MonoBehaviour
 
         transform.LookAt(transform.position + _cameraTransform.forward);
     }
+
+    // void Awake()
+    // {
+    //     InstanceFinder.SceneManager.OnLoadEnd += SceneManagerOnLoadEnd;
+    //     InstanceFinder.SceneManager.OnLoadStart += SceneManagerOnLoadStart;
+
+    // }
+
+    // private void SceneManagerOnLoadStart(SceneLoadStartEventArgs obj)
+    // {
+    //     isInGameplay = false;
+    // }
+
+    // private void SceneManagerOnLoadEnd(SceneLoadEndEventArgs obj)
+    // {
+    //     isInGameplay = true;
+    // }
+
+    // void OnDestroy()
+    // {
+    //     InstanceFinder.SceneManager.OnLoadEnd -= SceneManagerOnLoadEnd;
+    //     InstanceFinder.SceneManager.OnLoadStart -= SceneManagerOnLoadStart;
+
+
+    // }
 }

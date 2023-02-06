@@ -13,6 +13,7 @@ public class GamePlayView : View
     [SerializeField] private TextMeshProUGUI _infoText;
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _playersCountText;
+    [SerializeField] private TextMeshProUGUI _enemiesCountText;
 
     public override void Initialize()
     {
@@ -36,8 +37,10 @@ public class GamePlayView : View
         _infoText.text = $"Is Server = {InstanceFinder.IsServer}, Is Client = {InstanceFinder.IsClient}."; 
         
         // should be updated on change rather in updates.
-        _scoreText.text = $"Score: {Player.LocalPlayer.Score}";
+        // _scoreText.text = $"Score: {}";
 
         _playersCountText.text = $"Players Connected: {StageManager.Instance.StagePlayers.Count}.";
+
+        _enemiesCountText.text = $"Enemies left: {StageManager.Instance.Enemies.Count}.";
     }
 }

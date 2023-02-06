@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GhostEnemyStatics
   m_EditorClassIdentifier: 
   MonsterName: Ghost
-  MaxHealth: 250
+  MaxHealth: 10
   VisionRange: 7.5
   AttackRange: 4
   MinRoamingPause: 3

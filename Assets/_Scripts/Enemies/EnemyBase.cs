@@ -19,6 +19,8 @@ public class EnemyBase : NetworkBehaviour
     public event Action OnDamage ;
     public event Action OnHeal ;
 
+    public Player LastDamagingPlayer;
+
 
     public virtual void Awake()
     {
@@ -52,7 +54,6 @@ public class EnemyBase : NetworkBehaviour
         RpcOnDamage(_health, damage);
 
         if (_health == 0) Die();
-
     }
 
     [ObserversRpc]
@@ -72,6 +73,8 @@ public class EnemyBase : NetworkBehaviour
         OnDie?.Invoke();
         IsAlive = false ;
         _enemy.SwitchState(_enemy.DeadState);
+
+        StageManager.Instance.Enemies.Remove(this);
 
         RpcOnDie();
     }

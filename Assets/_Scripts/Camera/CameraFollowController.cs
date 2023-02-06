@@ -1,3 +1,4 @@
+using FishNet;
 using UnityEngine;
 
 public class CameraFollowController : MonoBehaviour
@@ -9,26 +10,24 @@ public class CameraFollowController : MonoBehaviour
     // Camera projection : Field of View = 60 ; Axis = Vertical
     
     [Space(10)]
-    // TODO check where the _cameraTarget is set.
-    public CameraTarget _cameraTarget;
+    public PlayerBase CameraTarget;
 
-    Vector3 controllerPosition;
-    Vector3 _cameraPosition;
-
-    public bool ClientConnected = false;
+    private Vector3 _controllerPosition;
+    private Vector3 _cameraPosition;
 
     public void LateUpdate()
     {
-        if (!ClientConnected) return ;
+        if (!InstanceFinder.IsClient || CameraTarget == null)
+            return;
 
-        _cameraPosition = _cameraTarget.transform.position ;
-        // TODO once this parameters are set and done we get them only once in the start method.
+        // ! once this parameters are set and done we get them only once in the start method.
         Vector3 offset = _cameraSettings.Offset ;
         Vector3 rotation = _cameraSettings.Rotation ;
 
-        controllerPosition = _cameraPosition + new Vector3(0f , offset.y, offset.z);
+        _cameraPosition = CameraTarget.transform.position ;
+        _controllerPosition = _cameraPosition + new Vector3(0f , offset.y, offset.z);
         
-        this.transform.position = controllerPosition;
+        this.transform.position = _controllerPosition;
         this.transform.eulerAngles = rotation;
 
     }
