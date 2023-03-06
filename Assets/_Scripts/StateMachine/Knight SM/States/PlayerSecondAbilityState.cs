@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using FishNet.Object;
+using FishNet.Managing.Scened;
 using UnityEngine.VFX;
 
 public class PlayerSecondAbilityState : BaseState, IHasCooldown
@@ -11,6 +12,7 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
 
     public string Id =>  OwnerId + _player.Statics.SecondAbilityAbilityName;
     public float CooldownDuration => _player.Statics.SecondAbilityCooldown;
+    private Dictionary<string, Image> imageDictionary = new();
 
     int _secondAbilityHash;
     int _secondAbilityMultiplierHash;
@@ -35,8 +37,26 @@ public class PlayerSecondAbilityState : BaseState, IHasCooldown
         if (!IsOwner)
             return;
 
+        imageDictionary = _player.CooldownSystem.ImageDictionary;
+        _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI2.Image);
+        SceneManager.OnLoadEnd += OnLoadStage;
+    }
+
+    private void OnLoadStage(SceneLoadEndEventArgs obj)
+    {
+        if (imageDictionary.ContainsKey(Id))
+            imageDictionary.Remove(Id);
+
         _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI2.Image);
     }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        SceneManager.OnLoadEnd -= OnLoadStage;
+
+    }
+
 
     public override void EnterState()
     {

@@ -143,16 +143,11 @@ public class PlayerStateManger : NetworkBehaviour
         // is think this is a better way then to get it with GetComponent
         // from other scripts.
 
-        CooldownUIManager = FindObjectOfType<ControlUIManager>();
-        CooldownUIManager.player = this;
+        OnLoadStage();
+        _moveJoyStickSnap.OnStartClient();
 
-        _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
-        _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
-        _moveJoyStickSnap.Player = this;
-        
         SubscriptionToPlayerControls();
         _playerControls.DefaultMap.Enable();
-        _moveJoyStickSnap.OnStartNetwork();
     }
 
     public override void OnStopNetwork()
@@ -162,9 +157,16 @@ public class PlayerStateManger : NetworkBehaviour
 
         if (!Owner.IsLocalClient)
             return;
-            
+    }
 
+    public void OnLoadStage()
+    {
+        CooldownUIManager = FindObjectOfType<ControlUIManager>();
+        CooldownUIManager.player = this;
 
+        _moveJoyStickSnap = FindObjectOfType<MoveJoyStickSnap>();
+        _cancelAbility = _moveJoyStickSnap.CancelAbilityRectTrans;
+        _moveJoyStickSnap.Player = this;
     }
 
     public override void OnStopClient()

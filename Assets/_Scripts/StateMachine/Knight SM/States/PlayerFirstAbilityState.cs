@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using FishNet.Managing.Scened;
 using FishNet.Object;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +12,7 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
 
     public string Id => _player.Statics.FirstAbilityAbilityName;
     public float CooldownDuration => _player.Statics.FirstAbilityCooldown ;
+    private Dictionary<string, Image> imageDictionary = new();
 
     int _firstAbilityHash;
     int _firstAbilityMultiplierHash ;
@@ -17,7 +21,6 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
     private  VisualEffect _vfx;
     float _tickTimer ;
     float _tickPeriod ;
-
 
     public override void OnStartNetwork()
     {
@@ -36,7 +39,24 @@ public class PlayerFirstAbilityState : BaseState, IHasCooldown
         if (!IsOwner)
             return;
 
-        _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI1.Image);
+        imageDictionary =_player.CooldownSystem.ImageDictionary;
+        imageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI1.Image);
+        SceneManager.OnLoadEnd += OnLoadStage;
+    }
+
+    private void OnLoadStage(SceneLoadEndEventArgs obj)
+    {
+        if (imageDictionary.ContainsKey(Id))
+            imageDictionary.Remove(Id);
+
+        imageDictionary.Add(Id, _player.CooldownUIManager.CooldownUI1.Image);
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        SceneManager.OnLoadEnd -= OnLoadStage;
+
     }
 
     public override void EnterState()

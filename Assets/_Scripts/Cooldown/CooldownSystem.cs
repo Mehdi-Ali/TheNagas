@@ -8,7 +8,7 @@ public class CooldownSystem : NetworkBehaviour
     private readonly List<CooldownData> cooldowns = new();
 
     #if !UNITY_SERVER
-    public Dictionary<string, Image> ImageDictionary =  new Dictionary<string, Image>();
+    public Dictionary<string, Image> ImageDictionary =  new();
     #endif
 
     public override void OnStartNetwork()
@@ -37,8 +37,12 @@ public class CooldownSystem : NetworkBehaviour
         {
             var remainingTime = cooldowns[i].DecrementalCooldown(tickDelta);
 
-            if (IsOwner) 
-                ImageDictionary[cooldowns[i].Id].fillAmount = remainingTime / cooldowns[i].Cooldown;
+            if (IsOwner)
+            {
+                Debug.Log("cooldowns[i]" + cooldowns[i]);
+                if(ImageDictionary[cooldowns[i].Id])
+                    ImageDictionary[cooldowns[i].Id].fillAmount = remainingTime / cooldowns[i].Cooldown;
+            }
 
             if (remainingTime == 0.0f )
                 cooldowns.RemoveAt(i) ;

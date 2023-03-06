@@ -6,19 +6,31 @@ using UnityEngine;
 public class Character : NetworkBehaviour
 {
     [SyncVar] public Player ControllingPlayer;
+    public PlayerBase ControllingPlayerBase;
+    public PlayerStateManger ControllingPlayerStateManger;
 
-
-
-    public void Awake()
+    public override void OnStartNetwork()
     {
+        base.OnStartNetwork();
+
         ControllingPlayer = Player.LocalPlayer;
         ControllingPlayer.ControlledCharacter = this;
+        ControllingPlayerBase = GetComponentInChildren<PlayerBase>();
+        ControllingPlayerStateManger = GetComponentInChildren<PlayerStateManger>();
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
 
         SettingCamera();
     }
 
-    private void SettingCamera()
+    public void SettingCamera()
     {
+        if (!base.IsOwner)
+            return;
+
         var cameraFollowController = FindObjectOfType<CameraFollowController>();
         cameraFollowController.CameraTarget = GetComponentInChildren<PlayerBase>();
     }

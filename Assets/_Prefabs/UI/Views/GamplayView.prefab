@@ -1564,6 +1564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b892b88c46c9e07429f035f57894e6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _joyStick: {fileID: 1712649376289031813}
   CancelAbilityRectTrans: {fileID: 3318328361605625875}
   Player: {fileID: 0}
 --- !u!1 &6636509939912478149

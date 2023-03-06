@@ -28,19 +28,29 @@ public sealed class StageManager : NetworkBehaviour
         Level = 1;
     }
 
+    public override void OnStartNetwork()
+    {
+        base.OnStartNetwork();
+        SceneManager.OnLoadEnd += SceneManagerOnLoadEnd;
+    }
+
+    public override void OnStopNetwork()
+    {
+        base.OnStopNetwork();
+        SceneManager.OnLoadEnd -= SceneManagerOnLoadEnd;
+    }
+
     public override void OnStartServer()
     {
         base.OnStartServer();
         StagePlayers.AddRange(GameManager.Instance.Players);
         StartTheStage();
-
-        SceneManager.OnLoadEnd += SceneManagerOnLoadEnd;
     }
 
     [Server]
     public void StartTheStage()
     {
-        Invoke(nameof(SpawningCharacters), 1.0f);
+        Invoke(nameof(SpawningCharacters), 1f);
     }
 
     private void SpawningCharacters()
@@ -63,14 +73,14 @@ public sealed class StageManager : NetworkBehaviour
     private void SceneManagerOnLoadEnd(SceneLoadEndEventArgs obj)
     {
         Debug.Log("SceneManagerOnLoadEnd " + Level);
-
         GettingEnemies();
-    }
 
-    private void GettingEnemies()
-    {
-        Enemies.Clear();
-        Enemies.AddRange(FindObjectsOfType<EnemyBase>().ToList());
+        if(IsClient)
+        {
+            if (Level > 1)
+                Player.LocalPlayer.ControlledCharacter.ControllingPlayerStateManger.OnLoadStage();
+        }
+
     }
 
     [Server]
@@ -89,14 +99,36 @@ public sealed class StageManager : NetworkBehaviour
 
     private void LoadNextLevel(string sceneName)
     {
-        var AdditionalMovedNetworkObjects = new NetworkObject[] {this.NetworkObject};
+        ReSetCharactersTransform(StagePlayers);
+
+        var characters = StagePlayers.Select(player => player.ControlledCharacter.NetworkObject);
+        var playersAndCharacter = StagePlayers.Select(player => player.NetworkObject).Concat(characters);
+
+        var additionalMovedNetworkObjects = new NetworkObject[] {this.NetworkObject};
         SceneLoadData sld = new(sceneName)
         {
-            MovedNetworkObjects = GetPlayersArray(StagePlayers).Concat(AdditionalMovedNetworkObjects).ToArray(),
+            MovedNetworkObjects = playersAndCharacter.Concat(additionalMovedNetworkObjects).ToArray(),
+
+            // MovedNetworkObjects = GetPlayersArray(StagePlayers).Concat(AdditionalMovedNetworkObjects).ToArray(),
             ReplaceScenes = ReplaceOption.All
         };
 
         SceneManager.LoadGlobalScenes(sld);
+    }
+
+    private void ReSetCharactersTransform(SyncList<Player> stagePlayers)
+    {
+        foreach(var player in stagePlayers)
+        {
+            Debug.Log("ReSetCharacterTransform");
+
+            var playerBase = player.ControlledCharacter.GetComponentInChildren<PlayerBase>();
+            var playerTrans = playerBase.transform;
+
+            // 0.048f 
+            playerTrans.position = new(0f, 1f, 0f);
+            playerTrans.rotation = Quaternion.identity;
+        }
     }
 
     private NetworkObject[] GetPlayersArray(SyncList<Player> players)
@@ -110,5 +142,11 @@ public sealed class StageManager : NetworkBehaviour
         }
 
         return netObj;
+    }
+
+    private void GettingEnemies()
+    {
+        Enemies.Clear();
+        Enemies.AddRange(FindObjectsOfType<EnemyBase>().ToList());
     }
 }

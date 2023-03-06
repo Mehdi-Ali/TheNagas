@@ -15,6 +15,15 @@ public class CameraFollowController : MonoBehaviour
     private Vector3 _controllerPosition;
     private Vector3 _cameraPosition;
 
+    void Awake()
+    {
+        var characters = FindObjectsOfType<Character>();
+        foreach (var character in characters)
+        {
+            character.SettingCamera();
+        }
+    }
+
     public void LateUpdate()
     {
         if (!InstanceFinder.IsClient || CameraTarget == null)

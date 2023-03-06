@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FishNet.Object;
+using FishNet.Managing.Scened;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
@@ -11,6 +12,7 @@ public class PlayerUltimateState : BaseState, IHasCooldown
 
     public string Id => _player.Statics.UltimateAbilityAbilityName;
     public float CooldownDuration => _player.Statics.UltimateAbilityCooldown;
+    private Dictionary<string, Image> imageDictionary = new();
 
     int _ultimateHash;
     int _ultimateMultiplierHash;
@@ -57,9 +59,25 @@ public class PlayerUltimateState : BaseState, IHasCooldown
         if (!IsOwner)
             return;
 
+        imageDictionary = _player.CooldownSystem.ImageDictionary;
         _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUIU.Image);
-
+        SceneManager.OnLoadEnd += OnLoadStage;
     }
+
+    private void OnLoadStage(SceneLoadEndEventArgs obj)
+    {
+        if (imageDictionary.ContainsKey(Id))
+            imageDictionary.Remove(Id);
+
+        _player.CooldownSystem.ImageDictionary.Add(Id, _player.CooldownUIManager.CooldownUIU.Image);
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        SceneManager.OnLoadEnd -= OnLoadStage;
+    }
+
 
     public override void EnterState()
     {

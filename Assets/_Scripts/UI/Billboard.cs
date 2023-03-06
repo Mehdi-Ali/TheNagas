@@ -14,7 +14,12 @@ public class Billboard : MonoBehaviour
     void LateUpdate()
     {
         if (_cameraTransform == null)
-            _cameraTransform = Camera.main.transform ;
+        {
+            var mainCamera = Camera.main;
+
+            if (mainCamera != null)
+                _cameraTransform = mainCamera.transform;
+        }
 
         if (_cameraTransform == null)
             return;
