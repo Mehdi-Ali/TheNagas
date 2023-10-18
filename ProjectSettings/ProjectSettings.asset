@@ -817,7 +817,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     Android: FISHNET
-    Standalone: FISHNET
+    Standalone: FISHNET;FISHNET_V3
     iPhone: FISHNET
   additionalCompilerArguments: {}
   platformArchitecture: {}

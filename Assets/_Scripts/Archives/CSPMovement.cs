@@ -1,5 +1,6 @@
 using FishNet.Object;
 using FishNet.Object.Prediction;
+using FishNet.Transporting;
 using UnityEngine;
 
 
@@ -100,14 +101,15 @@ public class CSPMovement : NetworkBehaviour
     }
 
     [Replicate]
-    private void Move(MoveData moveData, bool asServer, bool replaying = false)
+    private void Move(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
+    
     {
         Vector3 move = new Vector3(moveData.XAxis, 0f, moveData.ZAxis).normalized;
         _characterController.Move(move * MovementSpeed * (float)base.TimeManager.TickDelta);
     }
 
     [Reconcile]
-    private void Reconciliate(ReconcileMoveData recData, bool asServer)
+    private void Reconciliate(ReconcileMoveData recData, bool asServer, Channel channel = Channel.Unreliable)
     {
         transform.position = recData.Position;
         transform.rotation = recData.Rotation;

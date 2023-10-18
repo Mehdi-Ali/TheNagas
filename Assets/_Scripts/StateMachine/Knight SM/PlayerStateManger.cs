@@ -4,6 +4,7 @@ using FishNet.Component.Animating;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Prediction;
+using FishNet.Transporting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -548,7 +549,7 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
     [Replicate]
-    private void MoveAndRotate(MoveData moveData, bool asServer, bool replaying = false)
+    private void MoveAndRotate(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
     {
         if (CurrentState == DeadState) return ;
         
@@ -570,7 +571,7 @@ public class PlayerStateManger : NetworkBehaviour
     }
 
     [Reconcile]
-    private void Reconciliate(ReconcileMoveData recData, bool asServer)
+    private void Reconciliate(ReconcileMoveData recData, bool asServer, Channel channel = Channel.Unreliable)
     {
         if ((!IsMovementPressed && !NeedsMoveAndRotate) || (IsCastingAnAbility && !NeedsMoveAndRotate) ) return;
 
