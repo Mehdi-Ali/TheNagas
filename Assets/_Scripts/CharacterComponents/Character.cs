@@ -13,8 +13,12 @@ public class Character : NetworkBehaviour
     {
         base.OnStartNetwork();
 
-        ControllingPlayer = Player.LocalPlayer;
+        if (IsServer)
+            ControllingPlayer = base.Owner.FirstObject.gameObject.GetComponent<Player>();
+        
         ControllingPlayer.ControlledCharacter = this;
+
+
         ControllingPlayerBase = GetComponentInChildren<PlayerBase>();
         ControllingPlayerStateManger = GetComponentInChildren<PlayerStateManger>();
     }

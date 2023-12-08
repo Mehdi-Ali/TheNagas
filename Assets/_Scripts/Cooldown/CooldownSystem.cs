@@ -39,7 +39,6 @@ public class CooldownSystem : NetworkBehaviour
 
             if (IsOwner)
             {
-                Debug.Log("cooldowns[i]" + cooldowns[i]);
                 if(ImageDictionary[cooldowns[i].Id])
                     ImageDictionary[cooldowns[i].Id].fillAmount = remainingTime / cooldowns[i].Cooldown;
             }

@@ -16,7 +16,7 @@ public class EnemyIdleState : BaseState
     {
         _Enemy.NetworkAnimator.CrossFade(_IdleHash, 0.15f, 0);
         var statics = _Enemy.Statics;
-        Invoke(nameof(GoRoam), Random.Range(statics.MinRoamingPause , statics.MaxRoamingPause));
+        
     }
 
     public override void UpdateState(){}

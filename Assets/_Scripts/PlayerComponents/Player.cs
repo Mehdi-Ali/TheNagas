@@ -86,7 +86,6 @@ public class Player : NetworkBehaviour
         var characterInstance = Instantiate(characterPrefab);
 
         Spawn(characterInstance, Owner);
-
     }
 
     [Server]
